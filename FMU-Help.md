@@ -23,7 +23,7 @@
   * Connect Unity to FMI (Cameo?)  Directly?              <--- Windows only?  >
     https://github.com/CATIA-Systems/Unity-FMI-Addon
 
-# Build "OpenModelica" locally - aka the Massive Rabbit Hole of Shit
+# Build "OpenModelica" locally - aka the Massive Rabbit Hole
   * Build OpenModelica
     https://github.com/OpenModelica
 
