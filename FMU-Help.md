@@ -42,6 +42,9 @@
     Readline
       sudo apt-get install libreadline-dev
     qt5?  srsly?
+    *Fucking gave up at this point.  Don't fucking force me to install a whole SHIT IDE from Europe just to build this piece of shit*
+    *Qt is GARBAGE.  I tried Qt and it sucked. Else I would be uising it rigth now*
+    *They just didn't want to make it an Eclipse project, cause that Modella asshole already fucked that up beyond repair with v5*
       sudo apt install libqt5svg5-dev
       apt list | grep "libqt5web.*/"
       sudo apt install libqt5webkit5-dev
@@ -49,10 +52,9 @@
       sudo apt install libopenscenegraph-dev
       OMG finally done.  What was I building again?
 
-    *Fucking gave up at this point.  Don't fucking force me to install a whole SHIT IDE from Europe just to build this piece of shit*
-    *Qt is GARBAGE.  I tried Qt and it sucked. Else I would be uising it rigth now*
-    *They just didn't want to make it an Eclipse project, cause that Modella asshole already fucked that up beyond repair with v5*
 
+# Link for FMUSDK if you'd rather do this in C
+https://stackoverflow.com/questions/44964787/how-to-export-c-file-function-to-fmu-using-fmusdk
 
 # pythonfmu build -h 
 
