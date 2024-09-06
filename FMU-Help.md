@@ -56,6 +56,25 @@
 # Link for FMUSDK if you'd rather do this in C
 https://stackoverflow.com/questions/44964787/how-to-export-c-file-function-to-fmu-using-fmusdk
 
+# Tutorial link
+https://pythonfmu3.readthedocs.io/en/stable/usage/
+https://pythonfmu3.readthedocs.io/en/latest/usage/
+
+# Java
+https://github.com/NTNU-IHB/FMI4j
+
+# WTF is Vico?
+https://github.com/NTNU-IHB/Vico
+
+
+# Unrelated:  maybe?  learn how Unity uses FMI
+https://unity.com/
+# Unrelated: GLFW CMake not working
+https://discourse.glfw.org/t/glfw-on-linux-cmake-finds-no-libraries/2733/4
+
+
+##### COMMAND SYNTAX #####
+
 # pythonfmu build -h 
 
 usage: pythonfmu build [-h] -f SCRIPT_FILE [-d DEST]
