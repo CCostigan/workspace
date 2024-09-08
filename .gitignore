@@ -1,0 +1,9 @@
+
+
+/CMakeFiles
+/build
+/out
+
+*.class
+*.cmake
+CMakeCache.txt
