@@ -42,10 +42,10 @@ class ReviewOpenGL(object):
         ShaderLoader.load_shader()
 
         from TextureLoader import TextureLoader
-        TextureLoader.load_texture("res/imgs/texture.png")
+        TextureLoader.load_texture("res/imgs/pic2.png")
 
         from ModelLoader import ModelLoader
-        ModelLoader.load_model("res/mdls/FCA.obj")
+        ModelLoader.load_model("res/mdls/Cube.obj")
 
 
         # the main application loop
