@@ -12,6 +12,9 @@ class ReviewOpenGL(object):
     def __init__(self):
         pass
 
+    def window_size_callback():
+        pass
+
     def main(self):
         pass
 
@@ -23,29 +26,28 @@ class ReviewOpenGL(object):
 
         # creating the window
         window = glfw.create_window(WIDTH, HEIGHT, "My OpenGL window", None, None)
-
         # check if window was created
         if not window:
             glfw.terminate()
             raise Exception("glfw window can not be created!")
-
+        
         # Query the actual framebuffer size so we can set the right viewport later
         # -> glViewport(0, 0, framebuffer_size[0], framebuffer_size[1])
         framebuffer_size = glfw.get_framebuffer_size(window)
-
         glfw.set_window_pos(window, 10, 30)
 
         glfw.make_context_current(window)
-
+        # glfw.set_window_size_callback(window, self.window_size_callback)
 
         from ShaderLoader import ShaderLoader
-        ShaderLoader.load_shader()
-
-        from TextureLoader import TextureLoader
-        TextureLoader.load_texture("res/imgs/pic2.png")
+        shader = ShaderLoader.load_shader("shader_vert.glsl","shader_frag.glsl")
 
         from ModelLoader import ModelLoader
-        ModelLoader.load_model("res/mdls/Cube.obj")
+        model = ModelLoader.load_model("res/mdls/Cube.obj")
+
+        from TextureLoader import TextureLoader
+        texture = TextureLoader.load_texture("res/imgs/pic2.png")
+
 
 
         # the main application loop
