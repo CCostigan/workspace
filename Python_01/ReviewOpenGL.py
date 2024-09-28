@@ -45,7 +45,7 @@ class ReviewOpenGL(object):
         TextureLoader.load_texture("res/imgs/texture.png")
 
         from ModelLoader import ModelLoader
-        ModelLoader.load_model("res/mdls/DDG.obj")
+        ModelLoader.load_model("res/mdls/FCA.obj")
 
 
         # the main application loop
