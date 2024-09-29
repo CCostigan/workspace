@@ -60,10 +60,8 @@ class ModelLoader():
             print(f"norm count = {len(norm)}")
             print(f"face count = {len(face)}")
             
-            print(f"indx len = {len(indx)}")
-            # print(f"indx={indx}")
-            print(f"bufr len = {len(bufr)}")
-            # print(f"bufr={bufr}")
+            print(f"indx len = {len(indx)}") # print(f"indx={indx}")
+            print(f"bufr len = {len(bufr)}") # print(f"bufr={bufr}")
 
             indxs = np.array(indx, np.int32)
             buffr = np.array(vtxs, np.float32)
@@ -83,7 +81,17 @@ class ModelLoader():
             glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, buffr.itemsize * 8, ctypes.c_void_p(12))
             # Normal vectors
             glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, buffr.itemsize * 8, ctypes.c_void_p(20))
-            glEnableVertexAttribArray(2) # Shouldn't this line be above the one before it?
+            glEnableVertexAttribArray(2) 
+
+        # return [indxs, buffr, VAO, VBO]
+        return {
+            "indx" : indxs, 
+            "bufr" : buffr, 
+            "vao" : VAO, 
+            "vbo" : VBO
+        }
+
 
 if __name__ == '__main__':
-    ModelLoader.load_model("res/mdls/Cube.obj")
+    model = ModelLoader.load_model("res/mdls/Cube.obj")
+    print(model)
