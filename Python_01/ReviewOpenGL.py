@@ -46,6 +46,7 @@ class ReviewOpenGL(object):
         ]
 
         charstrip = TextureLoader.load_texture("res/imgs/charstrip.png")
+        hmmmmmmmm = TextureLoader.load_texture("res/imgs/lena.jpg")
 
         glUseProgram(shader)
         glClearColor(0.1, 0.2, 0.4, 1.0)
