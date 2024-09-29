@@ -12,38 +12,6 @@ MIN, MAX = 0.1, 10000.0
 
 class ReviewOpenGL(object):
 
-
-    # def window_size_callback(window, width, height):
-    #     print(f"Width={width} Height={height}")
-    #     glViewport(0, 0, width, height)
-    #     projection = pyrr.matrix44.create_perspective_projection_matrix(45, width / height, MIN, MAX)
-    #     # glUniformMatrix4fv(ReviewOpenGL.proj_loc, 1, GL_FALSE, ReviewOpenGL.proj_mtx)
-    #     pass
-    
-    # # @staticmethod
-    # def cursor_pos_callback(window, x, y):
-    #     ReviewOpenGL.mdxdy = (x - ReviewOpenGL.mouse[0], y - ReviewOpenGL.mouse[1])
-    #     ReviewOpenGL.mouse = x, y
-    #     if True:  # Need to log fewer of these
-    #         print(f"mouse={ReviewOpenGL.mdxdy}")
-    
-    # def mouse_button_callback(window, a, b, c):
-    #     print(f"mouse_button_callback button={a} down={b} c={c}")
-
-    # def key_callback(window, a, b, c, d):
-    #     print(f"key_callback a={a} b={b} c={c} d={d}")
-    #     if a==256 and b == 9:
-    #         ReviewOpenGL.DONE = True
-
-    # def char_callback(window, a):
-    #     print(f"char_callback char={a}")
-
-    # def char_mods_callback(window, a, b):
-    #     print(f"char_mods_callback a={a} b={b}")
-
-    # def joystick_callback(window, arg):
-    #     print(f"joystick_callback a={arg}")
-
     def main():
 
         if not glfw.init():
@@ -66,14 +34,6 @@ class ReviewOpenGL(object):
         glfw.make_context_current(window)
 
         eh = EHandler.configure(window)
-        # glfw.set_window_size_callback(window, ReviewOpenGL.window_size_callback)
-        # # Set some other fun callbacks
-        # glfw.set_key_callback(window, ReviewOpenGL.key_callback)
-        # glfw.set_char_callback(window, ReviewOpenGL.char_callback)
-        # glfw.set_char_mods_callback(window, ReviewOpenGL.char_mods_callback)
-        # glfw.set_cursor_pos_callback(window, ReviewOpenGL.cursor_pos_callback)
-        # glfw.set_mouse_button_callback(window, ReviewOpenGL.mouse_button_callback)
-        # glfw.set_joystick_callback(ReviewOpenGL.joystick_callback)
 
         from ShaderLoader import ShaderLoader
         shader = ShaderLoader.load_shader("shader_vert.glsl","shader_frag.glsl")
