@@ -7,6 +7,75 @@ import numpy as np
 
 class ModelLoader():
 
+    def null_model():
+        vertices = [-0.5, -0.5,  0.5,   0.0, 0.0,
+                     0.5, -0.5,  0.5,   1.0, 0.0,
+                     0.5,  0.5,  0.5,   1.0, 1.0,
+                    -0.5,  0.5,  0.5,   0.0, 1.0,
+
+                    -0.5, -0.5, -0.5,   0.0, 0.0,
+                     0.5, -0.5, -0.5,   1.0, 0.0,
+                     0.5,  0.5, -0.5,   1.0, 1.0,
+                    -0.5,  0.5, -0.5,   0.0, 1.0,
+
+                     0.5, -0.5, -0.5,   0.0, 0.0,
+                     0.5,  0.5, -0.5,   1.0, 0.0,
+                     0.5,  0.5,  0.5,   1.0, 1.0,
+                     0.5, -0.5,  0.5,   0.0, 1.0,
+
+                    -0.5,  0.5, -0.5,   0.0, 0.0,
+                    -0.5, -0.5, -0.5,   1.0, 0.0,
+                    -0.5, -0.5,  0.5,   1.0, 1.0,
+                    -0.5,  0.5,  0.5,   0.0, 1.0,
+
+                    -0.5, -0.5, -0.5,   0.0, 0.0,
+                     0.5, -0.5, -0.5,   1.0, 0.0,
+                     0.5, -0.5,  0.5,   1.0, 1.0,
+                    -0.5, -0.5,  0.5,   0.0, 1.0,
+
+                     0.5, 0.5, -0.5,    .0, 0.0,
+                    -0.5, 0.5, -0.5,    .0, 0.0,
+                    -0.5, 0.5,  0.5,    .0, 1.0,
+                     0.5, 0.5,  0.5,    .0, 1.0]
+
+        indices = [ 0,  1,  2,  2,  3,  0,
+                    4,  5,  6,  6,  7,  4,
+                    8,  9, 10, 10, 11,  8,
+                    12, 13, 14, 14, 15, 12,
+                    16, 17, 18, 18, 19, 16,
+                    20, 21, 22, 22, 23, 20]        
+        
+        vertices = np.array(vertices, dtype=np.float32)
+        indices = np.array(indices, dtype=np.uint32)
+
+        VBO = glGenBuffers(1)
+        glBindBuffer(GL_ARRAY_BUFFER, VBO)
+        glBufferData(GL_ARRAY_BUFFER, vertices.nbytes, vertices, GL_STATIC_DRAW)
+
+        # Element Buffer Object
+        EBO = glGenBuffers(1)
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO)
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.nbytes, indices, GL_STATIC_DRAW)
+
+        glEnableVertexAttribArray(0)
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, vertices.itemsize * 5, ctypes.c_void_p(0))
+
+        glEnableVertexAttribArray(1)
+        glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, vertices.itemsize * 5, ctypes.c_void_p(12))
+
+        texture = glGenTextures(1)
+        glBindTexture(GL_TEXTURE_2D, texture)
+    
+        print("Default model loaded")
+        return {
+            "indx" : indices, 
+            "bufr" : vertices, 
+            # "vao" : VAO, 
+            "vbo" : VBO,
+            "ebo" : EBO
+        }
+    
+
 
     def load_model(filename):
 
