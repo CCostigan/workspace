@@ -24,8 +24,8 @@ class EHandler():
     
     NEAR = 0.1
     FAR = 10000.0
-    FOV = 10.0
-    DIST = 20.0
+    FOV = 30.0
+    DIST = -8.0
     proj_vec =  pyrr.matrix44.create_perspective_projection_matrix(
         FOV, window_dims[0]/window_dims[1], NEAR, FAR)
 

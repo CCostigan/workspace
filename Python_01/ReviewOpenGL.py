@@ -58,7 +58,7 @@ class ReviewOpenGL(object):
 
         # Matrices for the view to be fed to the shaders
         # proj_vec = pyrr.matrix44.create_perspective_projection_matrix(45, WIDTH/HEIGHT, 0.1, 10000.0)
-        tran_vec = pyrr.matrix44.create_from_translation(pyrr.Vector3([0.0, 0.0, -30.0]))
+        tran_vec = pyrr.matrix44.create_from_translation(pyrr.Vector3([0.0, 0.0, EHandler.DIST]))
 
         # Talk to the shaders
         uniform_modl = glGetUniformLocation(shader, "model")
