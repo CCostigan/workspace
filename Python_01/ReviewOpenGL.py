@@ -5,7 +5,7 @@ from OpenGL.GL import *
 import glfw
 import pyrr
 
-from EHandler import *
+from Interaction import *
 
 WIDTH, HEIGHT = 1600, 900
 MIN, MAX = 0.1, 10000.0
@@ -50,23 +50,26 @@ class ReviewOpenGL(object):
         glEnable(GL_BLEND)
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
 
-        up_vec = pyrr.Vector3([0.0, 1.0, 0.0])
-        home_vec = pyrr.Vector3([0.0, 4.0, 3.0])
-        nose_vec = pyrr.Vector3([0.0, 0.0, -1.0])
+        # up_vec = pyrr.Vector3([0.0, 1.0, 0.0])
+        # home_vec = pyrr.Vector3([0.0, 4.0, 3.0])
+        # nose_vec = pyrr.Vector3([0.0, 0.0, -1.0])
         model_vec = pyrr.Vector3([0.0, 0.0, 0.0])
         # Matrices for the view to be fed to the shaders
         glViewport(0, 0, WIDTH, HEIGHT)
-        proj_mtx = pyrr.matrix44.create_perspective_projection_matrix(85, WIDTH / HEIGHT, MIN, MAX)
-        model_pos = pyrr.matrix44.create_from_translation(model_vec)
-        view_mtx = pyrr.matrix44.create_look_at(home_vec, home_vec+nose_vec, up_vec)
+        # proj_mtx = pyrr.matrix44.create_perspective_projection_matrix(85, WIDTH / HEIGHT, MIN, MAX)
+        # model_pos = pyrr.matrix44.create_from_translation(model_vec)
+        # view_mtx = pyrr.matrix44.create_look_at(home_vec, home_vec+nose_vec, up_vec)
+        proj_vec = pyrr.matrix44.create_perspective_projection_matrix(45, 1280/720, 0.1, 100)
+        tran_vec = pyrr.matrix44.create_from_translation(pyrr.Vector3([0, 0, -3]))
 
         # Talk to the shaders
-        modl_loc = glGetUniformLocation(shader, "model")
+        uniform_modl = glGetUniformLocation(shader, "model")
         # Will set this in the main loop
-        proj_loc = glGetUniformLocation(shader, "proj")
-        glUniformMatrix4fv(proj_loc, 1, GL_FALSE, proj_mtx)
-        view_loc = glGetUniformLocation(shader, "view")
-        glUniformMatrix4fv(view_loc, 1, GL_FALSE, view_mtx)
+        uniform_proj = glGetUniformLocation(shader, "proj")
+        # glUniformMatrix4fv(proj_loc, 1, GL_FALSE, proj_mtx)
+        # view_loc = glGetUniformLocation(shader, "view")
+        # glUniformMatrix4fv(view_loc, 1, GL_FALSE, view_mtx)
+        glUniformMatrix4fv(uniform_proj, 1, GL_FALSE, proj_vec)
 
         # the main application loop
         while not glfw.window_should_close(window) and not EHandler.DONE:
@@ -74,13 +77,15 @@ class ReviewOpenGL(object):
 
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
 
-            if True:
+            if model["indx"] is not None:
+                rot_x = pyrr.Matrix44.from_x_rotation(0.5 * glfw.get_time())
                 rot_y = pyrr.Matrix44.from_y_rotation(0.8 * glfw.get_time())
-                model_mtx = pyrr.matrix44.multiply(rot_y, model_pos)
 
-                glBindVertexArray(model["vao"][0])
-                glBindTexture(GL_TEXTURE_2D, texture)
-                glUniformMatrix4fv(modl_loc, 1, GL_FALSE, model_mtx)
+                rotation_mtx = pyrr.matrix44.multiply(rot_x, rot_y)
+                model_mtx = pyrr.matrix44.multiply(rotation_mtx, tran_vec)
+
+                glUniformMatrix4fv(uniform_modl, 1, GL_FALSE, model_mtx)
+
                 glDrawArrays(GL_TRIANGLES, 0, len(model["indx"]))
 
 

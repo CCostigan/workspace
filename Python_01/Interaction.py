@@ -4,8 +4,18 @@ import glfw
 from OpenGL.GL import *
 import pyrr
 
+class ViewHandler():
+    location = pyrr.Vector3([0.0, 1.0, 0.0])
+    up_vec = pyrr.Vector3([0.0, 1.0, 0.0])
+    fwd_vec = pyrr.Vector3([0.0, 0.0, -1.0])
+
+    def move(new_location):
+        pyrr.Vector3(new_location)        
+
+
+
 class EHandler():
-    dims = 800, 600
+    window_dims = 800, 600
 
     mouse_buttons = 0
     mouse_down = 0
@@ -20,7 +30,6 @@ class EHandler():
         pass
 
     def configure(window):
-
         glfw.set_window_size_callback(window, EHandler.window_size_callback)
         EHandler.window_size = glfw.get_window_size(window)
         # Set some other fun callbacks
@@ -35,16 +44,16 @@ class EHandler():
     # @staticmethod
     def window_size_callback(window, width, height):
         glViewport(0, 0, width, height)
-        EHandler.dims = width, height
+        EHandler.window_dims = width, height
         projection = pyrr.matrix44.create_perspective_projection_matrix(45, width / height, EHandler.NEAR, EHandler.FAR)
-        # glUniformMatrix4fv(ReviewOpenGL.proj_loc, 1, GL_FALSE, ReviewOpenGL.proj_mtx)
+        # glUniformMatrix4fv(EHandler.proj_loc, 1, GL_FALSE, EHandler.proj_mtx)
         print(f"window_size={EHandler.window_size}")
     
     # @staticmethod
     def cursor_pos_callback(window, x, y):
         EHandler.mouse_dxdy = (x - EHandler.mouse_coords[0], y - EHandler.mouse_coords[1])
         EHandler.mouse_coords = x, y
-        if EHandler.mouse_buttons == 0 and EHandler.mouse_down == 1:  # Need to log fewer of these
+        if EHandler.mouse_buttons == 0 and EHandler.mouse_down == 1:  # Is mouse button 0 down?
             print(f"mouse_pos={EHandler.mouse_dxdy}")
     
     # @staticmethod
