@@ -8,7 +8,9 @@ import pyrr
 
 WIDTH, HEIGHT = 1600, 900
 MIN, MAX = 0.1, 10000.0
+
 class ReviewOpenGL(object):
+    DONE = False
 
     def window_size_callback(window, width, height):
         print(f"Width={width} Height={height}")
@@ -16,6 +18,8 @@ class ReviewOpenGL(object):
         projection = pyrr.matrix44.create_perspective_projection_matrix(45, width / height, MIN, MAX)
         # glUniformMatrix4fv(ReviewOpenGL.proj_loc, 1, GL_FALSE, ReviewOpenGL.proj_mtx)
         pass
+    
+    @staticmethod
     def cursor_pos_callback(window, x, y):
         if False:  # Need to log fewer of these
             print(f"x={x} y={y}")
@@ -25,6 +29,8 @@ class ReviewOpenGL(object):
 
     def key_callback(window, a, b, c, d):
         print(f"key_callback a={a} b={b} c={c} d={d}")
+        if a==256 and b == 9:
+            ReviewOpenGL.DONE = True
 
     def char_callback(window, a):
         print(f"char_callback char={a}")
@@ -97,7 +103,7 @@ class ReviewOpenGL(object):
         glUniformMatrix4fv(view_loc, 1, GL_FALSE, view_mtx)
 
         # the main application loop
-        while not glfw.window_should_close(window):
+        while not glfw.window_should_close(window) and not ReviewOpenGL.DONE:
             glfw.poll_events()
 
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
