@@ -25,7 +25,7 @@ class EHandler():
     NEAR = 0.1
     FAR = 10000.0
     FOV = 30.0
-    DIST = -8.0
+    DIST = 20.0
     proj_vec =  pyrr.matrix44.create_perspective_projection_matrix(
         FOV, window_dims[0]/window_dims[1], NEAR, FAR)
 
@@ -85,3 +85,8 @@ class EHandler():
     def joystick_callback(window, arg):
         print(f"joystick_callback a={arg}")    
 
+if __name__=='__main__':
+    # model = ModelLoader.load_model_obj("res/mdls/Cube.obj")
+    # print(model)
+    from ReviewOpenGL import ReviewOpenGL
+    ReviewOpenGL.main()

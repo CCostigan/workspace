@@ -6,70 +6,62 @@ import numpy as np
 
 from TextureLoader import TextureLoader
 
+
+# https://stackoverflow.com/questions/16380005/opengl-3-4-glvertexattribpointer-stride-and-offset-miscalculation
+
 class ModelLoader():
-    vtxs = []
-    norm = []
-    txuv = []
-    face = []
 
-    indx = []
-    bufr = []
+    def __init__(self, mode=0, filename=None):
+        if mode == 1:
+            self.result = self.model_Elements_HC()
+        if mode == 2 and filename is not None:
+            self.result = self.model_Elements(filename)
+        if mode == 3 and filename is not None:
+            self.result = self.model_Arrays(filename)
+        
 
-    def model_Elements(filename=None):
+    def model_Elements_HC(self):
+        vertices = [-0.5, -0.5,  0.5,    0.0, 0.0,    0.0, 0.0, 1.0,
+                     0.5, -0.5,  0.5,    1.0, 0.0,    0.0, 0.0, 1.0,
+                     0.5,  0.5,  0.5,    1.0, 1.0,    0.0, 0.0, 1.0,
+                    -0.5,  0.5,  0.5,    0.0, 1.0,    0.0, 0.0, 1.0,
+   
+                    -0.5, -0.5, -0.5,    0.0, 0.0,    0.0, 0.0, 1.0,
+                     0.5, -0.5, -0.5,    1.0, 0.0,    0.0, 0.0, 1.0,
+                     0.5,  0.5, -0.5,    1.0, 1.0,    0.0, 0.0, 1.0,
+                    -0.5,  0.5, -0.5,    0.0, 1.0,    0.0, 0.0, 1.0,
+   
+                     0.5, -0.5, -0.5,    0.0, 0.0,    0.0, 0.0, 1.0,
+                     0.5,  0.5, -0.5,    1.0, 0.0,    0.0, 0.0, 1.0,
+                     0.5,  0.5,  0.5,    1.0, 1.0,    0.0, 0.0, 1.0,
+                     0.5, -0.5,  0.5,    0.0, 1.0,    0.0, 0.0, 1.0,
+   
+                    -0.5,  0.5, -0.5,    0.0, 0.0,    0.0, 0.0, 1.0,
+                    -0.5, -0.5, -0.5,    1.0, 0.0,    0.0, 0.0, 1.0,
+                    -0.5, -0.5,  0.5,    1.0, 1.0,    0.0, 0.0, 1.0,
+                    -0.5,  0.5,  0.5,    0.0, 1.0,    0.0, 0.0, 1.0,
+   
+                    -0.5, -0.5, -0.5,    0.0, 0.0,    0.0, 0.0, 1.0,
+                     0.5, -0.5, -0.5,    1.0, 0.0,    0.0, 0.0, 1.0,
+                     0.5, -0.5,  0.5,    1.0, 1.0,    0.0, 0.0, 1.0,
+                    -0.5, -0.5,  0.5,    0.0, 1.0,    0.0, 0.0, 1.0,
+   
+                     0.5,  0.5, -0.5,    0.0, 0.0,    0.0, 0.0, 1.0,
+                    -0.5,  0.5, -0.5,    1.0, 0.0,    0.0, 0.0, 1.0,
+                    -0.5,  0.5,  0.5,    1.0, 1.0,    0.0, 0.0, 1.0,
+                     0.5,  0.5,  0.5,    0.0, 1.0,    0.0, 0.0, 1.0,
+        ]
 
-        if filename:
-            objmod = ModelLoader.load_model_obj(filename)
-            vertices = np.array(objmod["buffr"], dtype=np.float32)
-            indices = np.array(objmod["indxs"], dtype=np.uint32)
-        else:
-            vertices = [-0.5, -0.5,  0.5,   0.0, 0.0,    0.0, 0.0, 1.0,
-                         0.5, -0.5,  0.5,   1.0, 0.0,    0.0, 0.0, 1.0,
-                         0.5,  0.5,  0.5,   1.0, 1.0,    0.0, 0.0, 1.0,
-                        -0.5,  0.5,  0.5,   0.0, 1.0,    0.0, 0.0, 1.0,
-
-                        -0.5, -0.5, -0.5,   0.0, 0.0,    0.0, 0.0, 1.0,
-                         0.5, -0.5, -0.5,   1.0, 0.0,    0.0, 0.0, 1.0,
-                         0.5,  0.5, -0.5,   1.0, 1.0,    0.0, 0.0, 1.0,
-                        -0.5,  0.5, -0.5,   0.0, 1.0,    0.0, 0.0, 1.0,
-
-                         0.5, -0.5, -0.5,   0.0, 0.0,    0.0, 0.0, 1.0,
-                         0.5,  0.5, -0.5,   1.0, 0.0,    0.0, 0.0, 1.0,
-                         0.5,  0.5,  0.5,   1.0, 1.0,    0.0, 0.0, 1.0,
-                         0.5, -0.5,  0.5,   0.0, 1.0,    0.0, 0.0, 1.0,
-
-                        -0.5,  0.5, -0.5,   0.0, 0.0,    0.0, 0.0, 1.0,
-                        -0.5, -0.5, -0.5,   1.0, 0.0,    0.0, 0.0, 1.0,
-                        -0.5, -0.5,  0.5,   1.0, 1.0,    0.0, 0.0, 1.0,
-                        -0.5,  0.5,  0.5,   0.0, 1.0,    0.0, 0.0, 1.0,
-
-                        -0.5, -0.5, -0.5,   0.0, 0.0,    0.0, 0.0, 1.0,
-                         0.5, -0.5, -0.5,   1.0, 0.0,    0.0, 0.0, 1.0,
-                         0.5, -0.5,  0.5,   1.0, 1.0,    0.0, 0.0, 1.0,
-                        -0.5, -0.5,  0.5,   0.0, 1.0,    0.0, 0.0, 1.0,
-
-                         0.5, 0.5, -0.5,    0.0, 0.0,    0.0, 0.0, 1.0,
-                        -0.5, 0.5, -0.5,    0.0, 0.0,    0.0, 0.0, 1.0,
-                        -0.5, 0.5,  0.5,    0.0, 1.0,    0.0, 0.0, 1.0,
-                         0.5, 0.5,  0.5,    0.0, 1.0,    0.0, 0.0, 1.0,
-            ]
-
-            indices = [ 0,  1,  2,  2,  3,  0,
-                        4,  5,  6,  6,  7,  4,
-                        8,  9, 10, 10, 11,  8,
-                        12, 13, 14, 14, 15, 12,
-                        16, 17, 18, 18, 19, 16,
-                        20, 21, 22, 22, 23, 20
-            ]            
-
-            # texture = TextureLoader.load_texture("res/imgs/charstrip.png")
-            objmod = { 
-                "textures" : [], 
-            }
-
-            vertices = np.array(vertices, dtype=np.float32)
-            indices = np.array(indices, dtype=np.uint32)
-
-
+        indices = [ 0,  1,  2,  2,  3,  0,
+                    4,  5,  6,  6,  7,  4,
+                    8,  9, 10, 10, 11,  8,
+                    12, 13, 14, 14, 15, 12,
+                    16, 17, 18, 18, 19, 16,
+                    20, 21, 22, 22, 23, 20
+        ]
+        vertices = np.array(vertices, dtype=np.float32)
+        indices = np.array(indices, dtype=np.uint32)
+        # Vertex Buffer Object
         VBO = glGenBuffers(1)
         glBindBuffer(GL_ARRAY_BUFFER, VBO)
         glBufferData(GL_ARRAY_BUFFER, vertices.nbytes, vertices, GL_STATIC_DRAW)
@@ -79,28 +71,62 @@ class ModelLoader():
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO)
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.nbytes, indices, GL_STATIC_DRAW)
 
-        glEnableVertexAttribArray(0)
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, vertices.itemsize * 8, ctypes.c_void_p(0))
+        glEnableVertexAttribArray(0)
 
+        glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, vertices.itemsize * 8, ctypes.c_void_p(12))        
         glEnableVertexAttribArray(1)
-        glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, vertices.itemsize * 8, ctypes.c_void_p(12))
 
-        # glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, vertices.itemsize * 8, ctypes.c_void_p(20))
-        # glEnableVertexAttribArray(2)
+        glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, vertices.itemsize * 8, ctypes.c_void_p(20))        
+        glEnableVertexAttribArray(2)
 
         print("Default model loaded")
         return {
             "render" : "DrawElements",
-            "indx" : indices, 
-            "bufr" : vertices, 
+            "vao" : None,
             "vbo" : VBO,
             "ebo" : EBO,
-            # "textures" : objmod["textures"], 
+            "indx" : indices, 
+            "bufr" : vertices, 
+            "textures" : [], 
+        }
+
+    def model_Elements(self, filename):
+
+        objmod = ModelLoader.load_model_obj(filename)
+
+
+        VBO = glGenBuffers(1)
+        glBindBuffer(GL_ARRAY_BUFFER, VBO)
+        glBufferData(GL_ARRAY_BUFFER, objmod["buffr"].nbytes, objmod["buffr"], GL_STATIC_DRAW)
+
+        # Element Buffer Object
+        EBO = glGenBuffers(1)
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO)
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, objmod["indxs"].nbytes, objmod["indxs"], GL_STATIC_DRAW)
+
+        glEnableVertexAttribArray(0)
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, objmod["buffr"].itemsize * 8, ctypes.c_void_p(0))
+
+        glEnableVertexAttribArray(1)
+        glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, objmod["buffr"].itemsize * 8, ctypes.c_void_p(12))
+
+        glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, objmod["buffr"].itemsize * 8, ctypes.c_void_p(20))
+        glEnableVertexAttribArray(2)
+
+        print("Default model loaded")
+        return {
+            "render" : "DrawElements",
+            "vao" : None,
+            "vbo" : VBO,
+            "ebo" : EBO,
+            "indx" : objmod["indxs"], 
+            "bufr" : objmod["buffr"], 
+            "textures" : objmod["textures"], 
         }
     
 
-
-    def model_Arrays(filename):
+    def model_Arrays(self, filename):
         objmod = ModelLoader.load_model_obj(filename)
 
         VAO = glGenVertexArrays(2)
@@ -121,9 +147,10 @@ class ModelLoader():
         glEnableVertexAttribArray(2) 
 
         return {
+            "render" : "DrawArrays",
             "vao" : VAO, 
             "vbo" : VBO,
-            "render" : "DrawArrays",
+            "ebo" : None,
             "indx" : objmod["indxs"], 
             "bufr" : objmod["buffr"], 
             "textures" : objmod["textures"], 
@@ -165,10 +192,13 @@ class ModelLoader():
                     for tokn in tokens[1:]:
                         norm.append(float(tokn))
                 if tokens[0] == 'f': # Face
+                    # face.append(tokens)
                     for tokn in tokens[1:]:
                         tkns = tokn.split('/')
+                        indx.append(len(bufr))
                         # print(tkns)
-                        indx.append(int(tkns[0])-1)
+                        # indx.append(int(tkns[0])-1)
+                        # indx.append(len(bufr))
                         v = (int(tkns[0])-1) * 3
                         t = (int(tkns[1])-1) * 2
                         n = (int(tkns[2])-1) * 3
@@ -182,13 +212,15 @@ class ModelLoader():
             print(f"norm count = {len(norm)}")
             print(f"face count = {len(face)}")
             
-            print(f"indx len = {len(indx)}") # print(f"indx={indx}")
-            print(f"bufr len = {len(bufr)}") # print(f"bufr={bufr}")
+            print(f"indx len = {len(indx)}")
+            print(f"indx={indx}")
+            print(f"bufr len = {len(bufr)}")
+            print(f"bufr={bufr}")
 
             indxs = np.array(indx, np.int32)
-            buffr = np.array(vtxs, np.float32)
+            buffr = np.array(bufr, np.float32)
 
-        texture = TextureLoader.load_texture("res/imgs/texture.png")
+        texture = TextureLoader.load_texture("res/imgs/lena.jpg")
         glBindTexture(GL_TEXTURE_2D, texture)
 
         return {
@@ -198,6 +230,8 @@ class ModelLoader():
         }
 
 
-if __name__ == '__main__':
-    model = ModelLoader.load_model_obj("res/mdls/Cube.obj")
-    print(model)
+if __name__=='__main__':
+    # model = ModelLoader.load_model_obj("res/mdls/Cube.obj")
+    # print(model)
+    from ReviewOpenGL import ReviewOpenGL
+    ReviewOpenGL.main()

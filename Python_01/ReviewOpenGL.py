@@ -24,7 +24,7 @@ class ReviewOpenGL(object):
         # glfw.window_hint(glfw.SAMPLES, 1)
 
         # creating the window
-        window = glfw.create_window(WIDTH, HEIGHT, "My OpenGL window", None, None)
+        window = glfw.create_window(WIDTH, HEIGHT, "Python OpenGL window", None, None)
         # check if window was created
         if not window:
             glfw.terminate()
@@ -32,21 +32,23 @@ class ReviewOpenGL(object):
         
         # fb_size = glfw.get_framebuffer_size(window)
         glfw.set_window_pos(window, 10, 30)
-
         glfw.make_context_current(window)
 
         eh = EHandler.configure(window)
 
         shader = ShaderLoader.load_shader("shader_vert.glsl","shader_frag.glsl")
 
+        ml = ModelLoader()
         models = [
-            ModelLoader.model_Elements(),
-            # ModelLoader.model_Elements("res/mdls/Cube.obj"),
-            # ModelLoader.model_Arrays("res/mdls/Cube.obj"),
+            # ml.model_Elements_HC(),
+            # ml.model_Elements("res/mdls/Cube.obj"),
+            ml.model_Arrays("res/mdls/FCA.obj"),
         ]
+        for model in models:
+            print(model)
 
         charstrip = TextureLoader.load_texture("res/imgs/charstrip.png")
-        hmmmmmmmm = TextureLoader.load_texture("res/imgs/lena.jpg")
+        picture = TextureLoader.load_texture("res/imgs/lena.jpg")
 
         glUseProgram(shader)
         glClearColor(0.1, 0.2, 0.4, 1.0)
@@ -58,7 +60,7 @@ class ReviewOpenGL(object):
 
         # Matrices for the view to be fed to the shaders
         # proj_vec = pyrr.matrix44.create_perspective_projection_matrix(45, WIDTH/HEIGHT, 0.1, 10000.0)
-        tran_vec = pyrr.matrix44.create_from_translation(pyrr.Vector3([0.0, 0.0, EHandler.DIST]))
+        tran_vec = pyrr.matrix44.create_from_translation(pyrr.Vector3([0.0, 0.0, -EHandler.DIST]))
 
         # Talk to the shaders
         uniform_modl = glGetUniformLocation(shader, "model")
@@ -78,9 +80,9 @@ class ReviewOpenGL(object):
             glUniformMatrix4fv(uniform_modl, 1, GL_FALSE, model_mtx)
             glUniformMatrix4fv(uniform_proj, 1, GL_FALSE, EHandler.proj_vec)
             for model in models:
-                if model["render"]=="DrawElements":
+                if model["render"] == "DrawElements":
                     glDrawElements(GL_TRIANGLES, len(model["indx"]), GL_UNSIGNED_INT, None)
-                elif model["render"]=="DrawArrays":
+                if model["render"] == "DrawArrays":
                     glDrawArrays(GL_TRIANGLES, 0, len(model["indx"]))
 
 
