@@ -6,8 +6,16 @@ import numpy as np
 
 
 class ModelLoader():
+    vtxs = []
+    norm = []
+    txuv = []
+    face = []
 
-    def null_model():
+    indx = []
+    bufr = []
+
+    def model_for_glDrawElements(filename):
+        objmod = ModelLoader.load_model_obj(filename)
         vertices = [-0.5, -0.5,  0.5,   0.0, 0.0,
                      0.5, -0.5,  0.5,   1.0, 0.0,
                      0.5,  0.5,  0.5,   1.0, 1.0,
@@ -48,6 +56,9 @@ class ModelLoader():
         vertices = np.array(vertices, dtype=np.float32)
         indices = np.array(indices, dtype=np.uint32)
 
+        # vertices = np.array(objmod["buffr"], dtype=np.float32)
+        # indices = np.array(objmod["indxs"], dtype=np.uint32)
+
         VBO = glGenBuffers(1)
         glBindBuffer(GL_ARRAY_BUFFER, VBO)
         glBufferData(GL_ARRAY_BUFFER, vertices.nbytes, vertices, GL_STATIC_DRAW)
@@ -77,7 +88,36 @@ class ModelLoader():
     
 
 
-    def load_model(filename):
+    def model_for_glDrawArrays(filename):
+        objmod = ModelLoader.load_model_obj(filename)
+
+        VAO = glGenVertexArrays(2)
+        VBO = glGenBuffers(2)
+
+        glBindVertexArray(VAO[0])
+        glBindBuffer(GL_ARRAY_BUFFER, VBO[0])
+        glBufferData(GL_ARRAY_BUFFER, objmod["buffr"].nbytes, objmod["buffr"], GL_STATIC_DRAW)
+
+        # Vertex coords
+        glEnableVertexAttribArray(0)
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, objmod["buffr"].itemsize * 8, ctypes.c_void_p(0))
+        # UV coords
+        glEnableVertexAttribArray(1)
+        glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, objmod["buffr"].itemsize * 8, ctypes.c_void_p(12))
+        # Normal vectors
+        glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, objmod["buffr"].itemsize * 8, ctypes.c_void_p(20))
+        glEnableVertexAttribArray(2) 
+
+        # return [indxs, buffr, VAO, VBO]
+        return {
+            "indx" : objmod["indxs"], 
+            "bufr" : objmod["buffr"], 
+            "vao" : VAO, 
+            "vbo" : VBO
+        }
+        pass 
+
+    def load_model_obj(filename):
 
         vtxs = []
         norm = []
@@ -135,32 +175,30 @@ class ModelLoader():
             indxs = np.array(indx, np.int32)
             buffr = np.array(vtxs, np.float32)
 
-            VAO = glGenVertexArrays(2)
-            VBO = glGenBuffers(2)
+            # VAO = glGenVertexArrays(2)
+            # VBO = glGenBuffers(2)
 
-            glBindVertexArray(VAO[0])
-            glBindBuffer(GL_ARRAY_BUFFER, VBO[0])
-            glBufferData(GL_ARRAY_BUFFER, buffr.nbytes, buffr, GL_STATIC_DRAW)
+            # glBindVertexArray(VAO[0])
+            # glBindBuffer(GL_ARRAY_BUFFER, VBO[0])
+            # glBufferData(GL_ARRAY_BUFFER, buffr.nbytes, buffr, GL_STATIC_DRAW)
 
-            # Vertex coords
-            glEnableVertexAttribArray(0)
-            glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, buffr.itemsize * 8, ctypes.c_void_p(0))
-            # UV coords
-            glEnableVertexAttribArray(1)
-            glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, buffr.itemsize * 8, ctypes.c_void_p(12))
-            # Normal vectors
-            glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, buffr.itemsize * 8, ctypes.c_void_p(20))
-            glEnableVertexAttribArray(2) 
+            # # Vertex coords
+            # glEnableVertexAttribArray(0)
+            # glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, buffr.itemsize * 8, ctypes.c_void_p(0))
+            # # UV coords
+            # glEnableVertexAttribArray(1)
+            # glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, buffr.itemsize * 8, ctypes.c_void_p(12))
+            # # Normal vectors
+            # glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, buffr.itemsize * 8, ctypes.c_void_p(20))
+            # glEnableVertexAttribArray(2) 
 
         # return [indxs, buffr, VAO, VBO]
         return {
-            "indx" : indxs, 
-            "bufr" : buffr, 
-            "vao" : VAO, 
-            "vbo" : VBO
+            "indxs" : indxs, 
+            "buffr" : buffr, 
         }
 
 
 if __name__ == '__main__':
-    model = ModelLoader.load_model("res/mdls/Cube.obj")
+    model = ModelLoader.load_model_obj("res/mdls/Cube.obj")
     print(model)

@@ -21,9 +21,12 @@ class EHandler():
     mouse_down = 0
     mouse_coords = 400, 300
     mouse_dxdy = 0, 0
-
+    
     NEAR = 0.1
     FAR = 10000.0
+    FOV = 45.0
+    proj_vec =  pyrr.matrix44.create_perspective_projection_matrix(FOV, window_dims[0]/window_dims[1], NEAR, FAR)
+
     DONE = False
 
     def __init__():
@@ -45,7 +48,7 @@ class EHandler():
     def window_size_callback(window, width, height):
         glViewport(0, 0, width, height)
         EHandler.window_dims = width, height
-        projection = pyrr.matrix44.create_perspective_projection_matrix(45, width / height, EHandler.NEAR, EHandler.FAR)
+        EHandler.proj_vec =  pyrr.matrix44.create_perspective_projection_matrix(EHandler.FOV, width/height, EHandler.NEAR, EHandler.FAR)
         # glUniformMatrix4fv(EHandler.proj_loc, 1, GL_FALSE, EHandler.proj_mtx)
         print(f"window_size={EHandler.window_size}")
     

@@ -35,16 +35,12 @@ class ReviewOpenGL(object):
 
         eh = EHandler.configure(window)
 
-        use_hc_model = True
-
         from ShaderLoader import ShaderLoader
         shader = ShaderLoader.load_shader("shader_vert.glsl","shader_frag.glsl")
 
         from ModelLoader import ModelLoader
-        if use_hc_model == True:
-            model = ModelLoader.null_model()
-        else:
-            model = ModelLoader.load_model("res/mdls/Cube.obj")
+        model1 = ModelLoader.model_for_glDrawElements("res/mdls/Cube.obj")
+        # model2 = ModelLoader.model_for_glDrawArrays("res/mdls/Cube.obj")
 
         from TextureLoader import TextureLoader
         texture = TextureLoader.load_texture("res/imgs/texture.png")
@@ -64,7 +60,8 @@ class ReviewOpenGL(object):
         # proj_mtx = pyrr.matrix44.create_perspective_projection_matrix(85, WIDTH / HEIGHT, MIN, MAX)
         # model_pos = pyrr.matrix44.create_from_translation(model_vec)
         # view_mtx = pyrr.matrix44.create_look_at(home_vec, home_vec+nose_vec, up_vec)
-        proj_vec = pyrr.matrix44.create_perspective_projection_matrix(45, WIDTH/HEIGHT, 0.1, 100)
+        proj_vec = pyrr.matrix44.create_perspective_projection_matrix(45, WIDTH/HEIGHT, 0.1, 10000.0)
+        # proj_vec = EHandler.proj_vec
         tran_vec = pyrr.matrix44.create_from_translation(pyrr.Vector3([0, 0, -30]))
 
         # Talk to the shaders
@@ -82,22 +79,17 @@ class ReviewOpenGL(object):
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
 
 
-            if use_hc_model:
-                glfwtime = glfw.get_time()
-                rot_x = pyrr.Matrix44.from_x_rotation(0.5 * glfwtime)
-                rot_y = pyrr.Matrix44.from_y_rotation(0.8 * glfwtime)
-                rotation_mtx = pyrr.matrix44.multiply(rot_x, rot_y)
-                model_mtx = pyrr.matrix44.multiply(rotation_mtx, tran_vec)
+            glfwtime = glfw.get_time()
+            rot_x = pyrr.Matrix44.from_x_rotation(0.5 * glfwtime)
+            rot_y = pyrr.Matrix44.from_y_rotation(0.8 * glfwtime)
+            rotation_mtx = pyrr.matrix44.multiply(rot_x, rot_y)
+            model_mtx = pyrr.matrix44.multiply(rotation_mtx, tran_vec)
+            if True:
                 glUniformMatrix4fv(uniform_modl, 1, GL_FALSE, model_mtx)
-                glDrawElements(GL_TRIANGLES, len(model["indx"]), GL_UNSIGNED_INT, None)
-
-            # elif model["indx"] is not None:
-            #     rot_x = pyrr.Matrix44.from_x_rotation(0.5 * glfw.get_time())
-            #     rot_y = pyrr.Matrix44.from_y_rotation(0.8 * glfw.get_time())
-            #     rotation_mtx = pyrr.matrix44.multiply(rot_x, rot_y)
-            #     model_mtx = pyrr.matrix44.multiply(rotation_mtx, tran_vec)
-            #     glUniformMatrix4fv(uniform_modl, 1, GL_FALSE, model_mtx)
-                # glDrawArrays(GL_TRIANGLES, 0, len(model["indx"]))
+                glDrawElements(GL_TRIANGLES, len(model1["indx"]), GL_UNSIGNED_INT, None)
+            else:
+                glUniformMatrix4fv(uniform_modl, 1, GL_FALSE, model_mtx)
+                glDrawArrays(GL_TRIANGLES, 0, len(model2["indx"]))
 
 
             glfw.swap_buffers(window)
