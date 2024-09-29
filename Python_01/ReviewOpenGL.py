@@ -5,41 +5,44 @@ from OpenGL.GL import *
 import glfw
 import pyrr
 
+from EHandler import *
 
 WIDTH, HEIGHT = 1600, 900
 MIN, MAX = 0.1, 10000.0
 
 class ReviewOpenGL(object):
-    DONE = False
 
-    def window_size_callback(window, width, height):
-        print(f"Width={width} Height={height}")
-        glViewport(0, 0, width, height)
-        projection = pyrr.matrix44.create_perspective_projection_matrix(45, width / height, MIN, MAX)
-        # glUniformMatrix4fv(ReviewOpenGL.proj_loc, 1, GL_FALSE, ReviewOpenGL.proj_mtx)
-        pass
+
+    # def window_size_callback(window, width, height):
+    #     print(f"Width={width} Height={height}")
+    #     glViewport(0, 0, width, height)
+    #     projection = pyrr.matrix44.create_perspective_projection_matrix(45, width / height, MIN, MAX)
+    #     # glUniformMatrix4fv(ReviewOpenGL.proj_loc, 1, GL_FALSE, ReviewOpenGL.proj_mtx)
+    #     pass
     
-    @staticmethod
-    def cursor_pos_callback(window, x, y):
-        if False:  # Need to log fewer of these
-            print(f"x={x} y={y}")
-        pass
-    def mouse_button_callback(window, a, b, c):
-        print(f"mouse_button_callback button={a} down={b} c={c}")
+    # # @staticmethod
+    # def cursor_pos_callback(window, x, y):
+    #     ReviewOpenGL.mdxdy = (x - ReviewOpenGL.mouse[0], y - ReviewOpenGL.mouse[1])
+    #     ReviewOpenGL.mouse = x, y
+    #     if True:  # Need to log fewer of these
+    #         print(f"mouse={ReviewOpenGL.mdxdy}")
+    
+    # def mouse_button_callback(window, a, b, c):
+    #     print(f"mouse_button_callback button={a} down={b} c={c}")
 
-    def key_callback(window, a, b, c, d):
-        print(f"key_callback a={a} b={b} c={c} d={d}")
-        if a==256 and b == 9:
-            ReviewOpenGL.DONE = True
+    # def key_callback(window, a, b, c, d):
+    #     print(f"key_callback a={a} b={b} c={c} d={d}")
+    #     if a==256 and b == 9:
+    #         ReviewOpenGL.DONE = True
 
-    def char_callback(window, a):
-        print(f"char_callback char={a}")
+    # def char_callback(window, a):
+    #     print(f"char_callback char={a}")
 
-    def char_mods_callback(window, a, b):
-        print(f"char_mods_callback a={a} b={b}")
+    # def char_mods_callback(window, a, b):
+    #     print(f"char_mods_callback a={a} b={b}")
 
-    def joystick_callback(window, arg):
-        print(f"joystick_callback a={arg}")
+    # def joystick_callback(window, arg):
+    #     print(f"joystick_callback a={arg}")
 
     def main():
 
@@ -61,14 +64,16 @@ class ReviewOpenGL(object):
         glfw.set_window_pos(window, 10, 30)
 
         glfw.make_context_current(window)
-        glfw.set_window_size_callback(window, ReviewOpenGL.window_size_callback)
-        # Set some other fun callbacks
-        glfw.set_key_callback(window, ReviewOpenGL.key_callback)
-        glfw.set_char_callback(window, ReviewOpenGL.char_callback)
-        glfw.set_char_mods_callback(window, ReviewOpenGL.char_mods_callback)
-        glfw.set_cursor_pos_callback(window, ReviewOpenGL.cursor_pos_callback)
-        glfw.set_mouse_button_callback(window, ReviewOpenGL.mouse_button_callback)
-        glfw.set_joystick_callback(ReviewOpenGL.joystick_callback)
+
+        eh = EHandler.configure(window)
+        # glfw.set_window_size_callback(window, ReviewOpenGL.window_size_callback)
+        # # Set some other fun callbacks
+        # glfw.set_key_callback(window, ReviewOpenGL.key_callback)
+        # glfw.set_char_callback(window, ReviewOpenGL.char_callback)
+        # glfw.set_char_mods_callback(window, ReviewOpenGL.char_mods_callback)
+        # glfw.set_cursor_pos_callback(window, ReviewOpenGL.cursor_pos_callback)
+        # glfw.set_mouse_button_callback(window, ReviewOpenGL.mouse_button_callback)
+        # glfw.set_joystick_callback(ReviewOpenGL.joystick_callback)
 
         from ShaderLoader import ShaderLoader
         shader = ShaderLoader.load_shader("shader_vert.glsl","shader_frag.glsl")
@@ -86,24 +91,25 @@ class ReviewOpenGL(object):
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
 
         up_vec = pyrr.Vector3([0.0, 1.0, 0.0])
-        home_vec = pyrr.Vector3([10.0, 0.0, 0.0])
+        home_vec = pyrr.Vector3([0.0, 4.0, 3.0])
+        nose_vec = pyrr.Vector3([0.0, 0.0, -1.0])
         model_vec = pyrr.Vector3([0.0, 0.0, 0.0])
         # Matrices for the view to be fed to the shaders
         glViewport(0, 0, WIDTH, HEIGHT)
         proj_mtx = pyrr.matrix44.create_perspective_projection_matrix(85, WIDTH / HEIGHT, MIN, MAX)
         model_pos = pyrr.matrix44.create_from_translation(model_vec)
-        view_mtx = pyrr.matrix44.create_look_at(home_vec, model_vec, up_vec)
+        view_mtx = pyrr.matrix44.create_look_at(home_vec, home_vec+nose_vec, up_vec)
 
         # Talk to the shaders
         modl_loc = glGetUniformLocation(shader, "model")
+        # Will set this in the main loop
         proj_loc = glGetUniformLocation(shader, "proj")
-        view_loc = glGetUniformLocation(shader, "view")
-
         glUniformMatrix4fv(proj_loc, 1, GL_FALSE, proj_mtx)
+        view_loc = glGetUniformLocation(shader, "view")
         glUniformMatrix4fv(view_loc, 1, GL_FALSE, view_mtx)
 
         # the main application loop
-        while not glfw.window_should_close(window) and not ReviewOpenGL.DONE:
+        while not glfw.window_should_close(window) and not EHandler.DONE:
             glfw.poll_events()
 
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
