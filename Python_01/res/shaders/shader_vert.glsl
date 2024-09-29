@@ -2,6 +2,7 @@
 
 layout(location = 0) in vec3 a_position;
 layout(location = 1) in vec2 a_texture;
+layout(location = 2) in vec2 a_normal;
 
 uniform mat4 model; // combined translation and rotation
 uniform mat4 proj;

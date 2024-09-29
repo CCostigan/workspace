@@ -4,7 +4,7 @@ from PIL import Image
 
 class TextureLoader():
 
-    def load_texture(filename):
+    def load_texture(filename): 
 
         texture = glGenTextures(1)
         glBindTexture(GL_TEXTURE_2D, texture)

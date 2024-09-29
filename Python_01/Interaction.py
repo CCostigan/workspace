@@ -24,7 +24,7 @@ class EHandler():
     
     NEAR = 0.1
     FAR = 10000.0
-    FOV = 45.0
+    FOV = 30.0
     proj_vec =  pyrr.matrix44.create_perspective_projection_matrix(FOV, window_dims[0]/window_dims[1], NEAR, FAR)
 
     DONE = False
@@ -57,7 +57,7 @@ class EHandler():
         EHandler.mouse_dxdy = (x - EHandler.mouse_coords[0], y - EHandler.mouse_coords[1])
         EHandler.mouse_coords = x, y
         if EHandler.mouse_buttons == 0 and EHandler.mouse_down == 1:  # Is mouse button 0 down?
-            print(f"mouse_pos={EHandler.mouse_dxdy}")
+            print(f"mouse_mov={EHandler.mouse_dxdy}")
     
     # @staticmethod
     def mouse_button_callback(window, a, b, c):
