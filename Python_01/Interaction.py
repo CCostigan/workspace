@@ -15,7 +15,7 @@ class ViewHandler():
 
 
 class EHandler():
-    window_dims = 800, 600
+    window_dims = 1600, 900
 
     mouse_buttons = 0
     mouse_down = 0
