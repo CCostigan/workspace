@@ -62,6 +62,7 @@ class ReviewOpenGL(object):
         glClearColor(0.1, 0.2, 0.4, 1.0)
         glEnable(GL_DEPTH_TEST)
         glEnable(GL_BLEND)
+        # glEnable(GL_LIGHTING)
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
         # Initial Viewport
         glViewport(0, 0, WIDTH, HEIGHT)
@@ -69,7 +70,18 @@ class ReviewOpenGL(object):
         # Talk to the shaders
         uniform_modl = glGetUniformLocation(shader, "model")
         uniform_proj = glGetUniformLocation(shader, "proj")
-        uniform_lite = glGetUniformLocation(shader, "light")
+        # Lighting
+        uniform_LP = glGetUniformLocation(shader, "light")
+        uniform_Ka = glGetUniformLocation(shader, "uKa")
+        uniform_Kd = glGetUniformLocation(shader, "uKd")
+        uniform_Ks = glGetUniformLocation(shader, "uKs")
+        uniform_Sh = glGetUniformLocation(shader, "uShininess")
+        # https://web.engr.oregonstate.edu/~mjb/cs557/Handouts/lighting.1pp.pdf
+        # glUniformMatrix4fv(uniform_LP, 1, GL_FALSE, pyrr.Vector3([5.0, 5.0, 0.0]))
+        # glUniformMatrix4fv(uniform_Ka, 1, GL_FALSE, 1.0)
+        # glUniformMatrix4fv(uniform_Kd, 1, GL_FALSE, 1.0)
+        # glUniformMatrix4fv(uniform_Ks, 1, GL_FALSE, 1.0)
+        # glUniformMatrix4fv(uniform_Sh, 1, GL_FALSE, 1.0)
 
         # the main application loop
         while not glfw.window_should_close(window) and not EHandler.DONE:
