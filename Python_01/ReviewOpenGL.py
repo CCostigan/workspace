@@ -51,9 +51,11 @@ class ReviewOpenGL(object):
         charstrip = TextureLoader.load_texture("res/imgs/charstrip.png")
         models[0]["textures"].append(TextureLoader.load_texture("res/imgs/lena.jpg"))
         models[1]["textures"].append(TextureLoader.load_texture("res/imgs/ddg0.png"))
-        models[0]["location"]=[0.0, 0.0, 0.0]
-        models[1]["location"]=[0.0, 4.0, 0.0]
-        models[2]["location"]=[0.0, -4.0, 0.0]
+        models[2]["textures"].append(TextureLoader.load_texture("res/imgs/pic1.png"))
+        
+        models[0]["location"]=[0.0, 6.0, 0.0]
+        models[1]["location"]=[0.0, 0.0, 0.0]
+        models[2]["location"]=[0.0, -3.0, 0.0]
 
 
         glUseProgram(shader)
@@ -67,6 +69,7 @@ class ReviewOpenGL(object):
         # Talk to the shaders
         uniform_modl = glGetUniformLocation(shader, "model")
         uniform_proj = glGetUniformLocation(shader, "proj")
+        uniform_lite = glGetUniformLocation(shader, "light")
 
         # the main application loop
         while not glfw.window_should_close(window) and not EHandler.DONE:

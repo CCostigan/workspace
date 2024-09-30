@@ -1,6 +1,8 @@
 # version 330
 
 in vec2 v_texture;
+in vec3 v_normal;
+//in vec3 v_frag;
 
 out vec4 out_color;
 
