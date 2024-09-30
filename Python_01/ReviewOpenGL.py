@@ -13,6 +13,7 @@ from Interaction import EHandler
 
 WIDTH, HEIGHT = 1600, 900
 MIN, MAX = 0.1, 10000.0
+model_axis = [0.0, 0.0, 0.0]
 
 class ReviewOpenGL(object):
 
@@ -42,13 +43,15 @@ class ReviewOpenGL(object):
         models = [
             # ml.model_Elements_HC(),
             # ml.model_Elements("res/mdls/Cube.obj"),
-            ml.model_Arrays("res/mdls/FCA.obj"),
+            ml.model_Arrays("res/mdls/DDG.obj"),
         ]
         for model in models:
             print(model)
 
         charstrip = TextureLoader.load_texture("res/imgs/charstrip.png")
-        picture = TextureLoader.load_texture("res/imgs/lena.jpg")
+        # picture = TextureLoader.load_texture("res/imgs/pic2.png")
+        picture = TextureLoader.load_texture("res/imgs/ddg0.png")
+        # picture = TextureLoader.load_texture("res/imgs/baboon.jpg")
 
         glUseProgram(shader)
         glClearColor(0.1, 0.2, 0.4, 1.0)
@@ -73,9 +76,11 @@ class ReviewOpenGL(object):
 
 
             glfwtime = glfw.get_time()
-            rot_x = pyrr.Matrix44.from_x_rotation(0.5 * glfwtime)
-            rot_y = pyrr.Matrix44.from_y_rotation(0.8 * glfwtime)
-            rotation_mtx = pyrr.matrix44.multiply(rot_x, rot_y)
+            rot_x = pyrr.Matrix44.from_x_rotation(0.01 * EHandler.model_axis[0]) #0.0 * glfwtime)
+            rot_y = pyrr.Matrix44.from_y_rotation(0.01 * EHandler.model_axis[1]) #0.8 * glfwtime)
+            # rot_z = pyrr.Matrix44.from_z_rotation(0.01 * EHandler.model_axis[2]) #0.8 * glfwtime)
+            rotation_mtx = pyrr.matrix44.multiply(rot_y, rot_x)
+            # rotation_mtx = pyrr.matrix44.multiply(rotation_mtx, rot_z)
             model_mtx = pyrr.matrix44.multiply(rotation_mtx, tran_vec)
             glUniformMatrix4fv(uniform_modl, 1, GL_FALSE, model_mtx)
             glUniformMatrix4fv(uniform_proj, 1, GL_FALSE, EHandler.proj_vec)
