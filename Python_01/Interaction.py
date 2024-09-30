@@ -21,7 +21,8 @@ class EHandler():
     mouse_down = 0
     mouse_coords = 400, 300
     mouse_dxdy = 0, 0
-    
+    mouse_scroll = 0
+
     NEAR = 0.1
     FAR = 10000.0
     FOV = 30.0
@@ -45,6 +46,7 @@ class EHandler():
         glfw.set_char_mods_callback(window, EHandler.char_mods_callback)
         glfw.set_cursor_pos_callback(window, EHandler.cursor_pos_callback)
         glfw.set_mouse_button_callback(window, EHandler.mouse_button_callback)
+        glfw.set_scroll_callback(window, EHandler.scroll_callback)
         glfw.set_joystick_callback(EHandler.joystick_callback)   
         print(f"window_size={EHandler.window_size}")
 
@@ -84,6 +86,11 @@ class EHandler():
     # @staticmethod
     def char_mods_callback(window, a, b):
         print(f"char_mods_callback a={a} b={b}")
+
+    def scroll_callback(window, a, b):
+        print(f"scroll_callback a={a} b={b}")
+        EHandler.mouse_scroll = b
+        EHandler.DIST += b
 
     # @staticmethod
     def joystick_callback(window, arg):

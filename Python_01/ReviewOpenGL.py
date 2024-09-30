@@ -51,7 +51,7 @@ class ReviewOpenGL(object):
         charstrip = TextureLoader.load_texture("res/imgs/charstrip.png")
         # picture = TextureLoader.load_texture("res/imgs/pic2.png")
         picture = TextureLoader.load_texture("res/imgs/ddg0.png")
-        # picture = TextureLoader.load_texture("res/imgs/baboon.jpg")
+        person = TextureLoader.load_texture("res/imgs/lena.jpg")
 
         glUseProgram(shader)
         glClearColor(0.1, 0.2, 0.4, 1.0)
@@ -63,7 +63,7 @@ class ReviewOpenGL(object):
 
         # Matrices for the view to be fed to the shaders
         # proj_vec = pyrr.matrix44.create_perspective_projection_matrix(45, WIDTH/HEIGHT, 0.1, 10000.0)
-        tran_vec = pyrr.matrix44.create_from_translation(pyrr.Vector3([0.0, 0.0, -EHandler.DIST]))
+        # tran_vec = pyrr.matrix44.create_from_translation(pyrr.Vector3([0.0, 0.0, -EHandler.DIST]))
 
         # Talk to the shaders
         uniform_modl = glGetUniformLocation(shader, "model")
@@ -74,6 +74,7 @@ class ReviewOpenGL(object):
             glfw.poll_events()
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
 
+            tran_vec = pyrr.matrix44.create_from_translation(pyrr.Vector3([0.0, 0.0, -EHandler.DIST]))
 
             glfwtime = glfw.get_time()
             rot_x = pyrr.Matrix44.from_x_rotation(0.01 * EHandler.model_axis[0]) #0.0 * glfwtime)
@@ -86,8 +87,10 @@ class ReviewOpenGL(object):
             glUniformMatrix4fv(uniform_proj, 1, GL_FALSE, EHandler.proj_vec)
             for model in models:
                 if model["render"] == "DrawElements":
+                    glBindTexture(GL_TEXTURE_2D, person)
                     glDrawElements(GL_TRIANGLES, len(model["indx"]), GL_UNSIGNED_INT, None)
                 if model["render"] == "DrawArrays":
+                    glBindTexture(GL_TEXTURE_2D, picture)
                     glDrawArrays(GL_TRIANGLES, 0, len(model["indx"]))
 
 
