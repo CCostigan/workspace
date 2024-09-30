@@ -45,13 +45,9 @@ class ReviewOpenGL(object):
             # ml.model_Elements("res/mdls/Cube.obj"),
             ml.model_Arrays("res/mdls/DDG.obj"),
         ]
-        for model in models:
-            print(model)
 
         charstrip = TextureLoader.load_texture("res/imgs/charstrip.png")
-        # picture = TextureLoader.load_texture("res/imgs/pic2.png")
-        picture = TextureLoader.load_texture("res/imgs/ddg0.png")
-        person = TextureLoader.load_texture("res/imgs/lena.jpg")
+        models[0]["textures"].append(TextureLoader.load_texture("res/imgs/ddg0.png"))
 
         glUseProgram(shader)
         glClearColor(0.1, 0.2, 0.4, 1.0)
@@ -60,10 +56,6 @@ class ReviewOpenGL(object):
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
         # Initial Viewport
         glViewport(0, 0, WIDTH, HEIGHT)
-
-        # Matrices for the view to be fed to the shaders
-        # proj_vec = pyrr.matrix44.create_perspective_projection_matrix(45, WIDTH/HEIGHT, 0.1, 10000.0)
-        # tran_vec = pyrr.matrix44.create_from_translation(pyrr.Vector3([0.0, 0.0, -EHandler.DIST]))
 
         # Talk to the shaders
         uniform_modl = glGetUniformLocation(shader, "model")
@@ -87,10 +79,13 @@ class ReviewOpenGL(object):
             glUniformMatrix4fv(uniform_proj, 1, GL_FALSE, EHandler.proj_vec)
             for model in models:
                 if model["render"] == "DrawElements":
+                    glBindBuffer(GL_ARRAY_BUFFER, model["vbo"])
+                    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, model["ebo"])
                     glBindTexture(GL_TEXTURE_2D, person)
                     glDrawElements(GL_TRIANGLES, len(model["indx"]), GL_UNSIGNED_INT, None)
                 if model["render"] == "DrawArrays":
-                    glBindTexture(GL_TEXTURE_2D, picture)
+                    glBindVertexArray(model["vao"])
+                    glBindTexture(GL_TEXTURE_2D, model["textures"][0])
                     glDrawArrays(GL_TRIANGLES, 0, len(model["indx"]))
 
 
