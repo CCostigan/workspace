@@ -168,7 +168,9 @@ class ModelLoader():
             while line:
                 tokens = line.split()
                 # print(f"Line={tokens[1:]}")  
-                if tokens[0] == '#':  # Comment line
+                if len(tokens) == 0:  # Empty line
+                    pass
+                elif tokens[0] == '#':  # Comment line
                     pass
                 elif tokens[0] == 'o':  # Object                    
                     pass

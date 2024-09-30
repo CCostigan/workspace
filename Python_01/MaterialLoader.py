@@ -7,12 +7,15 @@
 class MaterialLoader():
 
     def load_template(template_filename):
+        print(f"Opening {template_filename}")  
         with open(template_filename, 'r') as f:
             line = f.readline()
             while line:
                 tokens = line.split()
-                # print(f"Line={tokens[1:]}")  
-                if tokens[0] == '#':  # Comment line
+                print(f"Line={tokens}")  
+                if len(tokens) == 0:  # Empty line
+                    pass
+                elif tokens[0] == '#':  # Comment line
                     pass
                 elif tokens[0] == "newmtl":  # Material Name
                     pass
@@ -58,8 +61,10 @@ class MaterialLoader():
                     pass
                 else:
                     print(f"Unknown objet token {tokens[0]}")
+                line = f.readline()
 
-if __name__=='__main__':
+if __name__ == '__main__':
+    print("Hello>?")
     material = MaterialLoader.load_template("res/mdls/Cube.mtl")
     print(material)
     # from ReviewOpenGL import ReviewOpenGL
