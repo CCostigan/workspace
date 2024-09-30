@@ -49,8 +49,12 @@ class ReviewOpenGL(object):
         ]
 
         charstrip = TextureLoader.load_texture("res/imgs/charstrip.png")
-        # models[0]["textures"].append(TextureLoader.load_texture("res/imgs/lena.jpg"))
-        models[0]["textures"].append(TextureLoader.load_texture("res/imgs/ddg0.png"))
+        models[0]["textures"].append(TextureLoader.load_texture("res/imgs/lena.jpg"))
+        models[1]["textures"].append(TextureLoader.load_texture("res/imgs/ddg0.png"))
+        models[0]["location"]=[0.0, 0.0, 0.0]
+        models[1]["location"]=[0.0, 4.0, 0.0]
+        models[2]["location"]=[0.0, -4.0, 0.0]
+
 
         glUseProgram(shader)
         glClearColor(0.1, 0.2, 0.4, 1.0)
@@ -68,19 +72,19 @@ class ReviewOpenGL(object):
         while not glfw.window_should_close(window) and not EHandler.DONE:
             glfw.poll_events()
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
-
-            tran_vec = pyrr.matrix44.create_from_translation(pyrr.Vector3([0.0, 0.0, -EHandler.DIST]))
-
             glfwtime = glfw.get_time()
-            rot_x = pyrr.Matrix44.from_x_rotation(0.01 * EHandler.model_axis[0]) #0.0 * glfwtime)
-            rot_y = pyrr.Matrix44.from_y_rotation(0.01 * EHandler.model_axis[1]) #0.8 * glfwtime)
-            # rot_z = pyrr.Matrix44.from_z_rotation(0.01 * EHandler.model_axis[2]) #0.8 * glfwtime)
-            rotation_mtx = pyrr.matrix44.multiply(rot_y, rot_x)
-            # rotation_mtx = pyrr.matrix44.multiply(rotation_mtx, rot_z)
-            model_mtx = pyrr.matrix44.multiply(rotation_mtx, tran_vec)
-            glUniformMatrix4fv(uniform_modl, 1, GL_FALSE, model_mtx)
-            glUniformMatrix4fv(uniform_proj, 1, GL_FALSE, EHandler.proj_vec)
+
             for model in models:
+                # tran_vec = pyrr.matrix44.create_from_translation(pyrr.Vector3([0.0, 0.0, -EHandler.DIST]))
+                tran_vec = pyrr.matrix44.create_from_translation(pyrr.Vector3([model["location"][0], model["location"][1], -EHandler.DIST]))
+                rot_x = pyrr.Matrix44.from_x_rotation(0.01 * EHandler.model_axis[0]) #0.0 * glfwtime)
+                rot_y = pyrr.Matrix44.from_y_rotation(0.01 * EHandler.model_axis[1]) #0.8 * glfwtime)
+                # rot_z = pyrr.Matrix44.from_z_rotation(0.01 * EHandler.model_axis[2]) #0.8 * glfwtime)
+                rotation_mtx = pyrr.matrix44.multiply(rot_y, rot_x)
+                # rotation_mtx = pyrr.matrix44.multiply(rotation_mtx, rot_z)
+                model_mtx = pyrr.matrix44.multiply(rotation_mtx, tran_vec)
+                glUniformMatrix4fv(uniform_modl, 1, GL_FALSE, model_mtx)
+                glUniformMatrix4fv(uniform_proj, 1, GL_FALSE, EHandler.proj_vec)
                 if model["render"] == "DrawElements":
                     glBindBuffer(GL_ARRAY_BUFFER, model["vbo"])
                     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, model["ebo"])
