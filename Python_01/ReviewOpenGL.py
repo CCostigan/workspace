@@ -77,11 +77,11 @@ class ReviewOpenGL(object):
         uniform_Ks = glGetUniformLocation(shader, "uKs")
         uniform_Sh = glGetUniformLocation(shader, "uShininess")
         # https://web.engr.oregonstate.edu/~mjb/cs557/Handouts/lighting.1pp.pdf
-        # glUniformMatrix4fv(uniform_LP, 1, GL_FALSE, pyrr.Vector3([5.0, 5.0, 0.0]))
-        # glUniformMatrix4fv(uniform_Ka, 1, GL_FALSE, 1.0)
-        # glUniformMatrix4fv(uniform_Kd, 1, GL_FALSE, 1.0)
-        # glUniformMatrix4fv(uniform_Ks, 1, GL_FALSE, 1.0)
-        # glUniformMatrix4fv(uniform_Sh, 1, GL_FALSE, 1.0)
+        glUniform3fv(uniform_LP, 1, GL_FALSE, pyrr.Vector3([5.0, 5.0, 0.0]))
+        glUniform1fv(uniform_Ka, 1, GL_FALSE, 1.0)
+        glUniform1fv(uniform_Kd, 1, GL_FALSE, 1.0)
+        glUniform1fv(uniform_Ks, 1, GL_FALSE, 1.0)
+        glUniform1fv(uniform_Sh, 1, GL_FALSE, 1.0)
 
         # the main application loop
         while not glfw.window_should_close(window) and not EHandler.DONE:

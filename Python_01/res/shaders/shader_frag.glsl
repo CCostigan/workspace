@@ -9,7 +9,9 @@ out vec4 out_color;
 uniform sampler2D s_texture;
 
 
-uniform float uKa, uKd, uKs; // coefficients of each type of lighting
+uniform float uKa; // coefficients of each type of lighting 
+uniform float uKd; // coefficients of each type of lighting 
+uniform float uKs; // coefficients of each type of lighting
 uniform float uShininess; // specular exponent
 //in vec2 vST; // texture cords
 //in vec3 vN; // normal vector
