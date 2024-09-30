@@ -220,13 +220,13 @@ class ModelLoader():
             indxs = np.array(indx, np.int32)
             buffr = np.array(bufr, np.float32)
 
-        texture = TextureLoader.load_texture("res/imgs/lena.jpg")
-        glBindTexture(GL_TEXTURE_2D, texture)
+        # texture = TextureLoader.load_texture("res/imgs/lena.jpg")
+        # glBindTexture(GL_TEXTURE_2D, texture)
 
         return {
             "indxs" : indxs, 
             "buffr" : buffr,
-            "textures": [texture]
+            "textures": []
         }
 
 

@@ -43,10 +43,13 @@ class ReviewOpenGL(object):
         models = [
             # ml.model_Elements_HC(),
             # ml.model_Elements("res/mdls/Cube.obj"),
+            ml.model_Arrays("res/mdls/Cube.obj"),
             ml.model_Arrays("res/mdls/DDG.obj"),
+            ml.model_Arrays("res/mdls/FCA.obj"),
         ]
 
         charstrip = TextureLoader.load_texture("res/imgs/charstrip.png")
+        # models[0]["textures"].append(TextureLoader.load_texture("res/imgs/lena.jpg"))
         models[0]["textures"].append(TextureLoader.load_texture("res/imgs/ddg0.png"))
 
         glUseProgram(shader)
@@ -81,11 +84,12 @@ class ReviewOpenGL(object):
                 if model["render"] == "DrawElements":
                     glBindBuffer(GL_ARRAY_BUFFER, model["vbo"])
                     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, model["ebo"])
-                    glBindTexture(GL_TEXTURE_2D, person)
+                    glBindTexture(GL_TEXTURE_2D, model["textures"][0])
                     glDrawElements(GL_TRIANGLES, len(model["indx"]), GL_UNSIGNED_INT, None)
                 if model["render"] == "DrawArrays":
                     glBindVertexArray(model["vao"])
-                    glBindTexture(GL_TEXTURE_2D, model["textures"][0])
+                    if len(model["textures"]) > 0:
+                        glBindTexture(GL_TEXTURE_2D, model["textures"][0])
                     glDrawArrays(GL_TRIANGLES, 0, len(model["indx"]))
 
 

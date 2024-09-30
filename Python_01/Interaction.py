@@ -27,7 +27,7 @@ class EHandler():
     FAR = 10000.0
     FOV = 30.0
     DIST = 30.0
-    model_axis = [0.0, 0.0, 0.0]
+    model_axis = [-25.0, -238.0, 0.0]
 
     proj_vec =  pyrr.matrix44.create_perspective_projection_matrix(
         FOV, window_dims[0]/window_dims[1], NEAR, FAR)
@@ -63,7 +63,7 @@ class EHandler():
         EHandler.mouse_dxdy = (x - EHandler.mouse_coords[0], y - EHandler.mouse_coords[1])
         EHandler.mouse_coords = x, y
         if EHandler.mouse_buttons == 0 and EHandler.mouse_down == 1:  # Is mouse button 0 down?
-            print(f"mouse_mov={EHandler.mouse_dxdy}")
+            print(f"mouse_mov={EHandler.mouse_dxdy} gimbal angles {EHandler.model_axis[0]},{EHandler.model_axis[1]},{EHandler.model_axis[2]}")
             EHandler.model_axis[0] -= EHandler.mouse_dxdy[1]
             EHandler.model_axis[1] -= EHandler.mouse_dxdy[0]
     
