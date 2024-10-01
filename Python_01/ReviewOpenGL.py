@@ -43,19 +43,19 @@ class ReviewOpenGL(object):
         models = [
             # ml.model_Elements_HC(),
             # ml.model_Elements("res/mdls/Cube.obj"),
-            ml.model_Arrays("res/mdls/Cube.obj"),
-            ml.model_Arrays("res/mdls/DDG.obj"),
             ml.model_Arrays("res/mdls/FCA.obj"),
+            # ml.model_Arrays("res/mdls/Cube.obj"),
+            # ml.model_Arrays("res/mdls/DDG.obj"),
         ]
 
         charstrip = TextureLoader.load_texture("res/imgs/charstrip.png")
-        models[0]["textures"].append(TextureLoader.load_texture("res/imgs/lena.jpg"))
-        models[1]["textures"].append(TextureLoader.load_texture("res/imgs/ddg0.png"))
-        models[2]["textures"].append(TextureLoader.load_texture("res/imgs/pic1.png"))
+        # models[1]["textures"].append(TextureLoader.load_texture("res/imgs/lena.jpg"))
+        # models[2]["textures"].append(TextureLoader.load_texture("res/imgs/ddg0.png"))
+        models[0]["textures"].append(TextureLoader.load_texture("res/imgs/pic1.png"))
         
-        models[0]["location"]=[0.0, 6.0, 0.0]
-        models[1]["location"]=[0.0, 0.0, 0.0]
-        models[2]["location"]=[0.0, -3.0, 0.0]
+        models[0]["location"]=[0.0, 0.0, 0.0]
+        # models[1]["location"]=[0.0, 6.0, 0.0]
+        # models[2]["location"]=[0.0,-3.0, 0.0]
 
 
         glUseProgram(shader)
