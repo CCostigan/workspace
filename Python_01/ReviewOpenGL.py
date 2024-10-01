@@ -68,10 +68,10 @@ class ReviewOpenGL(object):
         glViewport(0, 0, WIDTH, HEIGHT)
 
         # Talk to the shaders
-        uniform_modl = glGetUniformLocation(shader, "model")
-        uniform_proj = glGetUniformLocation(shader, "proj")
+        uniform_modl = glGetUniformLocation(shader, "m_model")
+        uniform_proj = glGetUniformLocation(shader, "m_proj")
         # Lighting
-        uniform_LP = glGetUniformLocation(shader, "light")
+        uniform_LP = glGetUniformLocation(shader, "p_light")
         uniform_Ka = glGetUniformLocation(shader, "uKa")
         uniform_Kd = glGetUniformLocation(shader, "uKd")
         uniform_Ks = glGetUniformLocation(shader, "uKs")

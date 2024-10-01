@@ -63,7 +63,7 @@ class EHandler():
         EHandler.mouse_dxdy = (x - EHandler.mouse_coords[0], y - EHandler.mouse_coords[1])
         EHandler.mouse_coords = x, y
         if EHandler.mouse_buttons == 0 and EHandler.mouse_down == 1:  # Is mouse button 0 down?
-            print(f"mouse_mov={EHandler.mouse_dxdy} gimbal angles {EHandler.model_axis[0]},{EHandler.model_axis[1]},{EHandler.model_axis[2]}")
+            # print(f"mouse_mov={EHandler.mouse_dxdy} gimbal angles {EHandler.model_axis[0]},{EHandler.model_axis[1]},{EHandler.model_axis[2]}")
             EHandler.model_axis[0] -= EHandler.mouse_dxdy[1]
             EHandler.model_axis[1] -= EHandler.mouse_dxdy[0]
     
@@ -88,7 +88,7 @@ class EHandler():
         print(f"char_mods_callback a={a} b={b}")
 
     def scroll_callback(window, a, b):
-        print(f"scroll_callback a={a} b={b}")
+        # print(f"scroll_callback a={a} b={b}")
         EHandler.mouse_scroll = b
         EHandler.DIST += b
 
