@@ -49,8 +49,8 @@ class ReviewOpenGL(object):
         ]
 
         charstrip = TextureLoader.load_texture("res/imgs/charstrip.png")
-        # models[1]["textures"].append(TextureLoader.load_texture("res/imgs/lena.jpg"))
-        # models[2]["textures"].append(TextureLoader.load_texture("res/imgs/ddg0.png"))
+        # models[0]["textures"].append(TextureLoader.load_texture("res/imgs/lena.jpg"))
+        # models[0]["textures"].append(TextureLoader.load_texture("res/imgs/ddg0.png"))
         models[0]["textures"].append(TextureLoader.load_texture("res/imgs/pic1.png"))
         
         models[0]["location"]=[0.0, 0.0, 0.0]
@@ -78,10 +78,10 @@ class ReviewOpenGL(object):
         uniform_Sh = glGetUniformLocation(shader, "uShininess")
         # https://web.engr.oregonstate.edu/~mjb/cs557/Handouts/lighting.1pp.pdf
         glUniform3fv(uniform_LP, 1, GL_FALSE, pyrr.Vector3([5.0, 5.0, 0.0]))
-        glUniform1fv(uniform_Ka, 1, GL_FALSE, 1.0)
-        glUniform1fv(uniform_Kd, 1, GL_FALSE, 1.0)
-        glUniform1fv(uniform_Ks, 1, GL_FALSE, 1.0)
-        glUniform1fv(uniform_Sh, 1, GL_FALSE, 1.0)
+        glUniform1fv(uniform_Ka, 1, GL_FALSE, 0.1)
+        glUniform1fv(uniform_Kd, 1, GL_FALSE, 0.1)
+        glUniform1fv(uniform_Ks, 1, GL_FALSE, 0.1)
+        glUniform1fv(uniform_Sh, 1, GL_FALSE, 0.1)
 
         # the main application loop
         while not glfw.window_should_close(window) and not EHandler.DONE:

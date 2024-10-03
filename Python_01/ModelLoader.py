@@ -191,12 +191,25 @@ class ModelLoader():
                         norm.append(float(tokn))
                 elif tokens[0] == 'f': # Face
                     # face.append(tokens)
-                    for tokn in tokens[1:]:
-                        tkns = tokn.split('/')
+                    for i in range(2, len(tokens)-1):
+                        tkns = tokens[1].split('/')
                         indx.append(len(bufr))
-                        # print(tkns)
-                        # indx.append(int(tkns[0])-1)
-                        # indx.append(len(bufr))
+                        v = (int(tkns[0])-1) * 3
+                        t = (int(tkns[1])-1) * 2
+                        n = (int(tkns[2])-1) * 3
+                        bufr.extend(vtxs[v:v+3])
+                        bufr.extend(txuv[t:t+2])
+                        bufr.extend(norm[n:n+3])
+                        tkns = tokens[i].split('/')
+                        indx.append(len(bufr))
+                        v = (int(tkns[0])-1) * 3
+                        t = (int(tkns[1])-1) * 2
+                        n = (int(tkns[2])-1) * 3
+                        bufr.extend(vtxs[v:v+3])
+                        bufr.extend(txuv[t:t+2])
+                        bufr.extend(norm[n:n+3])
+                        tkns = tokens[i+1].split('/')
+                        indx.append(len(bufr))
                         v = (int(tkns[0])-1) * 3
                         t = (int(tkns[1])-1) * 2
                         n = (int(tkns[2])-1) * 3
