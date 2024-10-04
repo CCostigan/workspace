@@ -16,17 +16,32 @@ WIDTH, HEIGHT = 1600, 900
 MIN, MAX = 0.1, 10000.0
 model_axis = [0.0, 0.0, 0.0]
 
+
 class ReviewOpenGL(object):
 
-    def main():
+    def setup_shaders(self, shader):
+
+        glUseProgram(shader)
+        self.uniform_modl = glGetUniformLocation(shader, "m_model")
+        self.uniform_proj = glGetUniformLocation(shader, "m_proj")
+        self.uniform_LP = glGetUniformLocation(shader, "p_light")
+        self.uniform_Ka = glGetUniformLocation(shader, "uKa")
+        self.uniform_Kd = glGetUniformLocation(shader, "uKd")
+        self.uniform_Ks = glGetUniformLocation(shader, "uKs")
+        self.uniform_Sh = glGetUniformLocation(shader, "uShininess")
+        glUniform3fv(self.uniform_LP, 1, GL_FALSE, pyrr.Vector3([5.0, 5.0, 0.0]))
+        glUniform1fv(self.uniform_Ka, 1, GL_FALSE, 0.1)
+        glUniform1fv(self.uniform_Kd, 1, GL_FALSE, 0.1)
+        glUniform1fv(self.uniform_Ks, 1, GL_FALSE, 0.1)
+        glUniform1fv(self.uniform_Sh, 1, GL_FALSE, 0.1)
+        pass
+
+    def main(self):
 
         if not glfw.init():
             raise Exception("glfw can not be initialized!")
 
         # glfw.window_hint(glfw.SAMPLES, 1)
-
-        # creating the window
-
 
         # for m, mon in enumerate(glfw.get_monitors()):
         #     print(f"Monitor {m} = {mon}")
@@ -60,11 +75,12 @@ class ReviewOpenGL(object):
 
         shaders = []
         shaders.append(ShaderLoader.load_shader_programs("shader_vert.glsl","shader_frag.glsl"))
-        shaders.append(ShaderLoader.load_shader_programs("shader_vert.glsl","shader_frag.glsl","shader_geom.glsl"))
+        shaders.append(ShaderLoader.load_shader_programs("shader_vert.glsl","shader_frag.glsl","shader_geom0.glsl"))
+        shaders.append(ShaderLoader.load_shader_programs("shader_vert.glsl","shader_frag.glsl","shader_geom1.glsl"))
         # shaders.append(ShaderLoader.load_shader_programs("shader_vert.glsl","shader_frag.glsl"))
         # shadrX = ShaderLoader.load_shader_programs("shad_vert.glsl","shad_frag.glsl")
-
-        shader_index = 0
+        for shader in shaders:        
+            self.setup_shaders(shader)
 
         textwriter = Writer()
 
@@ -73,21 +89,20 @@ class ReviewOpenGL(object):
             # ml.model_Elements_HC(),
             # ml.model_Elements("res/mdls/Cube.obj"),
             # ml.model_Arrays("res/mdls/Cube.obj"),
-            ml.model_Arrays("res/mdls/FCA.obj"),
             # ml.model_Arrays("res/mdls/DDG.obj"),
+            ml.model_Arrays("res/mdls/FCA.obj"),
         ]
 
         # charstrip = TextureLoader.load_texture("res/imgs/charstrip.png")
         # models[0]["textures"].append(TextureLoader.load_texture("res/imgs/lena.jpg"))
-        models[0]["textures"].append(TextureLoader.load_texture("res/imgs/ddg0.png"))
-        # models[0]["textures"].append(TextureLoader.load_texture("res/imgs/pic1.png"))
+        # models[0]["textures"].append(TextureLoader.load_texture("res/imgs/ddg0.png"))
+        models[0]["textures"].append(TextureLoader.load_texture("res/imgs/pic1.png"))
         
         models[0]["location"]=[0.0, 0.0, 0.0]
         # models[1]["location"]=[0.0, 6.0, 0.0]
-        # models[2]["location"]=[0.0,-3.0, 0.0]
+        # models[2]["location"]=[0.0,-3.0, 0.0
 
-
-        glUseProgram(shaders[shader_index])
+        # glUseProgram(shaders[shader_index])
         glClearColor(0.1, 0.2, 0.4, 1.0)
         glEnable(GL_DEPTH_TEST)
         glEnable(GL_BLEND)
@@ -96,21 +111,7 @@ class ReviewOpenGL(object):
         # Initial Viewport
         glViewport(0, 0, WIDTH, HEIGHT)
 
-        # Talk to the shaders
-        uniform_modl = glGetUniformLocation(shaders[shader_index], "m_model")
-        uniform_proj = glGetUniformLocation(shaders[shader_index], "m_proj")
-        # Lighting
-        uniform_LP = glGetUniformLocation(shaders[shader_index], "p_light")
-        uniform_Ka = glGetUniformLocation(shaders[shader_index], "uKa")
-        uniform_Kd = glGetUniformLocation(shaders[shader_index], "uKd")
-        uniform_Ks = glGetUniformLocation(shaders[shader_index], "uKs")
-        uniform_Sh = glGetUniformLocation(shaders[shader_index], "uShininess")
-        # https://web.engr.oregonstate.edu/~mjb/cs557/Handouts/lighting.1pp.pdf
-        glUniform3fv(uniform_LP, 1, GL_FALSE, pyrr.Vector3([5.0, 5.0, 0.0]))
-        glUniform1fv(uniform_Ka, 1, GL_FALSE, 0.1)
-        glUniform1fv(uniform_Kd, 1, GL_FALSE, 0.1)
-        glUniform1fv(uniform_Ks, 1, GL_FALSE, 0.1)
-        glUniform1fv(uniform_Sh, 1, GL_FALSE, 0.1)
+        # self.setup_shaders(shaders[0])
 
         # the main application loop
         while not glfw.window_should_close(window) and not EHandler.DONE:
@@ -125,7 +126,6 @@ class ReviewOpenGL(object):
                 textwriter.draw("TEST 1234")
 
             for model in models:
-                glUseProgram(shaders[shader_index])
                 # tran_vec = pyrr.matrix44.create_from_translation(pyrr.Vector3([0.0, 0.0, -EHandler.DIST]))
                 tran_vec = pyrr.matrix44.create_from_translation(pyrr.Vector3([model["location"][0], model["location"][1], -EHandler.DIST]))
                 rot_x = pyrr.Matrix44.from_x_rotation(0.01 * EHandler.model_axis[0]) #0.0 * glfwtime)
@@ -134,25 +134,28 @@ class ReviewOpenGL(object):
                 rotation_mtx = pyrr.matrix44.multiply(rot_y, rot_x)
                 # rotation_mtx = pyrr.matrix44.multiply(rotation_mtx, rot_z)
                 model_mtx = pyrr.matrix44.multiply(rotation_mtx, tran_vec)
-                glUniformMatrix4fv(uniform_modl, 1, GL_FALSE, model_mtx)
-                glUniformMatrix4fv(uniform_proj, 1, GL_FALSE, EHandler.proj_vec)
-                # if model["render"] == "DrawElements":
-                #     glBindBuffer(GL_ARRAY_BUFFER, model["vbo"])
-                #     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, model["ebo"])
-                #     glBindTexture(GL_TEXTURE_2D, model["textures"][0])
-                #     glDrawElements(GL_TRIANGLES, len(model["indx"]), GL_UNSIGNED_INT, None)
+
+                glUseProgram(shaders[EHandler.SHADERNUM])
+                glUniformMatrix4fv(self.uniform_modl, 1, GL_FALSE, model_mtx)
+                glUniformMatrix4fv(self.uniform_proj, 1, GL_FALSE, EHandler.proj_vec)
                 if model["render"] == "DrawArrays":
                     glBindVertexArray(model["vao"])
                     if len(model["textures"]) > 0:
                         glBindTexture(GL_TEXTURE_2D, model["textures"][0])
                     glDrawArrays(GL_TRIANGLES, 0, len(model["indx"]))
+                # if model["render"] == "DrawElements":
+                #     glBindBuffer(GL_ARRAY_BUFFER, model["vbo"])
+                #     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, model["ebo"])
+                #     glBindTexture(GL_TEXTURE_2D, model["textures"][0])
+                #     glDrawElements(GL_TRIANGLES, len(model["indx"]), GL_UNSIGNED_INT, None)
 
             glfw.swap_buffers(window)
         glfw.terminate()
 
 
 if __name__=='__main__':
-    ReviewOpenGL.main()
+    program = ReviewOpenGL()
+    program.main()
 
 
 

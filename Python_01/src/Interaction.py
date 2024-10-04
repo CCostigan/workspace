@@ -33,6 +33,7 @@ class EHandler():
         FOV, window_dims[0]/window_dims[1], NEAR, FAR)
 
     DONE = False
+    SHADERNUM = 0
 
     def __init__():
         pass
@@ -78,6 +79,12 @@ class EHandler():
         print(f"key_callback a={a} b={b} c={c} d={d}")
         if a==256 and b == 9:
             EHandler.DONE = True
+        if b == 72:
+            EHandler.SHADERNUM = 0
+        if b == 73:
+            EHandler.SHADERNUM = 1
+        if b == 74:
+            EHandler.SHADERNUM = 2
 
     # @staticmethod
     def char_callback(window, a):
