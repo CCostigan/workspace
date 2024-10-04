@@ -1,4 +1,4 @@
-# version 330
+#version 330 core
 
 // Actual vertex data 
 layout(location = 0) in vec3 a_position;  // Vertex coords

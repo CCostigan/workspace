@@ -9,6 +9,7 @@ from TextureLoader import TextureLoader
 from ShaderLoader import ShaderLoader
 from ModelLoader import ModelLoader
 from Interaction import EHandler
+from TextWriter import Writer
 
 
 WIDTH, HEIGHT = 1600, 900
@@ -25,33 +26,47 @@ class ReviewOpenGL(object):
         # glfw.window_hint(glfw.SAMPLES, 1)
 
         # creating the window
-        window = glfw.create_window(WIDTH, HEIGHT, "Python OpenGL window", None, None)
-        # check if window was created
+
+
+        # for m, mon in enumerate(glfw.get_monitors()):
+        #     print(f"Monitor {m} = {mon}")
+        monitor1 = glfw.get_primary_monitor()
+        workarea = glfw.get_monitor_workarea(monitor1)
+
+        print(f"prime_monitor={monitor1} area={workarea}")
+        window = glfw.create_window(workarea[2], workarea[3], "Python OpenGL window", monitor1, None) # Fullscreen
+        # No window?  Bail
         if not window:
             glfw.terminate()
             raise Exception("glfw window can not be created!")
         
         # fb_size = glfw.get_framebuffer_size(window)
-        glfw.set_window_pos(window, 10, 30)
+        # glfw.set_window_pos(window, 10, 30)
         glfw.make_context_current(window)
+
+        glfw.maximize_window(window)
+        print(f"Vulkan supported = {glfw.vulkan_supported()}")
 
         eh = EHandler.configure(window)
 
         shader = ShaderLoader.load_shader("shader_vert.glsl","shader_frag.glsl")
+        shadr2 = ShaderLoader.load_shader("sh_vert.glsl","sh_frag.glsl")
+
+        textwriter = Writer()
 
         ml = ModelLoader()
         models = [
             # ml.model_Elements_HC(),
             # ml.model_Elements("res/mdls/Cube.obj"),
-            ml.model_Arrays("res/mdls/FCA.obj"),
+            # ml.model_Arrays("res/mdls/FCA.obj"),
             # ml.model_Arrays("res/mdls/Cube.obj"),
-            # ml.model_Arrays("res/mdls/DDG.obj"),
+            ml.model_Arrays("res/mdls/DDG.obj"),
         ]
 
-        charstrip = TextureLoader.load_texture("res/imgs/charstrip.png")
+        # charstrip = TextureLoader.load_texture("res/imgs/charstrip.png")
         # models[0]["textures"].append(TextureLoader.load_texture("res/imgs/lena.jpg"))
-        # models[0]["textures"].append(TextureLoader.load_texture("res/imgs/ddg0.png"))
-        models[0]["textures"].append(TextureLoader.load_texture("res/imgs/pic1.png"))
+        models[0]["textures"].append(TextureLoader.load_texture("res/imgs/ddg0.png"))
+        # models[0]["textures"].append(TextureLoader.load_texture("res/imgs/pic1.png"))
         
         models[0]["location"]=[0.0, 0.0, 0.0]
         # models[1]["location"]=[0.0, 6.0, 0.0]
@@ -89,7 +104,14 @@ class ReviewOpenGL(object):
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
             glfwtime = glfw.get_time()
 
+            if textwriter is not None:
+                glUseProgram(shadr2)
+                uniform_mtx_ortho = glGetUniformLocation(shadr2, "mtx_ortho")
+                glUniformMatrix4fv(uniform_mtx_ortho, 1, GL_FALSE, textwriter.m_ortho)
+                textwriter.draw("TEST 1234")
+
             for model in models:
+                glUseProgram(shader)
                 # tran_vec = pyrr.matrix44.create_from_translation(pyrr.Vector3([0.0, 0.0, -EHandler.DIST]))
                 tran_vec = pyrr.matrix44.create_from_translation(pyrr.Vector3([model["location"][0], model["location"][1], -EHandler.DIST]))
                 rot_x = pyrr.Matrix44.from_x_rotation(0.01 * EHandler.model_axis[0]) #0.0 * glfwtime)
@@ -110,7 +132,6 @@ class ReviewOpenGL(object):
                     if len(model["textures"]) > 0:
                         glBindTexture(GL_TEXTURE_2D, model["textures"][0])
                     glDrawArrays(GL_TRIANGLES, 0, len(model["indx"]))
-
 
             glfw.swap_buffers(window)
         glfw.terminate()
