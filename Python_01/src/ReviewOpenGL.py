@@ -129,11 +129,11 @@ class ReviewOpenGL(object):
                 model_mtx = pyrr.matrix44.multiply(rotation_mtx, tran_vec)
                 glUniformMatrix4fv(uniform_modl, 1, GL_FALSE, model_mtx)
                 glUniformMatrix4fv(uniform_proj, 1, GL_FALSE, EHandler.proj_vec)
-                if model["render"] == "DrawElements":
-                    glBindBuffer(GL_ARRAY_BUFFER, model["vbo"])
-                    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, model["ebo"])
-                    glBindTexture(GL_TEXTURE_2D, model["textures"][0])
-                    glDrawElements(GL_TRIANGLES, len(model["indx"]), GL_UNSIGNED_INT, None)
+                # if model["render"] == "DrawElements":
+                #     glBindBuffer(GL_ARRAY_BUFFER, model["vbo"])
+                #     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, model["ebo"])
+                #     glBindTexture(GL_TEXTURE_2D, model["textures"][0])
+                #     glDrawElements(GL_TRIANGLES, len(model["indx"]), GL_UNSIGNED_INT, None)
                 if model["render"] == "DrawArrays":
                     glBindVertexArray(model["vao"])
                     if len(model["textures"]) > 0:

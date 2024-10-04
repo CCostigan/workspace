@@ -60,14 +60,15 @@ class Writer():
 
         self.m_ortho = pyrr.matrix44.create_orthogonal_projection_matrix(0, 1920, 1080, 0, 0.1, 100.0)
 
-    def draw(self, string):
-        char = random.randint(68, 69)
-        self.count += 1
-
+    def draw(self, display_string):
+        # char0 = ord(display_string[0])
+        # self.count += 1
         glBindVertexArray(self.VAO)
         glBindTexture(GL_TEXTURE_2D, self.charstrip)
+        for asciicode in bytearray(display_string, 'ascii'):
+            glDrawArrays(GL_QUADS, asciicode, asciicode+1)
+            pass
         # glDrawArrays(GL_QUADS, 0, len(self.indxs))
-        glDrawArrays(GL_QUADS, char, char+1)
 
 
 
