@@ -8,7 +8,9 @@ class ShaderLoader():
 
     def load_shader(
             vertex_shader_filename, 
-            fragment_shader_filename  ):
+            fragment_shader_filename,
+            geometry_shader_filename=""
+        ):
 
         shader_home="res/shaders/"
 
@@ -22,6 +24,7 @@ class ShaderLoader():
         frag_shader = compileShader(fragment_shader_src, GL_FRAGMENT_SHADER)    
 
         shader = compileProgram(vert_shader,frag_shader)
+        
         # glReleaseShaderCompiler()  # GL4
 
         print(f"Shaders loaded: {shader}")

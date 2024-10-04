@@ -43,9 +43,16 @@ class ReviewOpenGL(object):
         # fb_size = glfw.get_framebuffer_size(window)
         # glfw.set_window_pos(window, 10, 30)
         glfw.make_context_current(window)
+        for monitor in glfw.get_monitors():
+            print(f"Monitor Name = {glfw.get_monitor_name(monitor)}")
+            print(f"Video Mode={glfw.get_video_mode(monitor)}")
+            print(f"Video Modes={glfw.get_video_modes(monitor)}")
 
         glfw.maximize_window(window)
         print(f"Vulkan supported = {glfw.vulkan_supported()}")
+        # print(f"get_physical_device_presentation_support={glfw.get_physical_device_presentation_support(window)}")
+        print(f"Window Opacity={glfw.get_window_opacity(window)}")
+        # print(f"Window Attrib={glfw.get_window_attrib(window)}")
 
         eh = EHandler.configure(window)
 
