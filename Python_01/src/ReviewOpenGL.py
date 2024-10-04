@@ -19,23 +19,6 @@ model_axis = [0.0, 0.0, 0.0]
 
 class ReviewOpenGL(object):
 
-    def setup_shaders(self, shader):
-
-        glUseProgram(shader)
-        self.uniform_modl = glGetUniformLocation(shader, "m_model")
-        self.uniform_proj = glGetUniformLocation(shader, "m_proj")
-        self.uniform_LP = glGetUniformLocation(shader, "p_light")
-        self.uniform_Ka = glGetUniformLocation(shader, "uKa")
-        self.uniform_Kd = glGetUniformLocation(shader, "uKd")
-        self.uniform_Ks = glGetUniformLocation(shader, "uKs")
-        self.uniform_Sh = glGetUniformLocation(shader, "uShininess")
-        glUniform3fv(self.uniform_LP, 1, GL_FALSE, pyrr.Vector3([5.0, 5.0, 0.0]))
-        glUniform1fv(self.uniform_Ka, 1, GL_FALSE, 0.1)
-        glUniform1fv(self.uniform_Kd, 1, GL_FALSE, 0.1)
-        glUniform1fv(self.uniform_Ks, 1, GL_FALSE, 0.1)
-        glUniform1fv(self.uniform_Sh, 1, GL_FALSE, 0.1)
-        pass
-
     def main(self):
 
         if not glfw.init():
@@ -63,7 +46,7 @@ class ReviewOpenGL(object):
             print(f"Video Mode={glfw.get_video_mode(monitor)}")
             # print(f"Video Modes={glfw.get_video_modes(monitor)}")
 
-        glfw.maximize_window(window)
+        # glfw.maximize_window(window)
         print(f"Vulkan supported = {glfw.vulkan_supported()}")
         # print(f"get_physical_device_presentation_support={glfw.get_physical_device_presentation_support(window)}")
         print(f"Window Opacity={glfw.get_window_opacity(window)}")
@@ -82,15 +65,15 @@ class ReviewOpenGL(object):
         for shader in shaders:        
             self.setup_shaders(shader)
 
-        textwriter = Writer()
+        textwriter = Writer(workarea)
 
         ml = ModelLoader()
         models = [
             # ml.model_Elements_HC(),
-            # ml.model_Elements("res/mdls/Cube.obj"),
-            # ml.model_Arrays("res/mdls/Cube.obj"),
-            # ml.model_Arrays("res/mdls/DDG.obj"),
-            ml.model_Arrays("res/mdls/FCA.obj"),
+            # ml.model_Elements("Cube.obj"),
+            # ml.model_Arrays("Cube.obj"),
+            # ml.model_Arrays("DDG.obj"),
+            ml.model_Arrays("FCA.obj"),
         ]
 
         # charstrip = TextureLoader.load_texture("res/imgs/charstrip.png")
@@ -151,6 +134,23 @@ class ReviewOpenGL(object):
 
             glfw.swap_buffers(window)
         glfw.terminate()
+
+
+    def setup_shaders(self, shader):
+        glUseProgram(shader)
+        self.uniform_modl = glGetUniformLocation(shader, "m_model")
+        self.uniform_proj = glGetUniformLocation(shader, "m_proj")
+        self.uniform_LP = glGetUniformLocation(shader, "p_light")
+        self.uniform_Ka = glGetUniformLocation(shader, "uKa")
+        self.uniform_Kd = glGetUniformLocation(shader, "uKd")
+        self.uniform_Ks = glGetUniformLocation(shader, "uKs")
+        self.uniform_Sh = glGetUniformLocation(shader, "uShininess")
+        glUniform3fv(self.uniform_LP, 1, GL_FALSE, pyrr.Vector3([5.0, 5.0, 0.0]))
+        glUniform1fv(self.uniform_Ka, 1, GL_FALSE, 0.1)
+        glUniform1fv(self.uniform_Kd, 1, GL_FALSE, 0.1)
+        glUniform1fv(self.uniform_Ks, 1, GL_FALSE, 0.1)
+        glUniform1fv(self.uniform_Sh, 1, GL_FALSE, 0.1)
+        pass
 
 
 if __name__=='__main__':

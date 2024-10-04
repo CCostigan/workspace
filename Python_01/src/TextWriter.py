@@ -7,7 +7,7 @@ import pyrr
 
 class Writer():
 
-    def __init__(self):
+    def __init__(self, workarea):
         self.charstrip = TextureLoader.load_texture("res/imgs/charstrip.png")
 
         self.count = 0
@@ -58,7 +58,7 @@ class Writer():
         glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, self.buffr.itemsize * 8, ctypes.c_void_p(20))
         glEnableVertexAttribArray(2) 
 
-        self.m_ortho = pyrr.matrix44.create_orthogonal_projection_matrix(0, 1920, 1080, 0, 0.1, 100.0)
+        self.m_ortho = pyrr.matrix44.create_orthogonal_projection_matrix(workarea[0], workarea[2], workarea[3], workarea[1], -1.0, 1.0)
 
     def draw(self, display_string):
         glBindVertexArray(self.VAO)
