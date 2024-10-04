@@ -72,8 +72,8 @@ class ReviewOpenGL(object):
             # ml.model_Elements_HC(),
             # ml.model_Elements("Cube.obj"),
             # ml.model_Arrays("Cube.obj"),
-            # ml.model_Arrays("DDG.obj"),
-            ml.model_Arrays("FCA.obj"),
+            ml.model_Arrays("DDG.obj"),
+            # ml.model_Arrays("FCA.obj"),
         ]
 
         # charstrip = TextureLoader.load_texture("res/imgs/charstrip.png")

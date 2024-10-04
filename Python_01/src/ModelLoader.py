@@ -8,42 +8,15 @@ from TextureLoader import TextureLoader
 
 
 # https://stackoverflow.com/questions/16380005/opengl-3-4-glvertexattribpointer-stride-and-offset-miscalculation
+
 model_home = "res/mdls/"
+image_home = "res/imgs/"
 
 class ModelLoader():
 
        
     def model_Elements(self, filename):
-        objmod = ModelLoader.load_model_obj(filename)
-        # VBO = glGenBuffers(1)
-        # glBindBuffer(GL_ARRAY_BUFFER, VBO)
-        # glBufferData(GL_ARRAY_BUFFER, objmod["buffr"].nbytes, objmod["buffr"], GL_STATIC_DRAW)
-
-        # # Element Buffer Object
-        # EBO = glGenBuffers(1)
-        # glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO)
-        # glBufferData(GL_ELEMENT_ARRAY_BUFFER, objmod["indxs"].nbytes, objmod["indxs"], GL_STATIC_DRAW)
-
-        # glEnableVertexAttribArray(0)
-        # glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, objmod["buffr"].itemsize * 8, ctypes.c_void_p(0))
-
-        # glEnableVertexAttribArray(1)
-        # glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, objmod["buffr"].itemsize * 8, ctypes.c_void_p(12))
-
-        # glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, objmod["buffr"].itemsize * 8, ctypes.c_void_p(20))
-        # glEnableVertexAttribArray(2)
-
-        # print("Default model loaded")
-        # return {
-        #     "render" : "DrawElements",
-        #     "vao" : None,
-        #     "vbo" : VBO,
-        #     "ebo" : EBO,
-        #     "indx" : objmod["indxs"], 
-        #     "bufr" : objmod["buffr"], 
-        #     "textures" : objmod["textures"], 
-        # }
-    
+        objmod = ModelLoader.load_model_obj(filename)    
 
     def model_Arrays(self, filename):
         objmod = ModelLoader.load_model_obj(filename)
@@ -75,14 +48,6 @@ class ModelLoader():
             "textures" : objmod["textures"], 
         }
 
-    def load_model_material(filename):
-        print(f"LOADING MATERIAL {filename}")        
-        with open(model_home+filename, 'r') as f:
-            line = f.readline()
-            while line:
-                print(line)
-                line = f.readline()
-        pass
 
     def load_model_obj(filename):
 
@@ -95,6 +60,7 @@ class ModelLoader():
         bufr = []
         
         with open(model_home+filename, 'r') as f:
+            textures = []
             line = f.readline()
             while line:
                 tokens = line.split()
@@ -106,7 +72,7 @@ class ModelLoader():
                 elif tokens[0] == 'o':  # Object                    
                     pass
                 elif tokens[0] == 'mtllib': # Material
-                    ModelLoader.load_model_material(tokens[1])
+                    ModelLoader.load_model_material(textures, tokens[1])
                     pass
                 elif tokens[0] == 'usemtl': # Set Current
                     pass
@@ -168,14 +134,52 @@ class ModelLoader():
             indxs = np.array(indx, np.int32)
             buffr = np.array(bufr, np.float32)
 
-        # texture = TextureLoader.load_texture("res/imgs/lena.jpg")
-        # glBindTexture(GL_TEXTURE_2D, texture)
-
         return {
             "indxs" : indxs, 
             "buffr" : buffr,
-            "textures": []
+            "textures": textures
         }
+
+    def load_model_material(textures, filename):
+        print(f"LOADING MATERIAL {filename}")        
+        with open(model_home+filename, 'r') as f:
+            line = f.readline()
+            while line:
+                tokens = line.split()
+                if len(tokens) == 0:  # Empty line
+                    pass
+                elif tokens[0] == '#':  # Comment line
+                    pass
+                elif tokens[0] == 'map_Kd':  # Object    
+                    print(f"Texture {tokens[1]}")
+                    textures.append(TextureLoader.load_texture(image_home + tokens[1]))
+                    pass
+                elif tokens[0] == 'newmtl':
+                    pass
+                elif tokens[0] == 'Ns':
+                    pass
+                elif tokens[0] == 'Ka':
+                    pass
+                elif tokens[0] == 'Kd':
+                    pass
+                elif tokens[0] == 'Ks':
+                    pass
+                elif tokens[0] == 'Ke':
+                    pass
+                elif tokens[0] == 'Ni':
+                    pass
+                elif tokens[0] == 'd':
+                    pass
+                elif tokens[0] == 'illum':
+                    pass
+
+                else:
+                    print(f"Unrecognized token '{tokens[0]}' in {filename}")
+
+                line = f.readline()
+        pass
+
+
 
 
 if __name__=='__main__':
