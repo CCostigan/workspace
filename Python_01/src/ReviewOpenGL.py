@@ -12,7 +12,6 @@ from Interaction import EHandler
 from TextWriter import Writer
 
 
-WIDTH, HEIGHT = 1600, 900
 MIN, MAX = 0.1, 10000.0
 model_axis = [0.0, 0.0, 0.0]
 
@@ -46,7 +45,7 @@ class ReviewOpenGL(object):
             print(f"Video Mode={glfw.get_video_mode(monitor)}")
             # print(f"Video Modes={glfw.get_video_modes(monitor)}")
 
-        # glfw.maximize_window(window)
+        glfw.maximize_window(window)
         print(f"Vulkan supported = {glfw.vulkan_supported()}")
         # print(f"get_physical_device_presentation_support={glfw.get_physical_device_presentation_support(window)}")
         print(f"Window Opacity={glfw.get_window_opacity(window)}")
@@ -70,16 +69,16 @@ class ReviewOpenGL(object):
         ml = ModelLoader()
         models = [
             # ml.model_Elements_HC(),
-            # ml.model_Elements("Cube.obj"),
             # ml.model_Arrays("Cube.obj"),
-            ml.model_Arrays("DDG.obj"),
+            # ml.model_Arrays("Cubes4.obj"),
+            # ml.model_Arrays("Sphere.obj"),
+            # ml.model_Arrays("DDG.obj"),
             # ml.model_Arrays("FCA.obj"),
+            # ml.model_Arrays("XJ2A1.obj"),
+            ml.model_Arrays("TonyStarkWasAbleToBuildThisInACave-WithABoxOfScrap.obj"),
         ]
 
-        # charstrip = TextureLoader.load_texture("res/imgs/charstrip.png")
-        # models[0]["textures"].append(TextureLoader.load_texture("res/imgs/lena.jpg"))
-        # models[0]["textures"].append(TextureLoader.load_texture("res/imgs/ddg0.png"))
-        models[0]["textures"].append(TextureLoader.load_texture("res/imgs/pic1.png"))
+        charstrip = TextureLoader.load_texture("res/imgs/charstrip.png")
         
         models[0]["location"]=[0.0, 0.0, 0.0]
         # models[1]["location"]=[0.0, 6.0, 0.0]
@@ -88,11 +87,11 @@ class ReviewOpenGL(object):
         # glUseProgram(shaders[shader_index])
         glClearColor(0.1, 0.2, 0.4, 1.0)
         glEnable(GL_DEPTH_TEST)
-        glEnable(GL_BLEND)
+        # glEnable(GL_BLEND)
         # glEnable(GL_LIGHTING)
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
+        # glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
         # Initial Viewport
-        glViewport(0, 0, WIDTH, HEIGHT)
+        glViewport(workarea[1], workarea[1], workarea[2], workarea[3])
 
         # self.setup_shaders(shaders[0])
 
