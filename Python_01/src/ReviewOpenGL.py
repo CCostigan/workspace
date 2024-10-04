@@ -46,7 +46,7 @@ class ReviewOpenGL(object):
         for monitor in glfw.get_monitors():
             print(f"Monitor Name = {glfw.get_monitor_name(monitor)}")
             print(f"Video Mode={glfw.get_video_mode(monitor)}")
-            print(f"Video Modes={glfw.get_video_modes(monitor)}")
+            # print(f"Video Modes={glfw.get_video_modes(monitor)}")
 
         glfw.maximize_window(window)
         print(f"Vulkan supported = {glfw.vulkan_supported()}")
@@ -56,8 +56,9 @@ class ReviewOpenGL(object):
 
         eh = EHandler.configure(window)
 
-        shader = ShaderLoader.load_shader("shader_vert.glsl","shader_frag.glsl")
-        shadr2 = ShaderLoader.load_shader("sh_vert.glsl","sh_frag.glsl")
+        ortho = ShaderLoader.load_shader_programs("ortho_vert.glsl","ortho_frag.glsl")
+        shader = ShaderLoader.load_shader_programs("shader_vert.glsl","shader_frag.glsl")
+        # shadrX = ShaderLoader.load_shader_programs("shad_vert.glsl","shad_frag.glsl")
 
         textwriter = Writer()
 
@@ -112,8 +113,8 @@ class ReviewOpenGL(object):
             glfwtime = glfw.get_time()
 
             if textwriter is not None:
-                glUseProgram(shadr2)
-                uniform_mtx_ortho = glGetUniformLocation(shadr2, "mtx_ortho")
+                glUseProgram(ortho)
+                uniform_mtx_ortho = glGetUniformLocation(ortho, "mtx_ortho")
                 glUniformMatrix4fv(uniform_mtx_ortho, 1, GL_FALSE, textwriter.m_ortho)
                 textwriter.draw("TEST 1234")
 
@@ -129,11 +130,11 @@ class ReviewOpenGL(object):
                 model_mtx = pyrr.matrix44.multiply(rotation_mtx, tran_vec)
                 glUniformMatrix4fv(uniform_modl, 1, GL_FALSE, model_mtx)
                 glUniformMatrix4fv(uniform_proj, 1, GL_FALSE, EHandler.proj_vec)
-                if model["render"] == "DrawElements":
-                    glBindBuffer(GL_ARRAY_BUFFER, model["vbo"])
-                    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, model["ebo"])
-                    glBindTexture(GL_TEXTURE_2D, model["textures"][0])
-                    glDrawElements(GL_TRIANGLES, len(model["indx"]), GL_UNSIGNED_INT, None)
+                # if model["render"] == "DrawElements":
+                #     glBindBuffer(GL_ARRAY_BUFFER, model["vbo"])
+                #     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, model["ebo"])
+                #     glBindTexture(GL_TEXTURE_2D, model["textures"][0])
+                #     glDrawElements(GL_TRIANGLES, len(model["indx"]), GL_UNSIGNED_INT, None)
                 if model["render"] == "DrawArrays":
                     glBindVertexArray(model["vao"])
                     if len(model["textures"]) > 0:
