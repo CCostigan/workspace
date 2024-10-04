@@ -46,7 +46,7 @@ class ReviewOpenGL(object):
         for monitor in glfw.get_monitors():
             print(f"Monitor Name = {glfw.get_monitor_name(monitor)}")
             print(f"Video Mode={glfw.get_video_mode(monitor)}")
-            print(f"Video Modes={glfw.get_video_modes(monitor)}")
+            # print(f"Video Modes={glfw.get_video_modes(monitor)}")
 
         glfw.maximize_window(window)
         print(f"Vulkan supported = {glfw.vulkan_supported()}")
@@ -56,8 +56,8 @@ class ReviewOpenGL(object):
 
         eh = EHandler.configure(window)
 
-        shader = ShaderLoader.load_shader("shader_vert.glsl","shader_frag.glsl")
-        shadr2 = ShaderLoader.load_shader("sh_vert.glsl","sh_frag.glsl")
+        shader = ShaderLoader.load_shader_programs("shader_vert.glsl","shader_frag.glsl")
+        shadr2 = ShaderLoader.load_shader_programs("sh_vert.glsl","sh_frag.glsl")
 
         textwriter = Writer()
 
