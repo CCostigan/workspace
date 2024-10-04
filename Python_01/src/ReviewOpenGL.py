@@ -56,9 +56,15 @@ class ReviewOpenGL(object):
 
         eh = EHandler.configure(window)
 
-        ortho = ShaderLoader.load_shader_programs("ortho_vert.glsl","ortho_frag.glsl")
-        shader = ShaderLoader.load_shader_programs("shader_vert.glsl","shader_frag.glsl")
+        ortho_shader = ShaderLoader.load_shader_programs("ortho_vert.glsl","ortho_frag.glsl")
+
+        shaders = []
+        shaders.append(ShaderLoader.load_shader_programs("shader_vert.glsl","shader_frag.glsl"))
+        shaders.append(ShaderLoader.load_shader_programs("shader_vert.glsl","shader_frag.glsl","shader_geom.glsl"))
+        # shaders.append(ShaderLoader.load_shader_programs("shader_vert.glsl","shader_frag.glsl"))
         # shadrX = ShaderLoader.load_shader_programs("shad_vert.glsl","shad_frag.glsl")
+
+        shader_index = 0
 
         textwriter = Writer()
 
@@ -66,9 +72,9 @@ class ReviewOpenGL(object):
         models = [
             # ml.model_Elements_HC(),
             # ml.model_Elements("res/mdls/Cube.obj"),
-            # ml.model_Arrays("res/mdls/FCA.obj"),
             # ml.model_Arrays("res/mdls/Cube.obj"),
-            ml.model_Arrays("res/mdls/DDG.obj"),
+            ml.model_Arrays("res/mdls/FCA.obj"),
+            # ml.model_Arrays("res/mdls/DDG.obj"),
         ]
 
         # charstrip = TextureLoader.load_texture("res/imgs/charstrip.png")
@@ -81,7 +87,7 @@ class ReviewOpenGL(object):
         # models[2]["location"]=[0.0,-3.0, 0.0]
 
 
-        glUseProgram(shader)
+        glUseProgram(shaders[shader_index])
         glClearColor(0.1, 0.2, 0.4, 1.0)
         glEnable(GL_DEPTH_TEST)
         glEnable(GL_BLEND)
@@ -91,14 +97,14 @@ class ReviewOpenGL(object):
         glViewport(0, 0, WIDTH, HEIGHT)
 
         # Talk to the shaders
-        uniform_modl = glGetUniformLocation(shader, "m_model")
-        uniform_proj = glGetUniformLocation(shader, "m_proj")
+        uniform_modl = glGetUniformLocation(shaders[shader_index], "m_model")
+        uniform_proj = glGetUniformLocation(shaders[shader_index], "m_proj")
         # Lighting
-        uniform_LP = glGetUniformLocation(shader, "p_light")
-        uniform_Ka = glGetUniformLocation(shader, "uKa")
-        uniform_Kd = glGetUniformLocation(shader, "uKd")
-        uniform_Ks = glGetUniformLocation(shader, "uKs")
-        uniform_Sh = glGetUniformLocation(shader, "uShininess")
+        uniform_LP = glGetUniformLocation(shaders[shader_index], "p_light")
+        uniform_Ka = glGetUniformLocation(shaders[shader_index], "uKa")
+        uniform_Kd = glGetUniformLocation(shaders[shader_index], "uKd")
+        uniform_Ks = glGetUniformLocation(shaders[shader_index], "uKs")
+        uniform_Sh = glGetUniformLocation(shaders[shader_index], "uShininess")
         # https://web.engr.oregonstate.edu/~mjb/cs557/Handouts/lighting.1pp.pdf
         glUniform3fv(uniform_LP, 1, GL_FALSE, pyrr.Vector3([5.0, 5.0, 0.0]))
         glUniform1fv(uniform_Ka, 1, GL_FALSE, 0.1)
@@ -113,13 +119,13 @@ class ReviewOpenGL(object):
             glfwtime = glfw.get_time()
 
             if textwriter is not None:
-                glUseProgram(ortho)
-                uniform_mtx_ortho = glGetUniformLocation(ortho, "mtx_ortho")
+                glUseProgram(ortho_shader)
+                uniform_mtx_ortho = glGetUniformLocation(ortho_shader, "mtx_ortho")
                 glUniformMatrix4fv(uniform_mtx_ortho, 1, GL_FALSE, textwriter.m_ortho)
                 textwriter.draw("TEST 1234")
 
             for model in models:
-                glUseProgram(shader)
+                glUseProgram(shaders[shader_index])
                 # tran_vec = pyrr.matrix44.create_from_translation(pyrr.Vector3([0.0, 0.0, -EHandler.DIST]))
                 tran_vec = pyrr.matrix44.create_from_translation(pyrr.Vector3([model["location"][0], model["location"][1], -EHandler.DIST]))
                 rot_x = pyrr.Matrix44.from_x_rotation(0.01 * EHandler.model_axis[0]) #0.0 * glfwtime)
