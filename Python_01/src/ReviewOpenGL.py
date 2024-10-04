@@ -56,8 +56,9 @@ class ReviewOpenGL(object):
 
         eh = EHandler.configure(window)
 
+        ortho = ShaderLoader.load_shader_programs("ortho_vert.glsl","ortho_frag.glsl")
         shader = ShaderLoader.load_shader_programs("shader_vert.glsl","shader_frag.glsl")
-        shadr2 = ShaderLoader.load_shader_programs("sh_vert.glsl","sh_frag.glsl")
+        # shadrX = ShaderLoader.load_shader_programs("shad_vert.glsl","shad_frag.glsl")
 
         textwriter = Writer()
 
@@ -112,8 +113,8 @@ class ReviewOpenGL(object):
             glfwtime = glfw.get_time()
 
             if textwriter is not None:
-                glUseProgram(shadr2)
-                uniform_mtx_ortho = glGetUniformLocation(shadr2, "mtx_ortho")
+                glUseProgram(ortho)
+                uniform_mtx_ortho = glGetUniformLocation(ortho, "mtx_ortho")
                 glUniformMatrix4fv(uniform_mtx_ortho, 1, GL_FALSE, textwriter.m_ortho)
                 textwriter.draw("TEST 1234")
 
