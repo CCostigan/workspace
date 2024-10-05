@@ -140,6 +140,7 @@ class ModelLoader():
             "textures": textures
         }
 
+
     def load_model_material(textures, filename):
         print(f"LOADING MATERIAL {filename}")        
         with open(model_home+filename, 'r') as f:

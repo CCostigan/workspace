@@ -12,7 +12,7 @@ class ShaderLoader():
             shader_src = source_file.readlines()
         return compileShader(shader_src, shadertype)
 
-
+    # https://www.geeksforgeeks.org/args-kwargs-python/
     def load_shader_progs(*args):
         shadermap = {
             "vert": GL_VERTEX_SHADER,
@@ -24,18 +24,18 @@ class ShaderLoader():
         }
         shader_tuple = tuple() # Adding to atuple don't forget the comma tup += (blah , )
         for arg in args:
-            print(f"\nARG = {arg} ***")
+            # print(f"\nARG = {arg} ***")
             for partial in shadermap.keys():
-                print(f"SEARCHING FOR {partial} IN {arg}")
+                # print(f"SEARCHING FOR {partial} IN {arg}")
                 if partial in arg:
-                    print(f"FOUND {partial} {arg} LOADING AS {shadermap[partial]}")
+                    # print(f"FOUND {partial} {arg} LOADING AS {shadermap[partial]}")
                     shader_tuple += (ShaderLoader.compile_shader(arg, shadermap[partial]),)
                     break
         shader = compileProgram(*shader_tuple)        
         print(f"Shaders loaded: {shader}")
         return shader
 
-    
+
 if __name__=='__main__':
     shader = ShaderLoader.load_shader("shader_vert.glsl","shader_frag.glsl")
     print(f"Shader loader={shader}")

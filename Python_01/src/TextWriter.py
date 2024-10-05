@@ -60,6 +60,7 @@ class Writer():
 
         self.m_ortho = pyrr.matrix44.create_orthogonal_projection_matrix(workarea[0], workarea[2], workarea[3], workarea[1], -1.0, 1.0)
 
+
     def draw(self, display_string):
         glBindVertexArray(self.VAO)
         glBindTexture(GL_TEXTURE_2D, self.charstrip)
