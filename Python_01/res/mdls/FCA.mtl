@@ -10,6 +10,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.450000
 d 1.000000
 illum 2
+map_Kd pic1.png
 
 newmtl Lighted
 Ns 225.000000
@@ -20,6 +21,7 @@ Ke 1.000000 1.000000 1.000000
 Ni 1.450000
 d 1.000000
 illum 2
+map_Kd pic2.png
 
 newmtl Main_Deflector
 Ns 225.000000
@@ -30,6 +32,7 @@ Ke 0.000000 0.215331 1.000032
 Ni 1.450000
 d 1.000000
 illum 2
+map_Kd pic3.png
 
 newmtl Rodinium
 Ns 225.000000
@@ -40,6 +43,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.450000
 d 1.000000
 illum 2
+map_Kd pic4.png
 
 newmtl Transparent_Aluminum
 Ns 225.000000
@@ -50,6 +54,7 @@ Ke 0.470045 0.000000 0.003407
 Ni 1.450000
 d 1.000000
 illum 2
+map_Kd pic5.png
 
 newmtl Tri_Titanium
 Ns 225.000000
@@ -60,3 +65,4 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.450000
 d 1.000000
 illum 2
+map_Kd texture.png

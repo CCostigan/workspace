@@ -13,33 +13,28 @@ class ShaderLoader():
         return compileShader(shader_src, shadertype)
 
 
-    def load_shader_programs(
-            vert_shader_filename, 
-            frag_shader_filename,
-            geom_shader_filename=None,
-            comp_shader_filename=None,
-            tess_shader_filename=None,
-            wtff_shader_filename=None,
-        ):
-
+    def load_shader_progs(*args):
+        shadermap = {
+            "vert": GL_VERTEX_SHADER,
+            "frag": GL_FRAGMENT_SHADER,
+            "geom": GL_GEOMETRY_SHADER,
+            "comp": GL_COMPUTE_SHADER,
+            "tess": GL_TESS_CONTROL_SHADER,
+            "wtff": GL_REFERENCED_BY_COMPUTE_SHADER,
+        }
         shader_tuple = tuple() # Adding to atuple don't forget the comma tup += (blah , )
-        if vert_shader_filename != None: 
-            shader_tuple += (ShaderLoader.compile_shader(vert_shader_filename, GL_VERTEX_SHADER),)
-        if frag_shader_filename != None: 
-            shader_tuple += (ShaderLoader.compile_shader(frag_shader_filename, GL_FRAGMENT_SHADER),)
-        if geom_shader_filename != None: 
-            shader_tuple += (ShaderLoader.compile_shader(geom_shader_filename, GL_GEOMETRY_SHADER),)
-        if comp_shader_filename != None: 
-            shader_tuple += (ShaderLoader.compile_shader(comp_shader_filename, GL_COMPUTE_SHADER),)
-        if tess_shader_filename != None: 
-            shader_tuple += (ShaderLoader.compile_shader(tess_shader_filename, GL_TESS_CONTROL_SHADER),)
-        if wtff_shader_filename != None: 
-            shader_tuple += (ShaderLoader.compile_shader(wtff_shader_filename, GL_REFERENCED_BY_COMPUTE_SHADER),)
-
-        shader = compileProgram(*shader_tuple)
-        
+        for arg in args:
+            print(f"\nARG = {arg} ***")
+            for partial in shadermap.keys():
+                print(f"SEARCHING FOR {partial} IN {arg}")
+                if partial in arg:
+                    print(f"FOUND {partial} {arg} LOADING AS {shadermap[partial]}")
+                    shader_tuple += (ShaderLoader.compile_shader(arg, shadermap[partial]),)
+                    break
+        shader = compileProgram(*shader_tuple)        
         print(f"Shaders loaded: {shader}")
         return shader
+
     
 if __name__=='__main__':
     shader = ShaderLoader.load_shader("shader_vert.glsl","shader_frag.glsl")

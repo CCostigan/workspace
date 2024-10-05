@@ -53,12 +53,11 @@ class ReviewOpenGL(object):
 
         eh = EHandler.configure(window)
 
-        ortho_shader = ShaderLoader.load_shader_programs("ortho_vert.glsl","ortho_frag.glsl")
-
+        ortho_shader = ShaderLoader.load_shader_progs("ortho_vert.glsl","ortho_frag.glsl")
         shaders = []
-        shaders.append(ShaderLoader.load_shader_programs("shader_vert.glsl","shader_frag.glsl"))
-        shaders.append(ShaderLoader.load_shader_programs("shader_vert.glsl","shader_frag.glsl","shader_geom0.glsl"))
-        shaders.append(ShaderLoader.load_shader_programs("shader_vert.glsl","shader_frag.glsl","shader_geom1.glsl"))
+        shaders.append(ShaderLoader.load_shader_progs("shader_vert.glsl","shader_frag.glsl"))
+        shaders.append(ShaderLoader.load_shader_progs("shader_vert.glsl","shader_frag.glsl","shader_geom0.glsl"))
+        shaders.append(ShaderLoader.load_shader_progs("shader_vert.glsl","shader_frag.glsl","shader_geom1.glsl"))
         # shaders.append(ShaderLoader.load_shader_programs("shader_vert.glsl","shader_frag.glsl"))
         # shadrX = ShaderLoader.load_shader_programs("shad_vert.glsl","shad_frag.glsl")
         for shader in shaders:        
@@ -72,10 +71,10 @@ class ReviewOpenGL(object):
             # ml.model_Arrays("Cube.obj"),
             # ml.model_Arrays("Cubes4.obj"),
             # ml.model_Arrays("Sphere.obj"),
-            # ml.model_Arrays("DDG.obj"),
+            ml.model_Arrays("DDG.obj"),
             # ml.model_Arrays("FCA.obj"),
             # ml.model_Arrays("XJ2A1.obj"),
-            ml.model_Arrays("TonyStarkWasAbleToBuildThisInACave-WithABoxOfScrap.obj"),
+            # ml.model_Arrays("TonyStarkWasAbleToBuildThisInACave-WithABoxOfScrap.obj"),
         ]
 
         charstrip = TextureLoader.load_texture("res/imgs/charstrip.png")
