@@ -5,6 +5,7 @@
 
 # Some good info (even though they are using garbage JS)
     https://www.youtube.com/watch?v=3mfvZ-mdtZQ
+    
 
 Shader parameters
 -Uniform   - read only - constant
