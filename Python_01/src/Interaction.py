@@ -115,5 +115,5 @@ class EHandler():
 if __name__=='__main__':
     # model = ModelLoader.load_model_obj("res/mdls/Cube.obj")
     # print(model)
-    from ReviewOpenGL import ReviewOpenGL
+    from AnOpenGLprogram import ReviewOpenGL
     ReviewOpenGL.main()
