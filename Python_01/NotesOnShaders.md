@@ -6,6 +6,10 @@
 # Some good info (even though they are using garbage JS)
     https://www.youtube.com/watch?v=3mfvZ-mdtZQ
     
+# Docker to Podman 
+https://metamost.com/post/tech/podman-from-docker-compose/
+
+
 
 Shader parameters
 -Uniform   - read only - constant
