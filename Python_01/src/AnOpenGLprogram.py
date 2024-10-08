@@ -57,9 +57,9 @@ class ReviewOpenGL(object):
         ortho_shader = ShaderLoader.load_shader_progs("ortho_vert.glsl","ortho_frag.glsl")
 
         shaders = []
-        shaders.append(ShaderLoader.load_shader_progs("shader_vert.glsl","shader_frag.glsl"))
-        shaders.append(ShaderLoader.load_shader_progs("shader_vert.glsl","shader_frag.glsl","shader_geom0.glsl"))
-        shaders.append(ShaderLoader.load_shader_progs("shader_vert.glsl","shader_frag.glsl","shader_geom1.glsl"))
+        shaders.append(ShaderLoader.load_shader_progs("shader_vert.glsl", "shader_frag.glsl"))
+        shaders.append(ShaderLoader.load_shader_progs("shader_vert.glsl", "shader_geom0.glsl"))
+        shaders.append(ShaderLoader.load_shader_progs("shader_vert.glsl", "shader_geom1.glsl"))
         # shaders.append(ShaderLoader.load_shader_programs("shader_vert.glsl","shader_frag.glsl"))
         # shadrX = ShaderLoader.load_shader_programs("shad_vert.glsl","shad_frag.glsl")
         for shader in shaders:        

@@ -1,14 +1,12 @@
+
 from OpenGL import GL as gl
 import glfw
 
-
-# https://metamost.com/post/tech/opengl-with-python/01-opengl-with-python/
 
 import ctypes
 import contextlib, sys
 import numpy as np
 import numpy.linalg as linalg
-
 
 # https://metamost.com/post/tech/opengl-with-python/01-opengl-with-python/
 
@@ -26,7 +24,7 @@ log.basicConfig(
 
 
 @contextlib.contextmanager
-def create_main_window(width, height):
+def create_main_window():
     if not glfw.init():
         sys.exit(1)
     try:
@@ -162,10 +160,10 @@ def perspective(fov, aspect, near, far):
     l = b * aspect
     assert abs(n - f) > 0
     return np.array((
-        ((2*n)/(r-l),           0,           0,  0),
-        (          0, (2*n)/(t-b),           0,  0),
-        ((r+l)/(r-l), (t+b)/(t-b), (f+n)/(n-f), -1),
-        (          0,           0, 2*f*n/(n-f),  0)))
+        ((2*n)/(r-l),           0,           0,      0),
+        (          0, (2*n)/(t-b),           0,      0),
+        ((r+l)/(r-l), (t+b)/(t-b), (f+n)/(n-f),     -1),
+        (          0,           0, 2*f*n/(n-f),      0)))
 
 def normalized(v):
     norm = linalg.norm(v)
@@ -178,15 +176,15 @@ def look_at(eye, target, up):
     x = - xax.dot(eye)
     y = - yax.dot(eye)
     z = - zax.dot(eye)
-    return np.array(((xax[0], yax[0], zax[0], 0),
-                     (xax[1], yax[1], zax[1], 0),
-                     (xax[2], yax[2], zax[2], 0),
-                     (     x,      y,      z, 1)))
+    return np.array(((xax[0], yax[0], zax[0],    0),
+                     (xax[1], yax[1], zax[1],    0),
+                     (xax[2], yax[2], zax[2],    0),
+                     (     x,      y,      z,    1)))
 
 def create_mvp(program_id, width, height):
-    fov, near, far = 45, 0.1, 100
-    eye = np.array((4,3,3))
-    target, up = np.array((0,0,0)), np.array((0,1,0))
+    fov, near, far = 45.0, 0.1, 100.0
+    eye = np.array((4.0, 3.0, 3.0))
+    target, up = np.array((0.0, 0.0, 0.0)), np.array((0.0, 1.0, 0.0))
     projection = perspective(fov, width / height, near, far)
     view = look_at(eye, target, up)
     model = np.identity(4)
@@ -210,8 +208,8 @@ def main_loop(window, mvp_matrix_id, mvp):
 
 
 if __name__ == '__main__':
-    width, height = 500, 400
-    with create_main_window(width, height) as window:
+    width, height = 800, 600
+    with create_main_window() as window:
         with create_vertex_buffer():
             with load_shaders() as prog_id:
                 mvp_matrix_id, mvp = create_mvp(prog_id, width, height)

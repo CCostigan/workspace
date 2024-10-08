@@ -3,13 +3,10 @@ from OpenGL import GL as gl
 import glfw
 
 
-# https://metamost.com/post/tech/opengl-with-python/01-opengl-with-python/
-
 import ctypes
 import contextlib, sys
 import numpy as np
 import numpy.linalg as linalg
-
 
 # https://metamost.com/post/tech/opengl-with-python/01-opengl-with-python/
 
@@ -63,6 +60,7 @@ def create_vertex_array_object():
 @contextlib.contextmanager
 def create_vertex_buffer():
     with create_vertex_array_object():
+
         # A triangle
         vertex_data = [-1, -1, 0,
                         1, -1, 0,
@@ -153,6 +151,36 @@ def load_shaders():
             gl.glDeleteShader(shader_id)
         gl.glUseProgram(0)
         gl.glDeleteProgram(program_id)
+
+
+def perspective(fov, aspect, near, far):
+    n, f = near, far
+    t = np.tan((fov * np.pi / 180) / 2) * near
+    b = - t
+    r = t * aspect
+    l = b * aspect
+    assert abs(n - f) > 0
+    return np.array((
+        ((2*n)/(r-l),           0,           0,      0),
+        (          0, (2*n)/(t-b),           0,      0),
+        ((r+l)/(r-l), (t+b)/(t-b), (f+n)/(n-f),     -1),
+        (          0,           0, 2*f*n/(n-f),      0)))
+
+def normalized(v):
+    norm = linalg.norm(v)
+    return v / norm if norm > 0 else v
+
+def look_at(eye, target, up):
+    zax = normalized(eye - target)
+    xax = normalized(np.cross(up, zax))
+    yax = np.cross(zax, xax)
+    x = - xax.dot(eye)
+    y = - yax.dot(eye)
+    z = - zax.dot(eye)
+    return np.array(((xax[0], yax[0], zax[0],    0),
+                     (xax[1], yax[1], zax[1],    0),
+                     (xax[2], yax[2], zax[2],    0),
+                     (     x,      y,      z,    1)))
 
 def main_loop(window):
     while (

@@ -3,10 +3,16 @@ from OpenGL import GL as gl
 import glfw
 
 
-# https://metamost.com/post/tech/opengl-with-python/01-opengl-with-python/
-
 import ctypes
 import contextlib, sys
+import numpy as np
+import numpy.linalg as linalg
+
+# https://metamost.com/post/tech/opengl-with-python/01-opengl-with-python/
+
+# Above references
+# https://www.opengl-tutorial.org/beginners-tutorials/tutorial-3-matrices/
+
 import os
 filename, ext = os.path.splitext(os.path.basename(__file__))
 import logging as log
