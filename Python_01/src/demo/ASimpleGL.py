@@ -98,6 +98,7 @@ def load_shaders():
     shaders = {
         gl.GL_VERTEX_SHADER: '''\
             #version 330 core
+            uniform mat4 model;
             layout(location = 0) in vec3 vertexPosition_modelspace;
             void main(){
               gl_Position.xyz = vertexPosition_modelspace;
@@ -141,7 +142,6 @@ def load_shaders():
             logmsg = gl.glGetProgramInfoLog(program_id)
             log.error(logmsg)
             sys.exit(11)
-
         gl.glUseProgram(program_id)
         yield
     finally:
@@ -189,7 +189,7 @@ def create_mvp(program_id, width, height):
     view = look_at(eye, target, up)
     model = np.identity(4)
     mvp = model @ view @ projection
-    matrix_id = gl.glGetUniformLocation(program_id, 'MVP')
+    matrix_id = gl.glGetUniformLocation(program_id, 'model')
     return matrix_id, mvp.astype(np.float32)
 
 def main_loop(window, mvp_matrix_id, mvp):
@@ -209,11 +209,17 @@ def main_loop(window, mvp_matrix_id, mvp):
 
 if __name__ == '__main__':
     width, height = 800, 600
-    with create_main_window() as window:
-        with create_vertex_buffer():
-            with load_shaders() as prog_id:
-                mvp_matrix_id, mvp = create_mvp(prog_id, width, height)
-                main_loop(window, mvp_matrix_id, mvp)
+    window = create_main_window()
+    vbfr = create_vertex_buffer()
+    prog_id = load_shaders()
+    mvp_matrix_id, mvp = create_mvp(prog_id, width, height)
+    main_loop(window, mvp_matrix_id, mvp)
+
+    # with create_main_window() as window:
+    #     with create_vertex_buffer():
+    #         with load_shaders() as prog_id:
+    #             mvp_matrix_id, mvp = create_mvp(prog_id, width, height)
+    #             main_loop(window, mvp_matrix_id, mvp)
 
 # if __name__ == '__main__':
 #     with create_main_window() as window:
