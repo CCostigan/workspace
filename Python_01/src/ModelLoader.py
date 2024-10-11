@@ -169,39 +169,39 @@ class ModelLoader():
                 elif tokens[0] == 'Ka':  # Ambient
                     ambient = (float(tokens[1]),float(tokens[2]),float(tokens[3]))
                 elif tokens[0] == 'Kd':  # Diffuse
-                    pass
+                    diffuse = (float(tokens[1]),float(tokens[2]),float(tokens[3]))
                 elif tokens[0] == 'Ks':  # Specular
-                    pass
+                    specular = (float(tokens[1]),float(tokens[2]),float(tokens[3]))
                 elif tokens[0] == 'Ke':  # 
-                    pass
+                    emission = (float(tokens[1]),float(tokens[2]),float(tokens[3]))
                 elif tokens[0] == "Tr":  # Transmission Color
-                    pass
+                    transmit = (float(tokens[1]),float(tokens[2]),float(tokens[3]))
                 elif tokens[0] == "d":  # Transmission Color Tr = 1 - d
-                    pass
+                    transmid = float(tokens[1])
                 elif tokens[0] == "Tf":  # Transmission Filter Color
-                    pass
-                elif tokens[0] == "map_Kd":  # Filename of Deliffuse texture
-                    pass
+                    filterc = (float(tokens[1]),float(tokens[2]),float(tokens[3]))
+                elif tokens[0] == "map_Kd":  # Filename of Diffuse texture
+                    print(f"+Diffuse {tokens[1]}")
                 elif tokens[0] == "map_Ke":  # Filename of Emission texture
-                    pass
+                    print(f"+Emission {tokens[1]}")
                 elif tokens[0] == "map_Ks":  # Filename of Specular texture
-                    pass
-                elif tokens[0] == "map_Ns":  # Filename of Speculat highlight texture
-                    pass
+                    print(f"+Specular {tokens[1]}")
+                elif tokens[0] == "map_Ns":  # Filename of Specular highlight texture
+                    print(f"+SpecularH {tokens[1]}")
                 elif tokens[0] == "map_d":   # Filename of Alpha texture
-                    pass
+                    print(f"+Alpha {tokens[1]}")
                 elif tokens[0] == "map_bump":  # Filename of Bumpmap texture
-                    pass
+                    print(f"+Bumpmap {tokens[1]}")
                 elif tokens[0] == "bump":  # See above
-                    pass
+                    print(f"+Bumpmap2 {tokens[1]}")
                 elif tokens[0] == "disp":  # Filename of Displacement texture
-                    pass
+                    print(f"+Displacement {tokens[1]}")
                 elif tokens[0] == "decal":  # Filename of Stencil Decal texture
-                    pass
+                    print(f"+StencilDecal {tokens[1]}")
                 elif tokens[0] == "refl":  # Filename of Spherical Reflection texture
-                    pass
+                    print(f"+SphericalReflect {tokens[1]}")
                 else:
-                    print(f"Unrecognized token '{tokens[0]}' in {filename}")
+                    print(f"!!! Unrecognized token '{tokens[0]}' in {filename}")
 
                 line = f.readline()
         pass
