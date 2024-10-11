@@ -73,8 +73,8 @@ class ReviewOpenGL(object):
             # ml.model_Arrays("Cube.obj"),
             # ml.model_Arrays("Cubes4.obj"),
             # ml.model_Arrays("Sphere.obj"),
-            # ml.model_Arrays("DDG.obj"),
-            ml.model_Arrays("FCA.obj"),
+            ml.model_Arrays("DDG.obj"),
+            # ml.model_Arrays("FCA.obj"),
             # ml.model_Arrays("XJ2A1.obj"),
             # ml.model_Arrays("TonyStarkWasAbleToBuildThisInACave-WithABoxOfScrap.obj"),
         ]

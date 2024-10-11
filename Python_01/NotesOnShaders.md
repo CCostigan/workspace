@@ -21,3 +21,13 @@
 # Docker to Podman 
     https://metamost.com/post/tech/podman-from-docker-compose/
 
+# Propellers
+
+https://www.youtube.com/watch?v=rLcZhsNQR4Q
+https://www.youtube.com/watch?v=OEDFDQFsXiE
+https://www.youtube.com/watch?v=ZmI1gBAyUok
+https://www.youtube.com/watch?v=HGL6QpVRyXk
+
+Topology (Welding)
+https://www.youtube.com/watch?v=m8JkR6tI_q4
+
