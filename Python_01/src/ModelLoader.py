@@ -55,6 +55,7 @@ class ModelLoader():
         norm = [] # Vertex Normals
         txuv = [] # Texture Coords
         face = [] # Face vertex lists
+        mats = {} # Materials
 
         indx = [] # Index for buffer
         bufr = [] # Vertex Buffer
@@ -72,7 +73,7 @@ class ModelLoader():
                 elif tokens[0] == 'o':  # Object                    
                     pass
                 elif tokens[0] == 'mtllib': # Material
-                    ModelLoader.load_model_material(textures, tokens[1])
+                    mats.update(ModelLoader.load_model_material(textures, tokens[1]))
                     pass
                 elif tokens[0] == 'usemtl': # Set Current
                     pass
@@ -143,7 +144,7 @@ class ModelLoader():
 
     def load_model_material(textures, filename):
 
-        mtls = [] # Materials loader
+        mtls = {} # Materials loader
 
         print(f"LOADING MATERIAL {filename}")        
         with open(model_home+filename, 'r') as f:
@@ -155,17 +156,17 @@ class ModelLoader():
                 elif tokens[0] == '#':  # Comment line
                     pass
                 elif tokens[0] == 'map_Kd':  # Object    
-                    print(f"Texture {tokens[1]}")
                     textures.append(TextureLoader.load_texture(image_home + tokens[1]))
-                    pass
                 elif tokens[0] == 'newmtl':
-                    mtls.append(tokens[1])
+                    mtls["newmtl"] = tokens[1]
                 elif tokens[0] == "illum":  # Illumination value?
-                    illum = int(tokens[1])
+                    mtls["illum"] = float(tokens[1])
+                elif tokens[0] == "d":  # Transmission Color Tr = 1 - d
+                    mtls["transmid"] = float(tokens[1])
                 elif tokens[0] == 'Ns':  # One float
-                    Ns = float(tokens[1])
+                    mtls["Ns"] = float(tokens[1])
                 elif tokens[0] == 'Ni':  # 
-                    Ni = float(tokens[1])
+                    mtls["Ni"] = float(tokens[1])
                 elif tokens[0] == 'Ka':  # Ambient
                     ambient = (float(tokens[1]),float(tokens[2]),float(tokens[3]))
                 elif tokens[0] == 'Kd':  # Diffuse
@@ -176,8 +177,6 @@ class ModelLoader():
                     emission = (float(tokens[1]),float(tokens[2]),float(tokens[3]))
                 elif tokens[0] == "Tr":  # Transmission Color
                     transmit = (float(tokens[1]),float(tokens[2]),float(tokens[3]))
-                elif tokens[0] == "d":  # Transmission Color Tr = 1 - d
-                    transmid = float(tokens[1])
                 elif tokens[0] == "Tf":  # Transmission Filter Color
                     filterc = (float(tokens[1]),float(tokens[2]),float(tokens[3]))
                 elif tokens[0] == "map_Kd":  # Filename of Diffuse texture
@@ -204,7 +203,7 @@ class ModelLoader():
                     print(f"!!! Unrecognized token '{tokens[0]}' in {filename}")
 
                 line = f.readline()
-        pass
+        return mtls        
 
 
 
@@ -213,4 +212,5 @@ if __name__=='__main__':
     # model = ModelLoader.load_model_obj("res/mdls/Cube.obj")
     # print(model)
     from AnOpenGLprogram import ReviewOpenGL
-    ReviewOpenGL.main()
+    rogl = ReviewOpenGL()
+    rogl.main()
