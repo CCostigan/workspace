@@ -51,13 +51,13 @@ class ModelLoader():
 
     def load_model_obj(filename):
 
-        vtxs = []
-        norm = []
-        txuv = []
-        face = []
+        vtxs = [] # Vertex Coords
+        norm = [] # Vertex Normals
+        txuv = [] # Texture Coords
+        face = [] # Face vertex lists
 
-        indx = []
-        bufr = []
+        indx = [] # Index for buffer
+        bufr = [] # Vertex Buffer
         
         with open(model_home+filename, 'r') as f:
             textures = []
@@ -142,6 +142,9 @@ class ModelLoader():
 
 
     def load_model_material(textures, filename):
+
+        mtls = [] # Materials loader
+
         print(f"LOADING MATERIAL {filename}")        
         with open(model_home+filename, 'r') as f:
             line = f.readline()
@@ -156,24 +159,47 @@ class ModelLoader():
                     textures.append(TextureLoader.load_texture(image_home + tokens[1]))
                     pass
                 elif tokens[0] == 'newmtl':
+                    mtls.append(tokens[1])
+                elif tokens[0] == "illum":  # Illumination value?
+                    illum = int(tokens[1])
+                elif tokens[0] == 'Ns':  # One float
+                    Ns = float(tokens[1])
+                elif tokens[0] == 'Ni':  # 
+                    Ni = float(tokens[1])
+                elif tokens[0] == 'Ka':  # Ambient
+                    ambient = (float(tokens[1]),float(tokens[2]),float(tokens[3]))
+                elif tokens[0] == 'Kd':  # Diffuse
                     pass
-                elif tokens[0] == 'Ns':
+                elif tokens[0] == 'Ks':  # Specular
                     pass
-                elif tokens[0] == 'Ka':
+                elif tokens[0] == 'Ke':  # 
                     pass
-                elif tokens[0] == 'Kd':
+                elif tokens[0] == "Tr":  # Transmission Color
                     pass
-                elif tokens[0] == 'Ks':
+                elif tokens[0] == "d":  # Transmission Color Tr = 1 - d
                     pass
-                elif tokens[0] == 'Ke':
+                elif tokens[0] == "Tf":  # Transmission Filter Color
                     pass
-                elif tokens[0] == 'Ni':
+                elif tokens[0] == "map_Kd":  # Filename of Deliffuse texture
                     pass
-                elif tokens[0] == 'd':
+                elif tokens[0] == "map_Ke":  # Filename of Emission texture
                     pass
-                elif tokens[0] == 'illum':
+                elif tokens[0] == "map_Ks":  # Filename of Specular texture
                     pass
-
+                elif tokens[0] == "map_Ns":  # Filename of Speculat highlight texture
+                    pass
+                elif tokens[0] == "map_d":   # Filename of Alpha texture
+                    pass
+                elif tokens[0] == "map_bump":  # Filename of Bumpmap texture
+                    pass
+                elif tokens[0] == "bump":  # See above
+                    pass
+                elif tokens[0] == "disp":  # Filename of Displacement texture
+                    pass
+                elif tokens[0] == "decal":  # Filename of Stencil Decal texture
+                    pass
+                elif tokens[0] == "refl":  # Filename of Spherical Reflection texture
+                    pass
                 else:
                     print(f"Unrecognized token '{tokens[0]}' in {filename}")
 
