@@ -28,6 +28,20 @@ https://www.youtube.com/watch?v=OEDFDQFsXiE
 https://www.youtube.com/watch?v=ZmI1gBAyUok
 https://www.youtube.com/watch?v=HGL6QpVRyXk
 
-Topology (Welding)
+# Topology (Welding)
 https://www.youtube.com/watch?v=m8JkR6tI_q4
+
+
+# Python ASYNC IO
+https://docs.python.org/3/library/asyncio-stream.html#asyncio-streams
+
+# DDS pretending to actually work
+https://community.rti.com/static/documentation/connext-dds/6.0.1/api/connext_dds/api_python/types.html#defining-types-programmatically
+https://community.rti.com/static/documentation/connext-dds/6.0.1/api/connext_dds/api_python/types.html#accessing-nested-members
+
+# Cameo admiting they suck ass - please debug our piece of shit for us
+https://docs.nomagic.com/display/FAQ/I+suspect+a+performance+problem.+How+do+I+solve+it
+
+
+
 
