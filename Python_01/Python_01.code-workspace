@@ -9,5 +9,9 @@
 	],
 	"settings": {
 		"python.defaultInterpreterPath": "~/.venv/bin/python"
+	},
+	"launch": {
+		"version": "0.2.0",
+		"configurations": []
 	}
 }
