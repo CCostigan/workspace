@@ -104,6 +104,8 @@ class ReviewOpenGL(object):
         count=0.0
         while not glfw.window_should_close(window) and not EHandler.DONE:
             count += 10.0
+            if count > 360.0 :
+                count -= 360.0
             glfw.poll_events()
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
             glfwtime = glfw.get_time()
