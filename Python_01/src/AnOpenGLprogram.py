@@ -70,10 +70,10 @@ class ReviewOpenGL(object):
         ml = ModelLoader()
         models = [
             # ml.model_Elements_HC(),
-            ml.model_Arrays("Cube.obj"),
+            # ml.model_Arrays("Cube.obj"),
             # ml.model_Arrays("Cubes4.obj"),
             # ml.model_Arrays("Sphere.obj"),
-            # ml.model_Arrays("FCA.obj"),
+            ml.model_Arrays("FCA.obj"),
             # ml.model_Arrays("DDG.obj"),
             # ml.model_Arrays("XJ2A1.obj"),
             # ml.model_Arrays("TonyStarkWasAbleToBuildThisInACave-WithABoxOfScrap.obj"),
@@ -81,8 +81,8 @@ class ReviewOpenGL(object):
         models[0]["location"]=[0.0, 0.0, 0.0]
 
         modules = [
-            # ml.model_Arrays("PropellerP.obj"),
-            # ml.model_Arrays("PropellerS.obj"),
+            ml.model_Arrays("PropellerP.obj"),
+            ml.model_Arrays("PropellerS.obj"),
         ]
         # modules[1]["location"]=[0.0, 8.0, 0.0]
         # modules[2]["location"]=[0.0, -8.0, 0.0]
@@ -138,6 +138,22 @@ class ReviewOpenGL(object):
 
                 for module in modules:
                     # glUniformMatrix4fv(self.uniform_modl, 1, GL_FALSE, model_mtx)
+                    # glUniformMatrix4fv(self.uniform_proj, 1, GL_FALSE, EHandler.proj_vec)
+
+                    shaft_end = pyrr.Matrix44.from_translation(pyrr.Vector3([0.0, 0.0, 10.0]))
+                    shaft_ang = pyrr.Matrix44.from_y_rotation(0.01 * 90.0) #0.8 * glfwtime)
+                    prop_scale = pyrr.Matrix44.from_scale(pyrr.Vector3([0.01, 0.01, 0.01]))
+                    prop_angle = pyrr.Matrix44.from_z_rotation(0.01 * 90.0) #0.8 * glfwtime)
+                    # pyrr.matrix44.multiply(shaft_end, shaft_ang)
+                    # prop_rtn = pyrr.matrix44.multiply(prop_scale, prop_angle)
+                    prop_mtx = pyrr.matrix44.multiply(shaft_end, model_mtx) # Move to the end of the shafts
+                    prop_mtx = pyrr.matrix44.multiply(prop_mtx, prop_angle)  # Angle the propellers
+                    # prop_mtx = pyrr.matrix44.multiply(shaft_ang, model_mtx)
+                    # prop_mtx = pyrr.matrix44.multiply(model_mtx, prop_angle)
+
+                    glUniformMatrix4fv(self.uniform_modl, 1, GL_FALSE, prop_mtx)
+                    glUniformMatrix4fv(self.uniform_proj, 1, GL_FALSE, EHandler.proj_vec)                    
+                    # glUniformMatrix4fv(self.uniform_modl, 1, GL_FALSE, prop_rtn)
                     # glUniformMatrix4fv(self.uniform_proj, 1, GL_FALSE, EHandler.proj_vec)
                     if module["render"] == "DrawArrays":
                         glBindVertexArray(module["vao"])

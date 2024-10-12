@@ -148,7 +148,7 @@ class ModelLoader():
         
         material = { # Set up the default material in case the mat file is junk
             "name":"Default",
-            "map_Kd": TextureLoader.load_texture(image_home + "nothing"),
+            "map_Kd": TextureLoader.load_texture(image_home + "NO-IMAGE"),
             "ambient" : (1.0, 1.0, 1.0),
             "diffuse" : (1.0, 0.0, 0.0),
             "specular" : (0.0, 1.0, 0.0),
