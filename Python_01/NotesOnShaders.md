@@ -21,8 +21,12 @@
 # Docker to Podman 
     https://metamost.com/post/tech/podman-from-docker-compose/
 
-# Propellers
 
+# Circular repetition stuff - arrays
+https://www.youtube.com/watch?v=ejR1_JzFDKY
+
+# Propellers
+https://www.navsea.navy.mil/Home/Shipyards/Norfolk/Department-Links/Naval-Foundry-and-Propeller-Center/
 https://www.youtube.com/watch?v=rLcZhsNQR4Q
 https://www.youtube.com/watch?v=OEDFDQFsXiE
 https://www.youtube.com/watch?v=ZmI1gBAyUok
@@ -43,5 +47,13 @@ https://community.rti.com/static/documentation/connext-dds/6.0.1/api/connext_dds
 https://docs.nomagic.com/display/FAQ/I+suspect+a+performance+problem.+How+do+I+solve+it
 
 
-
+# Propeller instructions
+    Add Empty spehere at origin
+    Add UV Sphere and RY90 
+        move on +X axis so point is on origin
+        flatten it on the X-Z plane (Surfboard)
+        Mesh Transform Bend to your liking
+        Taper X ~1.8
+        Twist X ~85
+        Arrary X Object Offset Empty
 
