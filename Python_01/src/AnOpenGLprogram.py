@@ -148,11 +148,12 @@ class ReviewOpenGL(object):
                     shaft_ang = pyrr.Matrix44.from_x_rotation(-90.0 * d2r) 
                     prop_scale = pyrr.Matrix44.from_scale(pyrr.Vector3([0.4, 0.4, 0.4]))
                     prop_angle = pyrr.Matrix44.from_y_rotation(count * d2r)
-                    # Accumulate the matrices for the propeller(s)
-                    prop_mtx = pyrr.matrix44.multiply(shaft_ang, model_mtx)  # Angle the propellers
-                    prop_mtx = pyrr.matrix44.multiply(shaft_end, prop_mtx)  # Angle the propellers
+                    # Accumulate the matrices for the propeller(s
+                    prop_mtx = model_mtx # Copy the Model matrix to the prop matrix, this is just for convenience 
+                    prop_mtx = pyrr.matrix44.multiply(shaft_ang, prop_mtx)   # Angle the prop to the shaft
+                    prop_mtx = pyrr.matrix44.multiply(shaft_end, prop_mtx)   # Move prop to end of shaft
                     prop_mtx = pyrr.matrix44.multiply(prop_angle, prop_mtx)  # Turn the propeller
-                    prop_mtx = pyrr.matrix44.multiply(prop_scale, prop_mtx)  # Turn the propeller
+                    prop_mtx = pyrr.matrix44.multiply(prop_scale, prop_mtx)  # Scale the propeller
 
                     glUniformMatrix4fv(self.uniform_modl, 1, GL_FALSE, prop_mtx)
                     glUniformMatrix4fv(self.uniform_proj, 1, GL_FALSE, EHandler.proj_vec)                    
