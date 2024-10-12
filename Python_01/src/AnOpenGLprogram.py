@@ -82,7 +82,7 @@ class ReviewOpenGL(object):
 
         modules = [
             ml.model_Arrays("PropellerP.obj"),
-            ml.model_Arrays("PropellerS.obj"),
+            # ml.model_Arrays("PropellerS.obj"),
         ]
         # modules[1]["location"]=[0.0, 8.0, 0.0]
         # modules[2]["location"]=[0.0, -8.0, 0.0]
@@ -103,7 +103,7 @@ class ReviewOpenGL(object):
         # the main application loop
         count=0.0
         while not glfw.window_should_close(window) and not EHandler.DONE:
-            count += 1.0
+            count += 10.0
             glfw.poll_events()
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
             glfwtime = glfw.get_time()
@@ -142,18 +142,15 @@ class ReviewOpenGL(object):
                     # glUniformMatrix4fv(self.uniform_modl, 1, GL_FALSE, model_mtx)
                     # glUniformMatrix4fv(self.uniform_proj, 1, GL_FALSE, EHandler.proj_vec)
                     d2r = 3.1415922/180
-                    shaft_end = pyrr.Matrix44.from_translation(pyrr.Vector3([0.0, 10.0, 0.0]))
-                    shaft_ang = pyrr.Matrix44.from_x_rotation(-90.0 * d2r) #0.8 * glfwtime)
-                    prop_scale = pyrr.Matrix44.from_scale(pyrr.Vector3([0.01, 0.01, 0.01]))
-                    prop_angle = pyrr.Matrix44.from_y_rotation(count * d2r) #0.8 * glfwtime)
-                    # pyrr.matrix44.multiply(shaft_end, shaft_ang)
-                    # prop_rtn = pyrr.matrix44.multiply(prop_scale, prop_angle)
+                    shaft_end = pyrr.Matrix44.from_translation(pyrr.Vector3([0.0, 3.5, 1.3]))
+                    shaft_ang = pyrr.Matrix44.from_x_rotation(-90.0 * d2r) 
+                    prop_scale = pyrr.Matrix44.from_scale(pyrr.Vector3([0.4, 0.4, 0.4]))
+                    prop_angle = pyrr.Matrix44.from_y_rotation(count * d2r)
+                    # Accumulate the matrices for the propeller(s)
                     prop_mtx = pyrr.matrix44.multiply(shaft_ang, model_mtx)  # Angle the propellers
                     prop_mtx = pyrr.matrix44.multiply(shaft_end, prop_mtx)  # Angle the propellers
-                    # prop_mtx = pyrr.matrix44.multiply(shaft_end, model_mtx) # Move to the end of the shafts
-                    prop_mtx = pyrr.matrix44.multiply(prop_angle, prop_mtx)  # Angle the propellers
-                    # prop_mtx = pyrr.matrix44.multiply(shaft_ang, model_mtx)
-                    # prop_mtx = pyrr.matrix44.multiply(model_mtx, prop_angle)
+                    prop_mtx = pyrr.matrix44.multiply(prop_angle, prop_mtx)  # Turn the propeller
+                    prop_mtx = pyrr.matrix44.multiply(prop_scale, prop_mtx)  # Turn the propeller
 
                     glUniformMatrix4fv(self.uniform_modl, 1, GL_FALSE, prop_mtx)
                     glUniformMatrix4fv(self.uniform_proj, 1, GL_FALSE, EHandler.proj_vec)                    
