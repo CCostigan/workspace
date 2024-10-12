@@ -144,7 +144,16 @@ class ModelLoader():
 
     def load_model_material(textures, filename):
 
-        mtls = {} # Materials loader
+        matlist = [] # Overall list of materials
+        
+        material = { # Set up the default material in case the mat file is junk
+            "name":"Default",
+            "map_Kd": TextureLoader.load_texture(image_home + "nothing"),
+            "ambient" : (1.0, 1.0, 1.0),
+            "diffuse" : (1.0, 0.0, 0.0),
+            "specular" : (0.0, 1.0, 0.0),
+            "emission" : (0.0, 0.0, 1.0),
+        } 
 
         print(f"LOADING MATERIAL {filename}")        
         with open(model_home+filename, 'r') as f:
@@ -155,30 +164,31 @@ class ModelLoader():
                     pass
                 elif tokens[0] == '#':  # Comment line
                     pass
+                #  First legit line in the mats file is usually the 'New Material' line
+                elif tokens[0] == 'newmtl':
+                    material["newmtl"] = tokens[1]
                 elif tokens[0] == 'map_Kd':  # Object    
                     textures.append(TextureLoader.load_texture(image_home + tokens[1]))
-                elif tokens[0] == 'newmtl':
-                    mtls["newmtl"] = tokens[1]
                 elif tokens[0] == "illum":  # Illumination value?
-                    mtls["illum"] = float(tokens[1])
+                    material["illum"] = float(tokens[1])
                 elif tokens[0] == "d":  # Transmission Color Tr = 1 - d
-                    mtls["transmid"] = float(tokens[1])
+                    material["transmid"] = float(tokens[1])
                 elif tokens[0] == 'Ns':  # One float
-                    mtls["Ns"] = float(tokens[1])
+                    material["Ns"] = float(tokens[1])
                 elif tokens[0] == 'Ni':  # 
-                    mtls["Ni"] = float(tokens[1])
+                    material["Ni"] = float(tokens[1])
                 elif tokens[0] == 'Ka':  # Ambient
-                    ambient = (float(tokens[1]),float(tokens[2]),float(tokens[3]))
+                    material["ambient"] = (float(tokens[1]),float(tokens[2]),float(tokens[3]))
                 elif tokens[0] == 'Kd':  # Diffuse
-                    diffuse = (float(tokens[1]),float(tokens[2]),float(tokens[3]))
+                    material["diffuse"] = (float(tokens[1]),float(tokens[2]),float(tokens[3]))
                 elif tokens[0] == 'Ks':  # Specular
-                    specular = (float(tokens[1]),float(tokens[2]),float(tokens[3]))
+                    material["specular"] = (float(tokens[1]),float(tokens[2]),float(tokens[3]))
                 elif tokens[0] == 'Ke':  # 
-                    emission = (float(tokens[1]),float(tokens[2]),float(tokens[3]))
+                    material["emission"] = (float(tokens[1]),float(tokens[2]),float(tokens[3]))
                 elif tokens[0] == "Tr":  # Transmission Color
-                    transmit = (float(tokens[1]),float(tokens[2]),float(tokens[3]))
+                    material["transmit"] = (float(tokens[1]),float(tokens[2]),float(tokens[3]))
                 elif tokens[0] == "Tf":  # Transmission Filter Color
-                    filterc = (float(tokens[1]),float(tokens[2]),float(tokens[3]))
+                    material["filterc"] = (float(tokens[1]),float(tokens[2]),float(tokens[3]))
                 elif tokens[0] == "map_Kd":  # Filename of Diffuse texture
                     print(f"+Diffuse {tokens[1]}")
                 elif tokens[0] == "map_Ke":  # Filename of Emission texture
@@ -203,7 +213,7 @@ class ModelLoader():
                     print(f"!!! Unrecognized token '{tokens[0]}' in {filename}")
 
                 line = f.readline()
-        return mtls        
+        return matlist        
 
 
 

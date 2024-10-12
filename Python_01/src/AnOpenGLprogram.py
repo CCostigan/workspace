@@ -70,17 +70,22 @@ class ReviewOpenGL(object):
         ml = ModelLoader()
         models = [
             # ml.model_Elements_HC(),
-            # ml.model_Arrays("Cube.obj"),
+            ml.model_Arrays("Cube.obj"),
             # ml.model_Arrays("Cubes4.obj"),
             # ml.model_Arrays("Sphere.obj"),
-            ml.model_Arrays("DDG.obj"),
             # ml.model_Arrays("FCA.obj"),
+            # ml.model_Arrays("DDG.obj"),
             # ml.model_Arrays("XJ2A1.obj"),
             # ml.model_Arrays("TonyStarkWasAbleToBuildThisInACave-WithABoxOfScrap.obj"),
         ]
-
-        
         models[0]["location"]=[0.0, 0.0, 0.0]
+
+        modules = [
+            # ml.model_Arrays("PropellerP.obj"),
+            # ml.model_Arrays("PropellerS.obj"),
+        ]
+        # modules[1]["location"]=[0.0, 8.0, 0.0]
+        # modules[2]["location"]=[0.0, -8.0, 0.0]
         # models[1]["location"]=[0.0, 6.0, 0.0]
         # models[2]["location"]=[0.0,-3.0, 0.0
 
@@ -130,6 +135,15 @@ class ReviewOpenGL(object):
                 #     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, model["ebo"])
                 #     glBindTexture(GL_TEXTURE_2D, model["textures"][0])
                 #     glDrawElements(GL_TRIANGLES, len(model["indx"]), GL_UNSIGNED_INT, None)
+
+                for module in modules:
+                    # glUniformMatrix4fv(self.uniform_modl, 1, GL_FALSE, model_mtx)
+                    # glUniformMatrix4fv(self.uniform_proj, 1, GL_FALSE, EHandler.proj_vec)
+                    if module["render"] == "DrawArrays":
+                        glBindVertexArray(module["vao"])
+                        if len(module["textures"]) > 0:
+                            glBindTexture(GL_TEXTURE_2D, module["textures"][0])
+                        glDrawArrays(GL_TRIANGLES, 0, len(module["indx"]))
 
             glfw.swap_buffers(window)
         glfw.terminate()
