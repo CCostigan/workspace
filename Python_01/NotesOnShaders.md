@@ -60,3 +60,5 @@ https://docs.nomagic.com/display/FAQ/I+suspect+a+performance+problem.+How+do+I+s
         Twist X ~85
         Arrary X Object Offset Empty
 
+# Phong Shading -- nice demo
+    https://www.youtube.com/watch?v=LKXAIuCaKAQ
