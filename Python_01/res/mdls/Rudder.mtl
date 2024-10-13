@@ -1,0 +1,12 @@
+# Blender MTL File: 'Rudder.blend'
+# Material Count: 1
+
+newmtl PaintedRed
+Ns 323.999994
+Ka 0.305785 0.305785 0.305785
+Kd 0.797127 0.000000 0.006242
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 3

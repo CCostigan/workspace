@@ -4,6 +4,7 @@
 from OpenGL.GL import *
 import glfw
 import pyrr
+import math
 
 from TextureLoader import TextureLoader
 from ShaderLoader import ShaderLoader
@@ -78,13 +79,21 @@ class ReviewOpenGL(object):
         # models[1]["location"]=[0.0, 0.0, 0.0]
 
         #  Propellers
-        modules = [
+        props = [
             ml.model_Arrays("PropellerP.obj"),
             ml.model_Arrays("PropellerS.obj"),
         ]
-        modules[0]["location"]=[ 0.8, 10.2, 1.2]
-        modules[1]["location"]=[-0.8, 10.2, 1.2]
-        shaftrpm=[8.0, -8.0]
+        props[0]["location"]=[ 0.8, 10.8, 1.2]
+        props[1]["location"]=[-0.8, 10.8, 1.2]
+        shaftrpm=[12.0, -12.0, 0.0, 0.0]
+
+        # Rudders
+        rudders = [
+            ml.model_Arrays("Rudder.obj"),
+            ml.model_Arrays("Rudder.obj"),
+        ]
+        rudders[0]["location"]=[ 0.8, 11.4, 1.2]
+        rudders[1]["location"]=[-0.8, 11.4, 1.2]
 
         # glUseProgram(shaders[shader_index])
         glClearColor(0.1, 0.2, 0.4, 1.0)
@@ -98,8 +107,13 @@ class ReviewOpenGL(object):
         # self.setup_shaders(shaders[0])
 
         # the main application loop
-        counters=[0.0, 0.0]
+        counters=[0.0, 0.0, 0.0, 0.0]
+        steering=[0.0, 0.0, 0.0, 0.0]
         while not glfw.window_should_close(window) and not EHandler.DONE:
+            glfwtime = glfw.get_time()
+            print(f"GLFWTIME={glfwtime}")
+            steering[0] = 30.0 * math.sin(glfwtime)
+            steering[1] = 30.0 * math.sin(glfwtime)
             for i in range(0, len(counters)):
                 counters[i] += shaftrpm[i]
                 if counters[i] > 360.0 :
@@ -108,7 +122,6 @@ class ReviewOpenGL(object):
                     counters[i] += 360.0
             glfw.poll_events()
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
-            glfwtime = glfw.get_time()
 
             if textwriter is not None:
                 glUseProgram(ortho_shader)
@@ -140,10 +153,10 @@ class ReviewOpenGL(object):
                 #     glBindTexture(GL_TEXTURE_2D, model["textures"][0])
                 #     glDrawElements(GL_TRIANGLES, len(model["indx"]), GL_UNSIGNED_INT, None)
 
-                for m, module in enumerate(modules):
+                for m, prop in enumerate(props):
                     d2r = 3.1415922/180
                     # shaft_end = pyrr.Matrix44.from_translation(pyrr.Vector3([0.0, 3.5, 1.3]))
-                    shaft_end = pyrr.matrix44.create_from_translation(pyrr.Vector3([module["location"][0], module["location"][1], module["location"][2]]))
+                    shaft_end = pyrr.matrix44.create_from_translation(pyrr.Vector3([prop["location"][0], prop["location"][1], prop["location"][2]]))
                     shaft_ang = pyrr.Matrix44.from_x_rotation(-90.0 * d2r) 
                     prop_scale = pyrr.Matrix44.from_scale(pyrr.Vector3([0.1, 0.1, 0.1]))
                     prop_angle = pyrr.Matrix44.from_y_rotation(counters[m] * d2r)
@@ -156,11 +169,33 @@ class ReviewOpenGL(object):
 
                     glUniformMatrix4fv(self.uniform_modl, 1, GL_FALSE, prop_mtx)
                     glUniformMatrix4fv(self.uniform_proj, 1, GL_FALSE, EHandler.proj_vec)                    
-                    if module["render"] == "DrawArrays":
-                        glBindVertexArray(module["vao"])
-                        if len(module["textures"]) > 0:
-                            glBindTexture(GL_TEXTURE_2D, module["textures"][0])
-                        glDrawArrays(GL_TRIANGLES, 0, len(module["indx"]))
+                    if prop["render"] == "DrawArrays":
+                        glBindVertexArray(prop["vao"])
+                        if len(prop["textures"]) > 0:
+                            glBindTexture(GL_TEXTURE_2D, prop["textures"][0])
+                        glDrawArrays(GL_TRIANGLES, 0, len(prop["indx"]))
+
+                for r, rudder in enumerate(rudders):
+                    d2r = 3.1415922/180
+                    # shaft_end = pyrr.Matrix44.from_translation(pyrr.Vector3([0.0, 3.5, 1.3]))
+                    shaft_end = pyrr.matrix44.create_from_translation(pyrr.Vector3([rudder["location"][0], rudder["location"][1], rudder["location"][2]]))
+                    shaft_ang = pyrr.Matrix44.from_x_rotation(-90.0 * d2r) 
+                    rudd_scale = pyrr.Matrix44.from_scale(pyrr.Vector3([0.1, 0.1, 0.1]))
+                    rudd_angle = pyrr.Matrix44.from_z_rotation(steering[r] * d2r)
+                    # Acccumulate the matrices for the rudder(s)
+                    rudd_mtx = model_mtx # Copy the Model matrix to the prop matrix, this is just for convenience 
+                    rudd_mtx = pyrr.matrix44.multiply(shaft_ang, rudd_mtx)   # Angle the prop to the shaft
+                    rudd_mtx = pyrr.matrix44.multiply(shaft_end, rudd_mtx)   # Move prop to end of shaft
+                    rudd_mtx = pyrr.matrix44.multiply(rudd_angle, rudd_mtx)  # Turn the propeller
+                    rudd_mtx = pyrr.matrix44.multiply(rudd_scale, rudd_mtx)  # Scale the propeller
+
+                    glUniformMatrix4fv(self.uniform_modl, 1, GL_FALSE, rudd_mtx)
+                    glUniformMatrix4fv(self.uniform_proj, 1, GL_FALSE, EHandler.proj_vec)                    
+                    if rudder["render"] == "DrawArrays":
+                        glBindVertexArray(rudder["vao"])
+                        if len(rudder["textures"]) > 0:
+                            glBindTexture(GL_TEXTURE_2D, rudder["textures"][0])
+                        glDrawArrays(GL_TRIANGLES, 0, len(rudder["indx"]))
 
             glfw.swap_buffers(window)
         glfw.terminate()
