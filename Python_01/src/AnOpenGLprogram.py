@@ -67,27 +67,24 @@ class ReviewOpenGL(object):
 
         textwriter = Writer(workarea)
 
+        # Load models and modules
         ml = ModelLoader()
         models = [
             # ml.model_Elements_HC(),
-            # ml.model_Arrays("Cube.obj"),
-            # ml.model_Arrays("Cubes4.obj"),
-            # ml.model_Arrays("Sphere.obj"),
-            ml.model_Arrays("FCA.obj"),
-            # ml.model_Arrays("DDG.obj"),
-            # ml.model_Arrays("XJ2A1.obj"),
-            # ml.model_Arrays("TonyStarkWasAbleToBuildThisInACave-WithABoxOfScrap.obj"),
+            # ml.model_Arrays("FCA.obj"),
+            ml.model_Arrays("DDG.obj"),
         ]
         models[0]["location"]=[0.0, 0.0, 0.0]
+        # models[1]["location"]=[0.0, 0.0, 0.0]
 
+        #  Propellers
         modules = [
             ml.model_Arrays("PropellerP.obj"),
-            # ml.model_Arrays("PropellerS.obj"),
+            ml.model_Arrays("PropellerS.obj"),
         ]
-        # modules[1]["location"]=[0.0, 8.0, 0.0]
-        # modules[2]["location"]=[0.0, -8.0, 0.0]
-        # models[1]["location"]=[0.0, 6.0, 0.0]
-        # models[2]["location"]=[0.0,-3.0, 0.0
+        modules[0]["location"]=[ 0.8, 10.2, 1.2]
+        modules[1]["location"]=[-0.8, 10.2, 1.2]
+        shaftrpm=[8.0, -8.0]
 
         # glUseProgram(shaders[shader_index])
         glClearColor(0.1, 0.2, 0.4, 1.0)
@@ -101,11 +98,14 @@ class ReviewOpenGL(object):
         # self.setup_shaders(shaders[0])
 
         # the main application loop
-        count=0.0
+        counters=[0.0, 0.0]
         while not glfw.window_should_close(window) and not EHandler.DONE:
-            count += 10.0
-            if count > 360.0 :
-                count -= 360.0
+            for i in range(0, len(counters)):
+                counters[i] += shaftrpm[i]
+                if counters[i] > 360.0 :
+                    counters[i] -= 360.0
+                if counters[i] < 0.0 :
+                    counters[i] += 360.0
             glfw.poll_events()
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
             glfwtime = glfw.get_time()
@@ -140,14 +140,13 @@ class ReviewOpenGL(object):
                 #     glBindTexture(GL_TEXTURE_2D, model["textures"][0])
                 #     glDrawElements(GL_TRIANGLES, len(model["indx"]), GL_UNSIGNED_INT, None)
 
-                for module in modules:
-                    # glUniformMatrix4fv(self.uniform_modl, 1, GL_FALSE, model_mtx)
-                    # glUniformMatrix4fv(self.uniform_proj, 1, GL_FALSE, EHandler.proj_vec)
+                for m, module in enumerate(modules):
                     d2r = 3.1415922/180
-                    shaft_end = pyrr.Matrix44.from_translation(pyrr.Vector3([0.0, 3.5, 1.3]))
+                    # shaft_end = pyrr.Matrix44.from_translation(pyrr.Vector3([0.0, 3.5, 1.3]))
+                    shaft_end = pyrr.matrix44.create_from_translation(pyrr.Vector3([module["location"][0], module["location"][1], module["location"][2]]))
                     shaft_ang = pyrr.Matrix44.from_x_rotation(-90.0 * d2r) 
-                    prop_scale = pyrr.Matrix44.from_scale(pyrr.Vector3([0.4, 0.4, 0.4]))
-                    prop_angle = pyrr.Matrix44.from_y_rotation(count * d2r)
+                    prop_scale = pyrr.Matrix44.from_scale(pyrr.Vector3([0.1, 0.1, 0.1]))
+                    prop_angle = pyrr.Matrix44.from_y_rotation(counters[m] * d2r)
                     # Accumulate the matrices for the propeller(s
                     prop_mtx = model_mtx # Copy the Model matrix to the prop matrix, this is just for convenience 
                     prop_mtx = pyrr.matrix44.multiply(shaft_ang, prop_mtx)   # Angle the prop to the shaft
@@ -157,8 +156,6 @@ class ReviewOpenGL(object):
 
                     glUniformMatrix4fv(self.uniform_modl, 1, GL_FALSE, prop_mtx)
                     glUniformMatrix4fv(self.uniform_proj, 1, GL_FALSE, EHandler.proj_vec)                    
-                    # glUniformMatrix4fv(self.uniform_modl, 1, GL_FALSE, prop_rtn)
-                    # glUniformMatrix4fv(self.uniform_proj, 1, GL_FALSE, EHandler.proj_vec)
                     if module["render"] == "DrawArrays":
                         glBindVertexArray(module["vao"])
                         if len(module["textures"]) > 0:

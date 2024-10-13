@@ -7,6 +7,9 @@
 # OpenGL tutorials
     https://www.opengl-tutorial.org/beginners-tutorials/tutorial-3-matrices/
 
+# Math for GL
+    https://www.3dgep.com/3d-math-primer-for-game-programmers-matrices/
+
 # Some good info (even though they are using garbage JS)
     https://www.youtube.com/watch?v=3mfvZ-mdtZQ
 
