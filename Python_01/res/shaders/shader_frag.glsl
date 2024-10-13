@@ -34,6 +34,7 @@ void main() {
     // Specular Lighting
     vec3  refl_vec = normalize(reflect(-diff_loc, normal));
     float spec_str = max(0.0, dot(eyevec, refl_vec));
+    spec_str = pow(spec_str, 2.0);
 //    vec4 v_ambient = v_color;//uKa * myColor;
 //    float d = 0.0;
 //    float s = 0.0;
@@ -44,7 +45,7 @@ void main() {
 //    vec4 v_diffuse = uKd * d * v_color;
 //    vec4 v_specular = uKs * s * v_spec_color;
 //    out_color = vec4( v_ambient + v_diffuse + v_specular );///texture(s_texture, v_texture);
-    out_color = tex_color * (diff_color + amb_clr);
+    out_color = spec_str * tex_color * (diff_color + amb_clr);
 }
 
 //void old_main() {

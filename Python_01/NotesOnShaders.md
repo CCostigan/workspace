@@ -62,3 +62,5 @@ https://docs.nomagic.com/display/FAQ/I+suspect+a+performance+problem.+How+do+I+s
 
 # Phong Shading -- nice demo
     https://www.youtube.com/watch?v=LKXAIuCaKAQ
+    https://gamedev.stackexchange.com/questions/89787/opengl-light-appears-to-move-with-camera-and-changes-with-object-rotation
+    
