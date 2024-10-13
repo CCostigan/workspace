@@ -83,8 +83,8 @@ class ReviewOpenGL(object):
             ml.model_Arrays("PropellerP.obj"),
             ml.model_Arrays("PropellerS.obj"),
         ]
-        props[0]["location"]=[ 0.8, 10.8, 1.2]
-        props[1]["location"]=[-0.8, 10.8, 1.2]
+        props[0]["location"]=[ 0.88, 10.7, 0.53]
+        props[1]["location"]=[-0.88, 10.7, 0.53]
         shaftrpm=[12.0, -12.0, 0.0, 0.0]
 
         # Rudders
@@ -92,8 +92,8 @@ class ReviewOpenGL(object):
             ml.model_Arrays("Rudder.obj"),
             ml.model_Arrays("Rudder.obj"),
         ]
-        rudders[0]["location"]=[ 0.8, 11.4, 1.25]
-        rudders[1]["location"]=[-0.8, 11.4, 1.25]
+        rudders[0]["location"]=[ 0.8, 11.4, 0.8]
+        rudders[1]["location"]=[-0.8, 11.4, 0.8]
 
         # glUseProgram(shaders[shader_index])
         glClearColor(0.1, 0.2, 0.4, 1.0)
