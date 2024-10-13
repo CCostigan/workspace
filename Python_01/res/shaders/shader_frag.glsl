@@ -18,7 +18,7 @@ uniform float uKx; // Specular exponent
 out vec4 out_color;
 
 void main() {
-    vec4  tex_color = texture(s_texture, v_texture) / 2.0;//vec4( 1.0, 0.5, 0.0, 1.0 ); // default color
+    vec4  tex_color = texture(s_texture, v_texture);//vec4( 1.0, 0.5, 0.0, 1.0 ); // default color
     vec3  normal = normalize(v_normal.xyz);
     vec3  eyevec = normalize(v_eye);
 
@@ -45,7 +45,7 @@ void main() {
 //    vec4 v_diffuse = uKd * d * v_color;
 //    vec4 v_specular = uKs * s * v_spec_color;
 //    out_color = vec4( v_ambient + v_diffuse + v_specular );///texture(s_texture, v_texture);
-    out_color = spec_str * tex_color * (diff_color + amb_clr);
+    out_color = tex_color;//spec_str * tex_color * diff_color;
 }
 
 //void old_main() {

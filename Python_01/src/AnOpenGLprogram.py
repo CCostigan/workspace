@@ -83,8 +83,8 @@ class ReviewOpenGL(object):
             ml.model_Arrays("PropellerP.obj"),
             ml.model_Arrays("PropellerS.obj"),
         ]
-        props[0]["location"]=[ 0.88, 10.7, 0.53]
-        props[1]["location"]=[-0.88, 10.7, 0.53]
+        props[0]["location"]=[ 0.88, 10.7, 0.55]
+        props[1]["location"]=[-0.88, 10.7, 0.55]
         shaftrpm=[12.0, -12.0, 0.0, 0.0]
 
         # Rudders
@@ -92,8 +92,8 @@ class ReviewOpenGL(object):
             ml.model_Arrays("Rudder.obj"),
             ml.model_Arrays("Rudder.obj"),
         ]
-        rudders[0]["location"]=[ 0.8, 11.4, 0.8]
-        rudders[1]["location"]=[-0.8, 11.4, 0.8]
+        rudders[0]["location"]=[ 0.8, 11.4, 0.7]
+        rudders[1]["location"]=[-0.8, 11.4, 0.7]
 
         # glUseProgram(shaders[shader_index])
         glClearColor(0.1, 0.2, 0.4, 1.0)
@@ -175,7 +175,6 @@ class ReviewOpenGL(object):
                     prop_mtx = pyrr.matrix44.multiply(prop_scale, prop_mtx)  # Scale the propeller
 
                     glUniformMatrix4fv(self.uniform_modl, 1, GL_FALSE, prop_mtx)
-                    glUniformMatrix4fv(self.uniform_proj, 1, GL_FALSE, EHandler.proj_vec)                    
                     if prop["render"] == "DrawArrays":
                         glBindVertexArray(prop["vao"])
                         if len(prop["textures"]) > 0:
@@ -196,7 +195,6 @@ class ReviewOpenGL(object):
                     rudd_mtx = pyrr.matrix44.multiply(rudd_scale, rudd_mtx)  # Scale the propeller
 
                     glUniformMatrix4fv(self.uniform_modl, 1, GL_FALSE, rudd_mtx)
-                    glUniformMatrix4fv(self.uniform_proj, 1, GL_FALSE, EHandler.proj_vec)                    
                     if rudder["render"] == "DrawArrays":
                         glBindVertexArray(rudder["vao"])
                         if len(rudder["textures"]) > 0:
