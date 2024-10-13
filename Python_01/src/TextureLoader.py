@@ -25,9 +25,7 @@ class TextureLoader():
             width = image.width
             height = image.height
             print(f"Texture Loader load: {filename} len={len(data)}")
-            # print(data)
-        else:
-            print(f"Using default texture {data}")
+            # print(f"Using default texture {data}")
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data)
         print(f"Loaded texture {filename}")
         return texture

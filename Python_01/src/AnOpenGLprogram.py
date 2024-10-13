@@ -5,6 +5,8 @@ from OpenGL.GL import *
 import glfw
 import pyrr
 import math
+import os
+import time
 
 from TextureLoader import TextureLoader
 from ShaderLoader import ShaderLoader
@@ -16,6 +18,8 @@ from TextWriter import Writer
 MIN, MAX = 0.1, 10000.0
 model_axis = [0.0, 0.0, 0.0]
 
+# fullscreen = True
+fullscreen = False
 
 class ReviewOpenGL(object):
 
@@ -24,36 +28,46 @@ class ReviewOpenGL(object):
         if not glfw.init():
             raise Exception("glfw can not be initialized!")
 
-        # glfw.window_hint(glfw.SAMPLES, 1)
 
-        # for m, mon in enumerate(glfw.get_monitors()):
-        #     print(f"Monitor {m} = {mon}")
         monitor1 = glfw.get_primary_monitor()
         workarea = glfw.get_monitor_workarea(monitor1)
 
         print(f"prime_monitor={monitor1} area={workarea}")
-        window = glfw.create_window(workarea[2], workarea[3], "Python OpenGL window", monitor1, None) # Fullscreen
+        if fullscreen:
+            window = glfw.create_window(workarea[2], workarea[3], "Python OpenGL window", monitor1, None) # Fullscreen
+            glfw.maximize_window(window)
+        else:
+            workarea = [0, 0, 1024, 768]
+            window = glfw.create_window(workarea[2], workarea[3], "Python OpenGL window", None, None) # Fullscreen
+            glfw.set_window_pos(window, 10, 30)
         # No window?  Bail
         if not window:
             glfw.terminate()
             raise Exception("glfw window can not be created!")
-        
-        # fb_size = glfw.get_framebuffer_size(window)
-        # glfw.set_window_pos(window, 10, 30)
-        glfw.make_context_current(window)
-        for monitor in glfw.get_monitors():
-            print(f"Monitor Name = {glfw.get_monitor_name(monitor)}")
-            print(f"Video Mode={glfw.get_video_mode(monitor)}")
-            # print(f"Video Modes={glfw.get_video_modes(monitor)}")
 
-        glfw.maximize_window(window)
-        print(f"Vulkan supported = {glfw.vulkan_supported()}")
+        # glfw.window_hint(glfw.SAMPLES, 1)
+        # Tell GLFW we want to use this window as our GL context
+        glfw.make_context_current(window)
+        # Do some other GL setup
+        glClearColor(0.1, 0.2, 0.4, 1.0)
+        glEnable(GL_DEPTH_TEST)
+        glViewport(workarea[1], workarea[1], workarea[2], workarea[3])
+
+        # May need to get the framebuffer size some time
+        # fb_size = glfw.get_framebuffer_size(window)
+        
+        # for monitor in glfw.get_monitors():
+        #     print(f"Monitor Name = {glfw.get_monitor_name(monitor)}")
+        #     print(f"Video Mode={glfw.get_video_mode(monitor)}")
+        #     print(f"Video Modes={glfw.get_video_modes(monitor)}")
+        # print(f"Vulkan supported = {glfw.vulkan_supported()}")
         # print(f"get_physical_device_presentation_support={glfw.get_physical_device_presentation_support(window)}")
-        print(f"Window Opacity={glfw.get_window_opacity(window)}")
+        # print(f"Window Opacity={glfw.get_window_opacity(window)}")
         # print(f"Window Attrib={glfw.get_window_attrib(window)}")
 
+        # Set up our handler for Mouse and Keyboard events
         eh = EHandler.configure(window)
-
+        # Set up our handler for Shaders
         sl = ShaderLoader()
 
         charstrip = TextureLoader.load_texture("res/imgs/charstrip.png")
@@ -63,8 +77,8 @@ class ReviewOpenGL(object):
         shaders.append(sl.load_shader_progs("shader_vert.glsl", "shader_frag.glsl"))  # Regular view
         shaders.append(sl.load_shader_progs("shader_vert.glsl", "shader_geom0.glsl")) # Wire frame view
         shaders.append(sl.load_shader_progs("shader_vert.glsl", "shader_geom1.glsl")) # Points only view
-        # shaders.append(ShaderLoader.load_shader_programs("shader_vert.glsl","shader_frag.glsl"))
-        # shadrX = ShaderLoader.load_shader_programs("shad_vert.glsl","shad_frag.glsl")
+        # Start the monitor thread to detect changes to shader files.  This would only be used in dev env
+        sl.start_checking(shaders, "shader_vert.glsl", "shader_frag.glsl")
         for shader in shaders:        
             self.setup_shaders(shader)
 
@@ -87,7 +101,7 @@ class ReviewOpenGL(object):
         ]
         props[0]["location"]=[ 0.88, 10.7, 0.55]
         props[1]["location"]=[-0.88, 10.7, 0.55]
-        shaftrpm=[12.0, -12.0, 0.0, 0.0]
+        shaftrpm=[10.0, -10.0, 0.0, 0.0]
 
         # Rudders
         rudders = [
@@ -97,14 +111,6 @@ class ReviewOpenGL(object):
         rudders[0]["location"]=[ 0.8, 11.4, 0.7]
         rudders[1]["location"]=[-0.8, 11.4, 0.7]
 
-        # glUseProgram(shaders[shader_index])
-        glClearColor(0.1, 0.2, 0.4, 1.0)
-        glEnable(GL_DEPTH_TEST)
-        # glEnable(GL_BLEND)
-        # glEnable(GL_LIGHTING)
-        # glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
-        # Initial Viewport
-        glViewport(workarea[1], workarea[1], workarea[2], workarea[3])
 
         # self.setup_shaders(shaders[0])
 
@@ -120,6 +126,16 @@ class ReviewOpenGL(object):
 
         while not glfw.window_should_close(window) and not EHandler.DONE:
             glfwtime = glfw.get_time()
+
+            #  This block can be removed if not doing shader development
+            if self.check_files("shader_vert.glsl", "shader_frag.glsl"):
+                try:
+                    newshader = sl.load_shader_progs("shader_vert.glsl", "shader_frag.glsl")                
+                    shaders[0] = newshader
+                except Exception as e:
+                    pass
+
+            # ShaderLoader.check_shaders()
             # print(f"GLFWTIME={glfwtime}")
             steering[0] = 30.0 * math.sin(glfwtime)
             steering[1] = 30.0 * math.sin(glfwtime)
@@ -149,8 +165,10 @@ class ReviewOpenGL(object):
                 model_mtx = pyrr.matrix44.multiply(rotation_mtx, tran_vec)
 
                 glUseProgram(shaders[EHandler.SHADERNUM])
+                # glUseProgram(shaders[len(shaders)-1])
                 glUniformMatrix4fv(self.uniform_modl, 1, GL_FALSE, model_mtx)
                 glUniformMatrix4fv(self.uniform_proj, 1, GL_FALSE, EHandler.proj_vec)
+
                 if model["render"] == "DrawArrays":
                     glBindVertexArray(model["vao"])
                     if len(model["textures"]) > 0:
@@ -166,8 +184,6 @@ class ReviewOpenGL(object):
                     d2r = 3.1415922/180
                     # shaft_end = pyrr.Matrix44.from_translation(pyrr.Vector3([0.0, 3.5, 1.3]))
                     shaft_end = pyrr.matrix44.create_from_translation(pyrr.Vector3([prop["location"][0], prop["location"][1], prop["location"][2]]))
-                    # shaft_ang = pyrr.Matrix44.from_x_rotation(-90.0 * d2r) 
-                    # prop_scale = pyrr.Matrix44.from_scale(pyrr.Vector3([0.1, 0.1, 0.1]))
                     prop_angle = pyrr.Matrix44.from_y_rotation(revcount[m] * d2r)
                     # Accumulate the matrices for the propeller(s
                     prop_mtx = model_mtx # Copy the Model matrix to the prop matrix, this is just for convenience 
@@ -186,15 +202,13 @@ class ReviewOpenGL(object):
                 for r, rudder in enumerate(rudders):
                     # shaft_end = pyrr.Matrix44.from_translation(pyrr.Vector3([0.0, 3.5, 1.3]))
                     shaft_end = pyrr.matrix44.create_from_translation(pyrr.Vector3([rudder["location"][0], rudder["location"][1], rudder["location"][2]]))
-                    # shaft_ang = pyrr.Matrix44.from_x_rotation(-90.0 * d2r) 
-                    # rudd_scale = pyrr.Matrix44.from_scale(pyrr.Vector3([0.1, 0.1, 0.1]))
                     rudd_angle = pyrr.Matrix44.from_z_rotation(steering[r] * d2r)
                     # Acccumulate the matrices for the rudder(s)
-                    rudd_mtx = model_mtx # Copy the Model matrix to the prop matrix, this is just for convenience 
-                    rudd_mtx = pyrr.matrix44.multiply(shaft_ang, rudd_mtx)   # Angle the prop to the shaft
-                    rudd_mtx = pyrr.matrix44.multiply(shaft_end, rudd_mtx)   # Move prop to end of shaft
-                    rudd_mtx = pyrr.matrix44.multiply(rudd_angle, rudd_mtx)  # Turn the propeller
-                    rudd_mtx = pyrr.matrix44.multiply(rudd_scale, rudd_mtx)  # Scale the propeller
+                    rudd_mtx = model_mtx # Copy the Model matrix to the rudder matrix, this is just for convenience 
+                    rudd_mtx = pyrr.matrix44.multiply(shaft_ang, rudd_mtx)   # Angle the rudder to the shaft
+                    rudd_mtx = pyrr.matrix44.multiply(shaft_end, rudd_mtx)   # Move rudder to end of shaft
+                    rudd_mtx = pyrr.matrix44.multiply(rudd_angle, rudd_mtx)  # Turn the rudder
+                    rudd_mtx = pyrr.matrix44.multiply(rudd_scale, rudd_mtx)  # Scale the rudder
 
                     glUniformMatrix4fv(self.uniform_modl, 1, GL_FALSE, rudd_mtx)
                     if rudder["render"] == "DrawArrays":
@@ -206,8 +220,18 @@ class ReviewOpenGL(object):
             glfw.swap_buffers(window)
         glfw.terminate()
 
+    def check_files(self, *filelist):
+        reload = False
+        shader_home="res/shaders/"
+        for filename in filelist:
+            stats_mt = os.stat(shader_home+filename).st_mtime        
+            if stats_mt > self.last_update:
+                self.last_update = time.time()
+                reload = True
+        return reload
 
     def setup_shaders(self, shader):
+        self.last_update = time.time()
         glUseProgram(shader)
         self.uniform_modl = glGetUniformLocation(shader, "m_model")
         self.uniform_proj = glGetUniformLocation(shader, "m_proj")

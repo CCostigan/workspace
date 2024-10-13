@@ -15,7 +15,7 @@ class ViewHandler():
 
 
 class EHandler():
-    window_dims = 1600, 900
+    window_dims = 800, 600
 
     mouse_buttons = 0
     mouse_down = 0
@@ -94,6 +94,8 @@ class EHandler():
             EHandler.SHADERNUM = 2
         # if b == 74:
         #     EHandler.SHADERNUM = 3
+        if b == 95:  # F11
+            EHandler.TOGGLESCREEN = 1
 
     # @staticmethod
     def char_callback(window, a):

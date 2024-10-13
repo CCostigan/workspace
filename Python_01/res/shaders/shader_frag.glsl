@@ -44,6 +44,7 @@ void main() {
 //    out_color = vec4( tex_color + spec_color );
 //    out_color = vec4( tex_color );
     out_color = tex_color;
+//    out_color = vec4(0.0, 0.7, 0.7,  1.0);//tex_color;
 }
 
 //void old_main() {

@@ -3,6 +3,8 @@
 from OpenGL.GL import *
 from OpenGL.GL.shaders import *  #compileProgram, compileShader
 import os
+import time
+from threading import Thread, Lock
 
 shadermap = {
     "vert": GL_VERTEX_SHADER,
@@ -19,18 +21,10 @@ class ShaderLoader():
 
     def __init__(self, shader_home="res/shaders/"):
         self.shader_home = shader_home
+        self.last_update = time.time()
+        self.checking = True
         # self.args = args
         # self.filemap = ShaderLoader.watcher(*args)
-
-    def watcher(self, *args):
-        filemap = {}
-        for filename in args:
-            stats_mt = os.stat(filename).st_mtime        
-            filemap[filename]=stats_mt
-        return filemap
-    
-    def check_shader_changes(self):
-        pass
 
     def compile_shader(self, filename, shadertype):
         with open(self.shader_home+filename, 'r') as source_file:
@@ -52,6 +46,27 @@ class ShaderLoader():
         shader = compileProgram(*shader_tuple)        
         print(f"Shaders loaded: {shader}")
         return shader
+
+
+
+    def check_files(self, *filelist):
+        reload = False
+        while self.checking:
+            for filename in filelist:
+                stats_mt = os.stat(self.shader_home+filename).st_mtime        
+                if stats_mt > self.last_update:
+                    self.last_update = time.time()
+                    reload = True
+                    # shaders[0]=self.load_shader_progs("shader_vert.glsl", "shader_geom1.glsl")
+        if reload:
+            self.shaders[0]=self.load_shader_progs(filelist)
+        time.sleep(1.0)
+        print("Checking...")
+
+    def start_checking(self, shaders, *filelist):
+        self.shaders = shaders
+        checker = Thread(target=self.check_files, args=filelist, daemon=False)
+        checker.start()
 
 
 if __name__=='__main__':
