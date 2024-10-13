@@ -92,8 +92,8 @@ class ReviewOpenGL(object):
             ml.model_Arrays("Rudder.obj"),
             ml.model_Arrays("Rudder.obj"),
         ]
-        rudders[0]["location"]=[ 0.8, 11.4, 1.2]
-        rudders[1]["location"]=[-0.8, 11.4, 1.2]
+        rudders[0]["location"]=[ 0.8, 11.4, 1.25]
+        rudders[1]["location"]=[-0.8, 11.4, 1.25]
 
         # glUseProgram(shaders[shader_index])
         glClearColor(0.1, 0.2, 0.4, 1.0)
@@ -107,19 +107,26 @@ class ReviewOpenGL(object):
         # self.setup_shaders(shaders[0])
 
         # the main application loop
-        counters=[0.0, 0.0, 0.0, 0.0]
+        revcount=[0.0, 0.0, 0.0, 0.0]
         steering=[0.0, 0.0, 0.0, 0.0]
+
+
+        d2r = 3.1415922/180
+        shaft_ang = pyrr.Matrix44.from_x_rotation(-90.0 * d2r) 
+        prop_scale = pyrr.Matrix44.from_scale(pyrr.Vector3([0.1, 0.1, 0.1]))
+        rudd_scale = pyrr.Matrix44.from_scale(pyrr.Vector3([0.1, 0.1, 0.1]))
+
         while not glfw.window_should_close(window) and not EHandler.DONE:
             glfwtime = glfw.get_time()
-            print(f"GLFWTIME={glfwtime}")
+            # print(f"GLFWTIME={glfwtime}")
             steering[0] = 30.0 * math.sin(glfwtime)
             steering[1] = 30.0 * math.sin(glfwtime)
-            for i in range(0, len(counters)):
-                counters[i] += shaftrpm[i]
-                if counters[i] > 360.0 :
-                    counters[i] -= 360.0
-                if counters[i] < 0.0 :
-                    counters[i] += 360.0
+            for i in range(0, len(revcount)):
+                revcount[i] += shaftrpm[i]
+                if revcount[i] > 360.0 :
+                    revcount[i] -= 360.0
+                if revcount[i] < 0.0 :
+                    revcount[i] += 360.0
             glfw.poll_events()
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
 
@@ -157,9 +164,9 @@ class ReviewOpenGL(object):
                     d2r = 3.1415922/180
                     # shaft_end = pyrr.Matrix44.from_translation(pyrr.Vector3([0.0, 3.5, 1.3]))
                     shaft_end = pyrr.matrix44.create_from_translation(pyrr.Vector3([prop["location"][0], prop["location"][1], prop["location"][2]]))
-                    shaft_ang = pyrr.Matrix44.from_x_rotation(-90.0 * d2r) 
-                    prop_scale = pyrr.Matrix44.from_scale(pyrr.Vector3([0.1, 0.1, 0.1]))
-                    prop_angle = pyrr.Matrix44.from_y_rotation(counters[m] * d2r)
+                    # shaft_ang = pyrr.Matrix44.from_x_rotation(-90.0 * d2r) 
+                    # prop_scale = pyrr.Matrix44.from_scale(pyrr.Vector3([0.1, 0.1, 0.1]))
+                    prop_angle = pyrr.Matrix44.from_y_rotation(revcount[m] * d2r)
                     # Accumulate the matrices for the propeller(s
                     prop_mtx = model_mtx # Copy the Model matrix to the prop matrix, this is just for convenience 
                     prop_mtx = pyrr.matrix44.multiply(shaft_ang, prop_mtx)   # Angle the prop to the shaft
@@ -176,11 +183,10 @@ class ReviewOpenGL(object):
                         glDrawArrays(GL_TRIANGLES, 0, len(prop["indx"]))
 
                 for r, rudder in enumerate(rudders):
-                    d2r = 3.1415922/180
                     # shaft_end = pyrr.Matrix44.from_translation(pyrr.Vector3([0.0, 3.5, 1.3]))
                     shaft_end = pyrr.matrix44.create_from_translation(pyrr.Vector3([rudder["location"][0], rudder["location"][1], rudder["location"][2]]))
-                    shaft_ang = pyrr.Matrix44.from_x_rotation(-90.0 * d2r) 
-                    rudd_scale = pyrr.Matrix44.from_scale(pyrr.Vector3([0.1, 0.1, 0.1]))
+                    # shaft_ang = pyrr.Matrix44.from_x_rotation(-90.0 * d2r) 
+                    # rudd_scale = pyrr.Matrix44.from_scale(pyrr.Vector3([0.1, 0.1, 0.1]))
                     rudd_angle = pyrr.Matrix44.from_z_rotation(steering[r] * d2r)
                     # Acccumulate the matrices for the rudder(s)
                     rudd_mtx = model_mtx # Copy the Model matrix to the prop matrix, this is just for convenience 
