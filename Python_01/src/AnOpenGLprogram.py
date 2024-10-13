@@ -54,13 +54,15 @@ class ReviewOpenGL(object):
 
         eh = EHandler.configure(window)
 
+        sl = ShaderLoader()
+
         charstrip = TextureLoader.load_texture("res/imgs/charstrip.png")
-        ortho_shader = ShaderLoader.load_shader_progs("ortho_vert.glsl","ortho_frag.glsl")
+        ortho_shader = sl.load_shader_progs("ortho_vert.glsl","ortho_frag.glsl")
 
         shaders = []
-        shaders.append(ShaderLoader.load_shader_progs("shader_vert.glsl", "shader_frag.glsl"))  # Regular view
-        shaders.append(ShaderLoader.load_shader_progs("shader_vert.glsl", "shader_geom0.glsl")) # Wire frame view
-        shaders.append(ShaderLoader.load_shader_progs("shader_vert.glsl", "shader_geom1.glsl")) # Points only view
+        shaders.append(sl.load_shader_progs("shader_vert.glsl", "shader_frag.glsl"))  # Regular view
+        shaders.append(sl.load_shader_progs("shader_vert.glsl", "shader_geom0.glsl")) # Wire frame view
+        shaders.append(sl.load_shader_progs("shader_vert.glsl", "shader_geom1.glsl")) # Points only view
         # shaders.append(ShaderLoader.load_shader_programs("shader_vert.glsl","shader_frag.glsl"))
         # shadrX = ShaderLoader.load_shader_programs("shad_vert.glsl","shad_frag.glsl")
         for shader in shaders:        
@@ -107,8 +109,8 @@ class ReviewOpenGL(object):
         # self.setup_shaders(shaders[0])
 
         # the main application loop
-        revcount=[0.0, 0.0, 0.0, 0.0]
-        steering=[0.0, 0.0, 0.0, 0.0]
+        revcount=[0.0, 0.0]
+        steering=[0.0, 0.0]
 
 
         d2r = 3.1415922/180
