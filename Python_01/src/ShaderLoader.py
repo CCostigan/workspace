@@ -56,17 +56,25 @@ class ShaderLoader():
                 stats_mt = os.stat(self.shader_home+filename).st_mtime        
                 if stats_mt > self.last_update:
                     self.last_update = time.time()
+                    # self.shaders[0]=self.load_shader_progs(filelist)
                     reload = True
-                    # shaders[0]=self.load_shader_progs("shader_vert.glsl", "shader_geom1.glsl")
-        if reload:
-            self.shaders[0]=self.load_shader_progs(filelist)
-        time.sleep(1.0)
-        print("Checking...")
+            if reload:
+                print(f"Reloading shaders... {filelist}")
+                self.load_shader_progs(filelist)
+
+            time.sleep(1.0)
 
     def start_checking(self, shaders, *filelist):
+        print("*** START CHECKING ***")
+        self.checking = True
         self.shaders = shaders
-        checker = Thread(target=self.check_files, args=filelist, daemon=False)
-        checker.start()
+        self.checker = Thread(target=self.check_files, args=filelist, daemon=False)
+        self.checker.start()
+
+    def stop_checking(self):
+        self.checking = False
+        self.checker.join()
+        pass
 
 
 if __name__=='__main__':

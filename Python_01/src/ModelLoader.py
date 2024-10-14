@@ -122,15 +122,15 @@ class ModelLoader():
                     print(f"Unknown objet token {tokens[0]}")
                 line = f.readline()
 
-            print(f"vtxs count = {len(vtxs)}")
-            print(f"txuv count = {len(txuv)}")
-            print(f"norm count = {len(norm)}")
-            print(f"face count = {len(face)}")
+            # print(f"vtxs count = {len(vtxs)}")
+            # print(f"txuv count = {len(txuv)}")
+            # print(f"norm count = {len(norm)}")
+            # print(f"face count = {len(face)}")
             
-            print(f"indx len = {len(indx)}")
-            # print(f"indx={indx}")
-            print(f"bufr len = {len(bufr)}")
-            # print(f"bufr={bufr}")
+            # print(f"indx len = {len(indx)}")
+            ## print(f"indx={indx}")
+            # print(f"bufr len = {len(bufr)}")
+            ## print(f"bufr={bufr}")
 
             indxs = np.array(indx, np.int32)
             buffr = np.array(bufr, np.float32)
@@ -155,7 +155,7 @@ class ModelLoader():
             "emission" : (0.0, 0.0, 1.0),
         } 
 
-        print(f"LOADING MATERIAL {filename}")        
+        # print(f"LOADING MATERIAL {filename}")        
         with open(model_home+filename, 'r') as f:
             line = f.readline()
             while line:

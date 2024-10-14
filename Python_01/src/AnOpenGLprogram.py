@@ -68,7 +68,7 @@ class ReviewOpenGL(object):
         # Set up our handler for Mouse and Keyboard events
         eh = EHandler.configure(window)
         # Set up our handler for Shaders
-        sl = ShaderLoader()
+        sl = ShaderLoader() 
 
         charstrip = TextureLoader.load_texture("res/imgs/charstrip.png")
         ortho_shader = sl.load_shader_progs("ortho_vert.glsl","ortho_frag.glsl")
@@ -77,8 +77,6 @@ class ReviewOpenGL(object):
         shaders.append(sl.load_shader_progs("shader_vert.glsl", "shader_frag.glsl"))  # Regular view
         shaders.append(sl.load_shader_progs("shader_vert.glsl", "shader_geom0.glsl")) # Wire frame view
         shaders.append(sl.load_shader_progs("shader_vert.glsl", "shader_geom1.glsl")) # Points only view
-        # Start the monitor thread to detect changes to shader files.  This would only be used in dev env
-        sl.start_checking(shaders, "shader_vert.glsl", "shader_frag.glsl")
         for shader in shaders:        
             self.setup_shaders(shader)
 
@@ -124,19 +122,42 @@ class ReviewOpenGL(object):
         prop_scale = pyrr.Matrix44.from_scale(pyrr.Vector3([0.1, 0.1, 0.1]))
         rudd_scale = pyrr.Matrix44.from_scale(pyrr.Vector3([0.1, 0.1, 0.1]))
 
+        # This horse shit threaded implementation doesn't work
+        # sl.start_checking(shaders, "shader_vert.glsl", "shader_frag.glsl")
+
+
+
         while not glfw.window_should_close(window) and not EHandler.DONE:
+
             glfwtime = glfw.get_time()
+            # Execute this block roughly every second
+            if(int(glfwtime*50) % 50 == 0 ):
+                # print(f"GLFWTIME={glfwtime}")
+                # #  This block can be removed if not doing shader development
+                if self.check_files("shader_vert.glsl", "shader_frag.glsl"):
+                    try:
+                        newshader = sl.load_shader_progs("shader_vert.glsl", "shader_frag.glsl")                
+                        shaders[0] = newshader
+                    except Exception as e:
+                        pass
 
-            #  This block can be removed if not doing shader development
-            if self.check_files("shader_vert.glsl", "shader_frag.glsl"):
-                try:
-                    newshader = sl.load_shader_progs("shader_vert.glsl", "shader_frag.glsl")                
-                    shaders[0] = newshader
-                except Exception as e:
-                    pass
+            if EHandler.KEY == 10:
+                shaftrpm[0] = 0
+            if EHandler.KEY == 11:
+                shaftrpm[0] = 2
+            if EHandler.KEY == 12:
+                shaftrpm[0] = 5
+            if EHandler.KEY == 13:
+                shaftrpm[0] = 10
+            if EHandler.KEY == 14:
+                shaftrpm[1] = 0
+            if EHandler.KEY == 15:
+                shaftrpm[1] = 2
+            if EHandler.KEY == 16:
+                shaftrpm[1] = 5
+            if EHandler.KEY == 17:
+                shaftrpm[1] = 10
 
-            # ShaderLoader.check_shaders()
-            # print(f"GLFWTIME={glfwtime}")
             steering[0] = 30.0 * math.sin(glfwtime)
             steering[1] = 30.0 * math.sin(glfwtime)
             for i in range(0, len(revcount)):
@@ -219,6 +240,7 @@ class ReviewOpenGL(object):
 
             glfw.swap_buffers(window)
         glfw.terminate()
+        sl.stop_checking()
 
     def check_files(self, *filelist):
         reload = False

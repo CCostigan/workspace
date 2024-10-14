@@ -13,18 +13,16 @@ uniform vec3 p_light;  // Location of light vec
 out vec2 v_texture;
 out vec3 v_normal;
 
-out vec3 v_light; // vector from point to light
-out vec3 v_eye; // vector from point to eye
+out vec3 v_light;      // vector from point to light
+out vec3 v_eye;        // vector from point to eye
 
 void main() {
-    // 
     vec4 v_observer = m_model * vec4(a_position, 1.0); // eye coordinate position
     v_light = p_light - v_observer.xyz; // vector from the point to the light position
-    v_eye = vec3( 0.0, 0.0, 0.0 ) - v_observer.xyz; // vector from the point to the eye position 
-    // 
+    v_eye = vec3( 0.0, 0.0, -1.0 ) - v_observer.xyz; // vector from the point to the eye 
+
     v_texture = a_texture;
     v_normal = a_normal;
-    // 
     gl_Position = m_proj * m_model * vec4(a_position, 1.0);
 }
 

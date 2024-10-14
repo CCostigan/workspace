@@ -35,19 +35,18 @@ void main() {
     vec4  diff_color = diff_bri * light_clr;
 
     // Specular Lighting
-    vec3  spec_vec = normalize(reflect(-light_loc, normal));
+    vec3  spec_vec = normalize(reflect(light_loc, normal));
     float spec_bri = max(0.0, dot(eyevec, spec_vec));
     spec_bri = pow(spec_bri, 32.0);
     vec4  spec_color = spec_bri * light_clr;
 
-//    out_color = vec4( tex_color + diff_color + spec_color );
-//    out_color = vec4( tex_color + spec_color );
-//    out_color = vec4( tex_color );
     out_color = tex_color;
+//    out_color = vec4( tex_color * diff_color )/4;
+//    out_color = vec4( tex_color + diff_color + spec_color );
 //    out_color = vec4(0.0, 0.7, 0.7,  1.0);//tex_color;
+
+//    out_color = diff_color * spec_color;
+
 }
 
-//void old_main() {
-//    out_color = texture(s_texture, v_texture);  //  Just plain texture color
-//}
 
