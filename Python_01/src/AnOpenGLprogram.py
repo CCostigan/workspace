@@ -100,6 +100,7 @@ class ReviewOpenGL(object):
         props[0]["location"]=[ 0.88, 10.7, 0.55]
         props[1]["location"]=[-0.88, 10.7, 0.55]
         shaftrpm=[10.0, -10.0, 0.0, 0.0]
+        engineon=[0.0, 0.0, 0.0, 0.0]
 
         # Rudders
         rudders = [
@@ -142,26 +143,16 @@ class ReviewOpenGL(object):
                         pass
 
             if EHandler.KEY == 10:
-                shaftrpm[1] = 0
+                engineon[0] = 1 - engineon[0]
             if EHandler.KEY == 11:
-                shaftrpm[1] = 2
-            if EHandler.KEY == 12:
-                shaftrpm[1] = 5
-            if EHandler.KEY == 13:
-                shaftrpm[1] = 10
-            if EHandler.KEY == 14:
-                shaftrpm[0] = 0
-            if EHandler.KEY == 15:
-                shaftrpm[0] = -2
-            if EHandler.KEY == 16:
-                shaftrpm[0] = -5
-            if EHandler.KEY == 17:
-                shaftrpm[0] = -10
+                engineon[1] = 1 - engineon[1]
 
-            steering[0] = 30.0 * math.sin(glfwtime)
-            steering[1] = 30.0 * math.sin(glfwtime)
+            shaftrpm[0] =  EHandler.model_data[0]
+            shaftrpm[1] = -EHandler.model_data[0]
+            steering[0] = -EHandler.model_data[1]
+            steering[1] = -EHandler.model_data[1]
             for i in range(0, len(revcount)):
-                revcount[i] += shaftrpm[i]
+                revcount[i] += shaftrpm[i] * engineon[i]
                 if revcount[i] > 360.0 :
                     revcount[i] -= 360.0
                 if revcount[i] < 0.0 :
