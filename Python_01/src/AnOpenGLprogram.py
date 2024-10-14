@@ -100,7 +100,7 @@ class ReviewOpenGL(object):
         props[0]["location"]=[ 0.88, 10.7, 0.55]
         props[1]["location"]=[-0.88, 10.7, 0.55]
         shaftrpm=[10.0, -10.0, 0.0, 0.0]
-        engineon=[0.0, 0.0, 0.0, 0.0]
+        engineon=[True, True, True, True]
 
         # Rudders
         rudders = [
@@ -142,17 +142,13 @@ class ReviewOpenGL(object):
                     except Exception as e:
                         pass
 
-            if EHandler.KEY == 10:
-                engineon[0] = 1 - engineon[0]
-            if EHandler.KEY == 11:
-                engineon[1] = 1 - engineon[1]
-
             shaftrpm[0] =  EHandler.model_data[0]
             shaftrpm[1] = -EHandler.model_data[0]
             steering[0] = -EHandler.model_data[1]
             steering[1] = -EHandler.model_data[1]
             for i in range(0, len(revcount)):
-                revcount[i] += shaftrpm[i] * engineon[i]
+                if engineon[i]:
+                    revcount[i] += shaftrpm[i]
                 if revcount[i] > 360.0 :
                     revcount[i] -= 360.0
                 if revcount[i] < 0.0 :

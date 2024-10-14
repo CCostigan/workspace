@@ -102,8 +102,6 @@ class EHandler():
         #     EHandler.SHADERNUM = 3
         if b == 95:  # F11
             EHandler.TOGGLESCREEN = 1
-        if b >= 10 and b <= 20:  # Numbers
-            EHandler.KEY = b
 
 
     # @staticmethod
