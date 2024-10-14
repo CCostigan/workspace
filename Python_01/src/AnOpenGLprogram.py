@@ -142,21 +142,21 @@ class ReviewOpenGL(object):
                         pass
 
             if EHandler.KEY == 10:
-                shaftrpm[0] = 0
-            if EHandler.KEY == 11:
-                shaftrpm[0] = 2
-            if EHandler.KEY == 12:
-                shaftrpm[0] = 5
-            if EHandler.KEY == 13:
-                shaftrpm[0] = 10
-            if EHandler.KEY == 14:
                 shaftrpm[1] = 0
-            if EHandler.KEY == 15:
+            if EHandler.KEY == 11:
                 shaftrpm[1] = 2
-            if EHandler.KEY == 16:
+            if EHandler.KEY == 12:
                 shaftrpm[1] = 5
-            if EHandler.KEY == 17:
+            if EHandler.KEY == 13:
                 shaftrpm[1] = 10
+            if EHandler.KEY == 14:
+                shaftrpm[0] = 0
+            if EHandler.KEY == 15:
+                shaftrpm[0] = -2
+            if EHandler.KEY == 16:
+                shaftrpm[0] = -5
+            if EHandler.KEY == 17:
+                shaftrpm[0] = -10
 
             steering[0] = 30.0 * math.sin(glfwtime)
             steering[1] = 30.0 * math.sin(glfwtime)
