@@ -7,6 +7,7 @@ import pyrr
 import math
 import os
 import time
+import numpy as np
 
 from TextureLoader import TextureLoader
 from ShaderLoader import ShaderLoader
@@ -86,8 +87,9 @@ class ReviewOpenGL(object):
         ml = ModelLoader()
         models = [
             # ml.model_Elements_HC(),
+            ml.model_Arrays("Sphere.obj"),
             # ml.model_Arrays("FCA.obj"),
-            ml.model_Arrays("DDG.obj"),
+            # ml.model_Arrays("DDG.obj"),
         ]
         models[0]["location"]=[0.0, 0.0, 0.0]
         # models[1]["location"]=[0.0, 0.0, 0.0]
@@ -126,7 +128,13 @@ class ReviewOpenGL(object):
         # This horse shit threaded implementation doesn't work
         # sl.start_checking(shaders, "shader_vert.glsl", "shader_frag.glsl")
 
-
+        # Section 19 of https://sibras.github.io/OpenGL4-Tutorials/docs/Tutorials/03-Tutorial3/
+        light = [10.0,0.0,0.0, 0.4,0.4,0.4, 12.5]  # XYZ RGB FALLOFF
+        light = np.array(light, np.float32)
+        g_uiPointLightUBO = glGenBuffers(1)
+        glBindBuffer(GL_UNIFORM_BUFFER, g_uiPointLightUBO)
+        glBufferData(GL_UNIFORM_BUFFER, light.nbytes, light, GL_STATIC_DRAW )
+        glBindBufferBase(GL_UNIFORM_BUFFER, 2, g_uiPointLightUBO);
 
         while not glfw.window_should_close(window) and not EHandler.DONE:
 
