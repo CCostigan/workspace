@@ -63,4 +63,31 @@ https://docs.nomagic.com/display/FAQ/I+suspect+a+performance+problem.+How+do+I+s
 # Phong Shading -- nice demo
     https://www.youtube.com/watch?v=LKXAIuCaKAQ
     https://gamedev.stackexchange.com/questions/89787/opengl-light-appears-to-move-with-camera-and-changes-with-object-rotation
-    
+
+
+
+
+# GREAT Explanation
+https://gamedev.stackexchange.com/questions/89787/opengl-light-appears-to-move-with-camera-and-changes-with-object-rotation
+
+    From what I read from the shaders the light is in world-space and the light calculation is done on the object in part in untransformed object-space.
+
+    You need to compute your lighting with both light & model in world-space or both in camera space.
+
+    Whenever moving the camera messes up the lighting it means some of the data is calculated in a different space from the rest.
+
+    (a_vertexPosition.xyz) 
+    is in object space (before the object is placed in the 3D world).
+
+    (a_vertexPosition.xyz * modelmatrix) 
+    is in world space.
+
+    ((a_vertexPosition.xyz * modelmatrix) * viewmatrix) 
+    is in view (camera) space.
+
+    (((a_vertexPosition.xyz * modelmatrix) * viewmatrix) * projectionmatrix) 
+    is in screen space (just before perspective).
+
+    vec4 temp = ((a_vertexPosition.xyz * modelmatrix) * viewmatrix) * projectionmatrix;
+    temp /= temp.w; 
+    is in projected screen space. The GPU does this division by w just before the pixel shader. Sometimes you need to calculate this in the vertex shader to do 2D effects.

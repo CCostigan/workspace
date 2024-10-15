@@ -19,7 +19,9 @@ out vec3 v_eye;        // vector from point to eye
 void main() {
     vec4 v_observer = m_model * vec4(a_position, 1.0); // eye coordinate position
     v_light = p_light - v_observer.xyz; // vector from the point to the light position
-    v_eye = vec3( 0.0, 0.0, -1.0 ) - v_observer.xyz; // vector from the point to the eye 
+    v_eye = vec3( 0.0, 0.0, -10.0 ) - v_observer.xyz; // vector from the point to the eye 
+
+//    v_eye = vec4(a_position, 1.0);
 
     v_texture = a_texture;
     v_normal = a_normal;

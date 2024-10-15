@@ -23,7 +23,7 @@ void main() {
     vec3  eyevec = normalize(v_eye);
 
     // Ambient Lighting
-    vec4  amb_clr = vec4(0.0, 0.7, 0.7,  1.0);
+    vec4  amb_clr = vec4(0.1, 0.1, 0.1,  1.0);
 
     // Light location & color
     vec3  light_loc = vec3(4.0, 4.0, 4.0);
@@ -37,16 +37,17 @@ void main() {
     // Specular Lighting
     vec3  spec_vec = normalize(reflect(light_loc, normal));
     float spec_bri = max(0.0, dot(eyevec, spec_vec));
-    spec_bri = pow(spec_bri, 32.0);
+    spec_bri = pow(spec_bri, 64.0);
     vec4  spec_color = spec_bri * light_clr;
 
-    out_color = tex_color;
+    out_color = tex_color * amb_clr;//* diff_color;
+    out_color += spec_color;
 //    out_color = vec4( tex_color * diff_color )/4;
 //    out_color = vec4( tex_color + diff_color + spec_color );
 //    out_color = vec4(0.0, 0.7, 0.7,  1.0);//tex_color;
 
 //    out_color = diff_color * spec_color;
-
+//    out_color = tex_color;
 }
 
 
