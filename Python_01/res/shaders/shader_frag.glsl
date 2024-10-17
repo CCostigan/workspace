@@ -1,5 +1,7 @@
 #version 330 core
 
+// Some of this from 
+//https://sibras.github.io/OpenGL4-Tutorials/docs/Tutorials/03-Tutorial3/
 // 
 in vec2 v_texture;
 in vec3 v_normal;
@@ -8,6 +10,10 @@ uniform sampler2D s_texture;
 
 in vec3 v_light; // vector from point to light
 in vec3 v_eye; // vector from point to eye
+
+uniform mat4 m_model;  // Model translation rotation scale mtx
+uniform mat4 m_proj;   // Projction mtx
+uniform vec3 p_light;  // Location of light vec
 
 uniform float uKa; // Ambient
 uniform float uKd; // Diffuse
@@ -30,7 +36,7 @@ void main() {
     vec4  light_clr = vec4(0.8, 0.8, 0.8,  1.0);
 
     // Diffuse Lighting
-    vec4  diff_clr = vec4(0.5, 0.5, 0.5, 1.0); 
+    vec4  diff_clr = vec4(0.5, 0.5, 0.5,  1.0); 
     float diff_bri = max(0.0, dot(light_loc, normal));
     vec4  diff_color = diff_bri * light_clr;
 
@@ -54,7 +60,7 @@ void main() {
 
 //    out_color = blinnPhong(v_normal, v_light, v_eye, light_clr, light_clr, light_clr, 0.5);
 
-    out_color *= vec4(1.0, 0.0, 0.0, 1.0);// Toggle this to verify shaders are loading
+//    out_color *= vec4(1.0, 0.0, 0.0, 1.0);// Toggle this to verify shaders are loading
 }
 
 

@@ -1,5 +1,4 @@
 
-
     
 # Blender importer
     /usr/share/blender/scripts/templates_py/operator_file_import.py
@@ -65,7 +64,10 @@ https://docs.nomagic.com/display/FAQ/I+suspect+a+performance+problem.+How+do+I+s
     https://gamedev.stackexchange.com/questions/89787/opengl-light-appears-to-move-with-camera-and-changes-with-object-rotation
 
 
-
+# Matrices
+https://www.3dgep.com/3d-math-primer-for-game-programmers-matrices/
+https://www.opengl-tutorial.org/beginners-tutorials/tutorial-3-matrices/
+https://gamedev.stackexchange.com/questions/89787/opengl-light-appears-to-move-with-camera-and-changes-with-object-rotation
 
 # GREAT Explanation
 https://gamedev.stackexchange.com/questions/89787/opengl-light-appears-to-move-with-camera-and-changes-with-object-rotation
@@ -91,3 +93,22 @@ https://gamedev.stackexchange.com/questions/89787/opengl-light-appears-to-move-w
     vec4 temp = ((a_vertexPosition.xyz * modelmatrix) * viewmatrix) * projectionmatrix;
     temp /= temp.w; 
     is in projected screen space. The GPU does this division by w just before the pixel shader. Sometimes you need to calculate this in the vertex shader to do 2D effects.
+
+https://metamost.com/post/tech/opengl-with-python/01-opengl-with-python/
+https://metamost.com/post/tech/opengl-with-python/02-opengl-with-python-pt2/
+
+https://gitlab.com/metamost/learning-opengl-with-python/blob/master/tutorial-3-matrices/main.py
+
+https://www.youtube.com/watch?v=3mfvZ-mdtZQ
+
+
+https://www.pythonguis.com/tutorials/pyside6-creating-your-first-window/
+
+https://stackoverflow.com/questions/46209627/nesting-grids-and-frames-in-tkinter-and-python
+
+
+# OpenGL4 Tutorial with lighting and shaders
+https://sibras.github.io/OpenGL4-Tutorials/docs/Tutorials/03-Tutorial3/
+
+
+

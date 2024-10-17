@@ -129,12 +129,20 @@ class ReviewOpenGL(object):
         # sl.start_checking(shaders, "shader_vert.glsl", "shader_frag.glsl")
 
         # Section 19 of https://sibras.github.io/OpenGL4-Tutorials/docs/Tutorials/03-Tutorial3/
-        light = [10.0,0.0,0.0, 0.4,0.4,0.4, 12.5]  # XYZ RGB FALLOFF
+        light = [6.0,5.0,4.0, 1.0,1.0,1.0, 12.5]  # XYZ RGB FALLOFF
         light = np.array(light, np.float32)
         g_uiPointLightUBO = glGenBuffers(1)
         glBindBuffer(GL_UNIFORM_BUFFER, g_uiPointLightUBO)
         glBufferData(GL_UNIFORM_BUFFER, light.nbytes, light, GL_STATIC_DRAW )
-        glBindBufferBase(GL_UNIFORM_BUFFER, 2, g_uiPointLightUBO);
+        glBindBufferBase(GL_UNIFORM_BUFFER, 2, g_uiPointLightUBO)
+
+        material = [1.0,0.0,0.0, 1.0,0.3,0.3, 15.0]  # ??? ??? ?
+        material = np.array(material, np.float32)
+        g_uiMaterialUBO = glGenBuffers(1)
+        glBindBuffer(GL_UNIFORM_BUFFER, g_uiMaterialUBO)
+        glBufferData(GL_UNIFORM_BUFFER, material.nbytes, material, GL_STATIC_DRAW )
+        glBindBufferBase(GL_UNIFORM_BUFFER, 3, g_uiMaterialUBO)
+
 
         while not glfw.window_should_close(window) and not EHandler.DONE:
 
@@ -164,11 +172,11 @@ class ReviewOpenGL(object):
             glfw.poll_events()
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
 
-            if textwriter is not None:
-                glUseProgram(ortho_shader)
-                uniform_mtx_ortho = glGetUniformLocation(ortho_shader, "mtx_ortho")
-                glUniformMatrix4fv(uniform_mtx_ortho, 1, GL_FALSE, textwriter.m_ortho)
-                textwriter.draw("TEST 1234")
+            # if textwriter is not None:
+            #     glUseProgram(ortho_shader)
+            #     uniform_mtx_ortho = glGetUniformLocation(ortho_shader, "mtx_ortho")
+            #     glUniformMatrix4fv(uniform_mtx_ortho, 1, GL_FALSE, textwriter.m_ortho)
+            #     textwriter.draw("TEST 1234")
 
             for model in models:
                 # tran_vec = pyrr.matrix44.create_from_translation(pyrr.Vector3([0.0, 0.0, -EHandler.DIST]))
@@ -256,7 +264,7 @@ class ReviewOpenGL(object):
         self.uniform_Ka = glGetUniformLocation(shader, "uKa")
         self.uniform_Kd = glGetUniformLocation(shader, "uKd")
         self.uniform_Ks = glGetUniformLocation(shader, "uKs")
-        self.uniform_Sh = glGetUniformLocation(shader, "uShininess")
+        self.uniform_Sh = glGetUniformLocation(shader, "uKx")
         glUniform3fv(self.uniform_LP, 1, GL_FALSE, pyrr.Vector3([5.0, 5.0, 0.0]))
         glUniform1fv(self.uniform_Ka, 1, GL_FALSE, 0.1)
         glUniform1fv(self.uniform_Kd, 1, GL_FALSE, 0.1)

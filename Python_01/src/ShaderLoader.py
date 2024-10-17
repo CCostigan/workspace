@@ -73,7 +73,8 @@ class ShaderLoader():
 
     def stop_checking(self):
         self.checking = False
-        self.checker.join()
+        if hasattr(self, 'checker'):
+            self.checker.join()
         pass
 
 
