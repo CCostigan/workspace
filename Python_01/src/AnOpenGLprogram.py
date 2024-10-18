@@ -15,6 +15,15 @@ from ModelLoader import ModelLoader
 from Interaction import EHandler
 from TextWriter import Writer
 
+import logging 
+from logging import StreamHandler, FileHandler
+logbase,ext = os.path.splitext(os.path.basename(__file__))
+logging.basicConfig(handlers=[
+    StreamHandler(),
+    FileHandler(logbase+'.log', mode='w') # The filename:lineno enables hyperlinking
+], format='%(asctime)s %(levelname)s %(filename)s:%(lineno)s %(threadName)s %(message)s'
+, datefmt='%H:%M:%S'  #  '%Y/%m/%d-%:%M:%S %p'
+, level=logging.DEBUG)
 
 MIN, MAX = 0.1, 10000.0
 model_axis = [0.0, 0.0, 0.0]
@@ -23,6 +32,9 @@ model_axis = [0.0, 0.0, 0.0]
 fullscreen = False
 
 class ReviewOpenGL(object):
+
+    def __init__(self):
+        self.log = logging.getLogger(__file__)        
 
     def main(self):
 
@@ -33,7 +45,7 @@ class ReviewOpenGL(object):
         monitor1 = glfw.get_primary_monitor()
         workarea = glfw.get_monitor_workarea(monitor1)
 
-        print(f"prime_monitor={monitor1} area={workarea}")
+        self.log.info(f"prime_monitor={monitor1} area={workarea}")
         if fullscreen:
             window = glfw.create_window(workarea[2], workarea[3], "Python OpenGL window", monitor1, None) # Fullscreen
             glfw.maximize_window(window)
@@ -58,20 +70,22 @@ class ReviewOpenGL(object):
         # fb_size = glfw.get_framebuffer_size(window)
         
         # for monitor in glfw.get_monitors():
-        #     print(f"Monitor Name = {glfw.get_monitor_name(monitor)}")
-        #     print(f"Video Mode={glfw.get_video_mode(monitor)}")
-        #     print(f"Video Modes={glfw.get_video_modes(monitor)}")
-        # print(f"Vulkan supported = {glfw.vulkan_supported()}")
-        # print(f"get_physical_device_presentation_support={glfw.get_physical_device_presentation_support(window)}")
-        # print(f"Window Opacity={glfw.get_window_opacity(window)}")
-        # print(f"Window Attrib={glfw.get_window_attrib(window)}")
+        #     self.log.info(f"Monitor Name = {glfw.get_monitor_name(monitor)}")
+        #     self.log.info(f"Video Mode={glfw.get_video_mode(monitor)}")
+        #     self.log.info(f"Video Modes={glfw.get_video_modes(monitor)}")
+        # self.log.info(f"Vulkan supported = {glfw.vulkan_supported()}")
+        # self.log.info(f"get_physical_device_presentation_support={glfw.get_physical_device_presentation_support(window)}")
+        # self.log.info(f"Window Opacity={glfw.get_window_opacity(window)}")
+        # self.log.info(f"Window Attrib={glfw.get_window_attrib(window)}")
 
         # Set up our handler for Mouse and Keyboard events
-        eh = EHandler.configure(window)
+        eh = EHandler()
+        eh.configure(window)
         # Set up our handler for Shaders
         sl = ShaderLoader() 
 
-        charstrip = TextureLoader.load_texture("res/imgs/charstrip.png")
+        tl = TextureLoader()
+        charstrip = tl.load_texture("res/imgs/charstrip.png")
         ortho_shader = sl.load_shader_progs("ortho_vert.glsl","ortho_frag.glsl")
 
         shaders = []
@@ -149,15 +163,15 @@ class ReviewOpenGL(object):
             glfwtime = glfw.get_time()
             # Execute this block roughly every second
             if(int(glfwtime*50) % 50 == 0 ):
-                # print(f"GLFWTIME={glfwtime}")
+                # self.log.info(f"GLFWTIME={glfwtime}")
                 # #  This block can be removed if not doing shader development
                 if self.check_files("shader_vert.glsl", "shader_frag.glsl"):
                     try:
                         newshader = sl.load_shader_progs("shader_vert.glsl", "shader_frag.glsl")                
                         shaders[0] = newshader
-                        print(f"Shader compiled {newshader}")
+                        self.log.info(f"Shader compiled {newshader}")
                     except Exception as e:
-                        print(f"Exception:{e}")
+                        self.log.info(f"Exception:{e}")
                         pass
                         
 

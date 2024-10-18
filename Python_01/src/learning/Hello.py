@@ -26,9 +26,9 @@ from logging import StreamHandler, FileHandler
 logbase,ext = os.path.splitext(os.path.basename(__file__))
 logging.basicConfig(handlers=[
     StreamHandler(),
-    FileHandler(logbase+'.log', mode='w')
-], format='%(asctime)s %(filename)s:%(lineno)s %(threadName)s %(message)s'
-, datefmt='%Y/%m/%d-%I:%M:%S %p'
+    FileHandler(logbase+'.log', mode='w') # The filename:lineno enables hyperlinking
+], format='%(asctime)s %(levelname)s %(filename)s:%(lineno)s %(threadName)s %(message)s'
+, datefmt='%H:%M:%S'  #  '%Y/%m/%d-%:%M:%S %p'
 , level=logging.DEBUG)
 
 class Hello():

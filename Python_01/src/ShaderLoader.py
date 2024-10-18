@@ -6,6 +6,16 @@ import os
 import time
 from threading import Thread, Lock
 
+import logging 
+from logging import StreamHandler, FileHandler
+logbase,ext = os.path.splitext(os.path.basename(__file__))
+logging.basicConfig(handlers=[
+    StreamHandler(),
+    FileHandler(logbase+'.log', mode='w') # The filename:lineno enables hyperlinking
+], format='%(asctime)s %(levelname)s %(filename)s:%(lineno)s %(threadName)s %(message)s'
+, datefmt='%H:%M:%S'  #  '%Y/%m/%d-%:%M:%S %p'
+, level=logging.DEBUG)
+
 shadermap = {
     "vert": GL_VERTEX_SHADER,
     "frag": GL_FRAGMENT_SHADER,
@@ -20,6 +30,8 @@ class ShaderLoader():
     shader_home="res/shaders/"
 
     def __init__(self, shader_home="res/shaders/"):
+        self.log = logging.getLogger(__file__)        
+
         self.shader_home = shader_home
         self.last_update = time.time()
         self.checking = True
@@ -35,16 +47,16 @@ class ShaderLoader():
     def load_shader_progs(self, *args):
         shader_tuple = tuple() 
         for arg in args:
-            # print(f"\nARG = {arg} ***")
+            # self.log.info(f"\nARG = {arg} ***")
             for partial in shadermap.keys():
-                # print(f"SEARCHING FOR {partial} IN {arg}")
+                # self.log.info(f"SEARCHING FOR {partial} IN {arg}")
                 if partial in arg:
-                    # print(f"FOUND {partial} {arg} LOADING AS {shadermap[partial]}")
+                    # self.log.info(f"FOUND {partial} {arg} LOADING AS {shadermap[partial]}")
                     # Adding to a tuple don't forget the comma tup += (blah , )
                     shader_tuple += (self.compile_shader(arg, shadermap[partial]),)
                     break
         shader = compileProgram(*shader_tuple)        
-        print(f"Shaders loaded: {shader}")
+        self.log.info(f"Shaders loaded: {shader}")
         return shader
 
 
@@ -59,13 +71,13 @@ class ShaderLoader():
                     # self.shaders[0]=self.load_shader_progs(filelist)
                     reload = True
             if reload:
-                print(f"Reloading shaders... {filelist}")
+                self.log.info(f"Reloading shaders... {filelist}")
                 self.load_shader_progs(filelist)
 
             time.sleep(1.0)
 
     def start_checking(self, shaders, *filelist):
-        print("*** START CHECKING ***")
+        self.log.info("*** START CHECKING ***")
         self.checking = True
         self.shaders = shaders
         self.checker = Thread(target=self.check_files, args=filelist, daemon=False)
@@ -82,4 +94,4 @@ if __name__=='__main__':
     from ShaderLoader import ShaderLoader
     sl = ShaderLoader()
     shader = sl.load_shader_progs(("shader_vert.glsl","shader_frag.glsl"))
-    print(f"Shader loader={shader}")
+    self.log.info(f"Shader loader={shader}")

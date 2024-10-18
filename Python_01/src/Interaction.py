@@ -4,6 +4,16 @@ import glfw
 from OpenGL.GL import *
 import pyrr
 
+import logging, os
+from logging import StreamHandler, FileHandler
+logbase,ext = os.path.splitext(os.path.basename(__file__))
+logging.basicConfig(handlers=[
+    StreamHandler(),
+    FileHandler(logbase+'.log', mode='w') # The filename:lineno enables hyperlinking
+], format='%(asctime)s %(levelname)s %(filename)s:%(lineno)s %(threadName)s %(message)s'
+, datefmt='%H:%M:%S'  #  '%Y/%m/%d-%:%M:%S %p'
+, level=logging.DEBUG)
+
 class ViewHandler():
     location = pyrr.Vector3([0.0, 1.0, 0.0])
     up_vec = pyrr.Vector3([0.0, 1.0, 0.0])
@@ -38,91 +48,93 @@ class EHandler():
     SHADERNUM = 0
     KEY = 0
 
-    def __init__():
-        pass
+    def __init__(self):
+        self.log = logging.getLogger(__file__)        
 
-    def configure(window):
-        glfw.set_window_size_callback(window, EHandler.window_size_callback)
-        EHandler.window_size = glfw.get_window_size(window)
+
+    # @staticmethod
+    def configure(self, window):
+        glfw.set_window_size_callback(window, self.window_size_callback)
+        self.window_size = glfw.get_window_size(window)
         # Set some other fun callbacks
-        glfw.set_key_callback(window, EHandler.key_callback)
-        glfw.set_char_callback(window, EHandler.char_callback)
-        glfw.set_char_mods_callback(window, EHandler.char_mods_callback)
-        glfw.set_cursor_pos_callback(window, EHandler.cursor_pos_callback)
-        glfw.set_mouse_button_callback(window, EHandler.mouse_button_callback)
-        glfw.set_scroll_callback(window, EHandler.scroll_callback)
-        glfw.set_joystick_callback(EHandler.joystick_callback)   
-        print(f"window_size={EHandler.window_size}")
+        glfw.set_key_callback(window, self.key_callback)
+        glfw.set_char_callback(window, self.char_callback)
+        glfw.set_char_mods_callback(window, self.char_mods_callback)
+        glfw.set_cursor_pos_callback(window, self.cursor_pos_callback)
+        glfw.set_mouse_button_callback(window, self.mouse_button_callback)
+        glfw.set_scroll_callback(window, self.scroll_callback)
+        glfw.set_joystick_callback(self.joystick_callback)   
+        self.log.info(f"window_size={self.window_size}")
 
     # @staticmethod
-    def window_size_callback(window, width, height):
+    def window_size_callback(self, window, width, height):
         glViewport(0, 0, width, height)
-        EHandler.window_dims = width, height
-        EHandler.proj_vec =  pyrr.matrix44.create_perspective_projection_matrix(EHandler.FOV, width/height, EHandler.NEAR, EHandler.FAR)
-        # glUniformMatrix4fv(EHandler.proj_loc, 1, GL_FALSE, EHandler.proj_mtx)
-        print(f"window_size={EHandler.window_size}")
+        self.window_dims = width, height
+        self.proj_vec =  pyrr.matrix44.create_perspective_projection_matrix(self.FOV, width/height, self.NEAR, self.FAR)
+        # glUniformMatrix4fv(self.proj_loc, 1, GL_FALSE, self.proj_mtx)
+        self.log.info(f"window_size={self.window_size}")
     
     # @staticmethod
-    def cursor_pos_callback(window, x, y):
-        EHandler.mouse_dxdy = (x - EHandler.mouse_coords[0], y - EHandler.mouse_coords[1])
-        EHandler.mouse_coords = x, y
-        if EHandler.mouse_buttons == 0 and EHandler.mouse_down == 1:  # Is mouse button 0 down?
-            # print(f"mouse_mov={EHandler.mouse_dxdy} gimbal angles {EHandler.model_axis[0]},{EHandler.model_axis[1]},{EHandler.model_axis[2]}")
-            EHandler.model_axis[0] -= EHandler.mouse_dxdy[1] / 4.0
-            EHandler.model_axis[1] -= EHandler.mouse_dxdy[0] / 4.0
-        if EHandler.mouse_buttons == 1 and EHandler.mouse_down == 1:  # Is mouse button 0 down?
-            # print(f"mouse_mov={EHandler.mouse_dxdy} gimbal angles {EHandler.model_axis[0]},{EHandler.model_axis[1]},{EHandler.model_axis[2]}")
-            EHandler.model_data[0] -= EHandler.mouse_dxdy[1] / 4.0
-            EHandler.model_data[1] -= EHandler.mouse_dxdy[0] / 4.0
+    def cursor_pos_callback(self, window, x, y):
+        self.mouse_dxdy = (x - self.mouse_coords[0], y - self.mouse_coords[1])
+        self.mouse_coords = x, y
+        if self.mouse_buttons == 0 and self.mouse_down == 1:  # Is mouse button 0 down?
+            # self.log.info(f"mouse_mov={self.mouse_dxdy} gimbal angles {self.model_axis[0]},{self.model_axis[1]},{self.model_axis[2]}")
+            self.model_axis[0] -= self.mouse_dxdy[1] / 4.0
+            self.model_axis[1] -= self.mouse_dxdy[0] / 4.0
+        if self.mouse_buttons == 1 and self.mouse_down == 1:  # Is mouse button 0 down?
+            # self.log.info(f"mouse_mov={self.mouse_dxdy} gimbal angles {self.model_axis[0]},{self.model_axis[1]},{self.model_axis[2]}")
+            self.model_data[0] -= self.mouse_dxdy[1] / 4.0
+            self.model_data[1] -= self.mouse_dxdy[0] / 4.0
     
     # @staticmethod
-    def mouse_button_callback(window, a, b, c):
-        print(f"mouse_button_callback button={a} down={b} c={c}")
-        EHandler.mouse_buttons = a
-        EHandler.mouse_down = b
+    def mouse_button_callback(self, window, a, b, c):
+        self.log.info(f"mouse_button_callback button={a} down={b} c={c}")
+        self.mouse_buttons = a
+        self.mouse_down = b
 
     # @staticmethod
-    def key_callback(window, a, b, c, d):
-        print(f"key_callback a={a} b={b} c={c} d={d}")
+    def key_callback(self, window, a, b, c, d):
+        self.log.info(f"key_callback a={a} b={b} c={c} d={d}")
         if a==256 and b == 9:
-            EHandler.DONE = True
+            self.DONE = True
         if b == 68:
-            EHandler.MODELNUM = 0
+            self.MODELNUM = 0
         if b == 69:
-            EHandler.MODELNUM = 1
+            self.MODELNUM = 1
         if b == 70:
-            EHandler.MODELNUM = 2
+            self.MODELNUM = 2
         if b == 71:
-            EHandler.SHADERNUM = 0
+            self.SHADERNUM = 0
         if b == 72:
-            EHandler.SHADERNUM = 1
+            self.SHADERNUM = 1
         if b == 73:
-            EHandler.SHADERNUM = 2
+            self.SHADERNUM = 2
         # if b == 74:
-        #     EHandler.SHADERNUM = 3
+        #     self.SHADERNUM = 3
         if b == 95:  # F11
-            EHandler.TOGGLESCREEN = 1
+            self.TOGGLESCREEN = 1
 
 
     # @staticmethod
-    def char_callback(window, a):
-        print(f"char_callback char={a}")
+    def char_callback(self, window, a):
+        self.log.info(f"char_callback char={a}")
 
     # @staticmethod
-    def char_mods_callback(window, a, b):
-        print(f"char_mods_callback a={a} b={b}")
+    def char_mods_callback(self, window, a, b):
+        self.log.info(f"char_mods_callback a={a} b={b}")
 
-    def scroll_callback(window, a, b):
-        # print(f"scroll_callback a={a} b={b}")
-        EHandler.mouse_scroll = b
-        EHandler.DIST += b
+    def scroll_callback(self, window, a, b):
+        # self.log.info(f"scroll_callback a={a} b={b}")
+        self.mouse_scroll = b
+        self.DIST += b
 
     # @staticmethod
-    def joystick_callback(window, arg):
-        print(f"joystick_callback a={arg}")    
+    def joystick_callback(self, window, arg):
+        self.log.info(f"joystick_callback a={arg}")    
 
 if __name__=='__main__':
     # model = ModelLoader.load_model_obj("res/mdls/Cube.obj")
-    # print(model)
+    # self.log.info(model)
     from AnOpenGLprogram import ReviewOpenGL
     ReviewOpenGL.main()

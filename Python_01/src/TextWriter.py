@@ -5,10 +5,22 @@ from TextureLoader import TextureLoader
 import random
 import pyrr
 
+import logging, os
+from logging import StreamHandler, FileHandler
+logbase,ext = os.path.splitext(os.path.basename(__file__))
+logging.basicConfig(handlers=[
+    StreamHandler(),
+    FileHandler(logbase+'.log', mode='w') # The filename:lineno enables hyperlinking
+], format='%(asctime)s %(levelname)s %(filename)s:%(lineno)s %(threadName)s %(message)s'
+, datefmt='%H:%M:%S'  #  '%Y/%m/%d-%:%M:%S %p'
+, level=logging.DEBUG)
+
 class Writer():
 
     def __init__(self, workarea):
-        self.charstrip = TextureLoader.load_texture("res/imgs/charstrip.png")
+        self.log = logging.getLogger(__file__)        
+        self.tl = TextureLoader()
+        self.charstrip = self.tl.load_texture("res/imgs/charstrip.png")
 
         self.count = 0
         indx = []
