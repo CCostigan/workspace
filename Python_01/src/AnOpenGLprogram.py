@@ -87,9 +87,9 @@ class ReviewOpenGL(object):
         ml = ModelLoader()
         models = [
             # ml.model_Elements_HC(),
-            ml.model_Arrays("Sphere.obj"),
+            # ml.model_Arrays("Sphere.obj"),
             # ml.model_Arrays("FCA.obj"),
-            # ml.model_Arrays("DDG.obj"),
+            ml.model_Arrays("DDG.obj"),
         ]
         models[0]["location"]=[0.0, 0.0, 0.0]
         # models[1]["location"]=[0.0, 0.0, 0.0]
@@ -155,8 +155,11 @@ class ReviewOpenGL(object):
                     try:
                         newshader = sl.load_shader_progs("shader_vert.glsl", "shader_frag.glsl")                
                         shaders[0] = newshader
+                        print(f"Shader compiled {newshader}")
                     except Exception as e:
+                        print(f"Exception:{e}")
                         pass
+                        
 
             shaftrpm[0] =  EHandler.model_data[0]
             shaftrpm[1] = -EHandler.model_data[0]

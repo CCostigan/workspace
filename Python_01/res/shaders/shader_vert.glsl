@@ -21,11 +21,6 @@ out vec3 v_eye;        // vector from point to eye
 
 out vec3 v3ColorOut;
 
-//struct PointLight {
-//    vec3 v3LightPosition;
-//    vec3 v3LightIntensity;
-//    float fFalloff;
-//};
 //layout(std140, binding = 3) uniform PointLightData {
 //    PointLight PointLights;
 //};
@@ -36,13 +31,10 @@ void main() {
     v_normal = a_normal;
     gl_Position = m_proj * m_model * vec4(a_position, 1.0);
 
-//    // https://sibras.github.io/OpenGL4-Tutorials/docs/Tutorials/03-Tutorial3/
-//    PointLight PointLights = PointLight(
-//        vec3(0.4,0.4,0.4),
-//        vec3(0.4,0.4,0.4),
-//        3.0;
-//    );
-//
+// https://sibras.github.io/OpenGL4-Tutorials/docs/Tutorials/03-Tutorial3/
+// https://www.khronos.org/opengl/wiki/Layout_Qualifier_(GLSL)
+
+
     vec4 v4Position = m_model * vec4(a_position, 1.0);
     gl_Position = m_proj * v4Position;
 
@@ -54,9 +46,9 @@ void main() {
 //    vec3 v3LightDirection = normalize(PointLights.v3LightPosition - v3Position);
 //
     float fRoughness = 0.3;
-    vec3 v3SpecularColor = vec3(0.4,0.4,0.4);
-    vec3 v3DiffuseColor = vec3(0.4,0.4,0.4);
-//
+    vec3 v3SpecularColor = vec3(0.4, 0.4, 0.4);
+    vec3 v3DiffuseColor = vec3(0.4, 0.4, 0.4);
+
 //    // Calculate light falloff
 //    vec3 v3LightIrradiance = lightFalloff(
 //        PointLights.v3LightIntensity, 
@@ -69,6 +61,7 @@ void main() {
 //        v3LightIrradiance, v3DiffuseColor, v3SpecularColor, fRoughness);
 //
 //    v3ColorOut = v3RetColor;
+
 }
 
 
