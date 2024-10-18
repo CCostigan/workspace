@@ -23,7 +23,7 @@ logging.basicConfig(handlers=[
     FileHandler(logbase+'.log', mode='w') # The filename:lineno enables hyperlinking
 ], format='%(asctime)s %(levelname)s %(filename)s:%(lineno)s %(threadName)s %(message)s'
 , datefmt='%H:%M:%S'  #  '%Y/%m/%d-%:%M:%S %p'
-, level=logging.DEBUG)
+, level=logging.INFO)
 
 MIN, MAX = 0.1, 10000.0
 model_axis = [0.0, 0.0, 0.0]
@@ -158,7 +158,7 @@ class ReviewOpenGL(object):
         glBindBufferBase(GL_UNIFORM_BUFFER, 3, g_uiMaterialUBO)
 
 
-        while not glfw.window_should_close(window) and not EHandler.DONE:
+        while not glfw.window_should_close(window) and not eh.DONE:
 
             glfwtime = glfw.get_time()
             # Execute this block roughly every second
@@ -175,7 +175,7 @@ class ReviewOpenGL(object):
                         pass
                         
 
-            shaftrpm[0] =  EHandler.model_data[0]
+            shaftrpm[0] =  eh.model_data[0]
             shaftrpm[1] = -EHandler.model_data[0]
             steering[0] = -EHandler.model_data[1]
             steering[1] = -EHandler.model_data[1]
@@ -198,9 +198,9 @@ class ReviewOpenGL(object):
             for model in models:
                 # tran_vec = pyrr.matrix44.create_from_translation(pyrr.Vector3([0.0, 0.0, -EHandler.DIST]))
                 tran_vec = pyrr.matrix44.create_from_translation(pyrr.Vector3([model["location"][0], model["location"][1], -EHandler.DIST]))
-                rot_x = pyrr.Matrix44.from_x_rotation(0.01 * EHandler.model_axis[0]) #0.0 * glfwtime)
-                rot_y = pyrr.Matrix44.from_y_rotation(0.01 * EHandler.model_axis[1]) #0.8 * glfwtime)
-                # rot_z = pyrr.Matrix44.from_z_rotation(0.01 * EHandler.model_axis[2]) #0.8 * glfwtime)
+                rot_x = pyrr.Matrix44.from_x_rotation(0.01 * eh.model_axis[0]) #0.0 * glfwtime)
+                rot_y = pyrr.Matrix44.from_y_rotation(0.01 * eh.model_axis[1]) #0.8 * glfwtime)
+                # rot_z = pyrr.Matrix44.from_z_rotation(0.01 * eh.model_axis[2]) #0.8 * glfwtime)
                 rotation_mtx = pyrr.matrix44.multiply(rot_y, rot_x)
                 # rotation_mtx = pyrr.matrix44.multiply(rotation_mtx, rot_z)
                 model_mtx = pyrr.matrix44.multiply(rotation_mtx, tran_vec)
@@ -208,7 +208,7 @@ class ReviewOpenGL(object):
                 glUseProgram(shaders[EHandler.SHADERNUM])
                 # glUseProgram(shaders[len(shaders)-1])
                 glUniformMatrix4fv(self.uniform_modl, 1, GL_FALSE, model_mtx)
-                glUniformMatrix4fv(self.uniform_proj, 1, GL_FALSE, EHandler.proj_vec)
+                glUniformMatrix4fv(self.uniform_proj, 1, GL_FALSE, eh.proj_vec)
 
                 if model["render"] == "DrawArrays":
                     glBindVertexArray(model["vao"])

@@ -125,7 +125,7 @@ class EHandler():
         self.log.info(f"char_mods_callback a={a} b={b}")
 
     def scroll_callback(self, window, a, b):
-        # self.log.info(f"scroll_callback a={a} b={b}")
+        self.log.info(f"scroll_callback a={a} b={b}")
         self.mouse_scroll = b
         self.DIST += b
 
