@@ -25,32 +25,33 @@ class ViewHandler():
 
 
 class EHandler():
-    window_dims = 800, 600
 
-    mouse_buttons = 0
-    mouse_down = 0
-    mouse_coords = 400, 300
-    mouse_dxdy = 0, 0
-    mouse_scroll = 0
-
-    NEAR = 0.1
-    FAR = 10000.0
-    FOV = 30.0
-    DIST = 30.0
-    model_axis = [-25.0, -238.0, 0.0]
-    model_data = [0.0, 0.0, 0.0]
-
-    proj_vec =  pyrr.matrix44.create_perspective_projection_matrix(
-        FOV, window_dims[0]/window_dims[1], NEAR, FAR)
-
-    DONE = False
-    MODELNUM = 0
-    SHADERNUM = 0
-    KEY = 0
 
     def __init__(self):
-        self.log = logging.getLogger(__file__)        
 
+        self.log = logging.getLogger(__file__)        
+        self.window_dims = 800, 600
+
+        self.mouse_buttons = 0
+        self.mouse_down = 0
+        self.mouse_coords = 400, 300
+        self.mouse_dxdy = 0, 0
+        self.mouse_scroll = 0
+
+        self.NEAR = 0.1
+        self.FAR = 10000.0
+        self.FOV = 30.0
+        self.DIST = 30.0
+        self.model_axis = [-25.0, -238.0, 0.0]
+        self.model_data = [0.0, 0.0, 0.0]
+
+        self.proj_vec =  pyrr.matrix44.create_perspective_projection_matrix(
+                self.FOV, self.window_dims[0]/self.window_dims[1], self.NEAR, self.FAR)
+
+        self.DONE = False
+        self.MODELNUM = 0
+        self.SHADERNUM = 0
+        self.KEY = 0
 
     # @staticmethod
     def configure(self, window):

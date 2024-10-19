@@ -1,4 +1,4 @@
-# version 330
+#version 330
 // /home/groot/Workspaces/Python/Learn-OpenGL-in-python-master/ep10_orthographic_projection.py
 
 layout(location = 0) in vec3 a_position;

@@ -85,8 +85,9 @@ class ReviewOpenGL(object):
         sl = ShaderLoader() 
 
         tl = TextureLoader()
-        charstrip = tl.load_texture("res/imgs/charstrip.png")
+        # charstrip = tl.load_texture("res/imgs/charstrip.png")
         ortho_shader = sl.load_shader_progs("ortho_vert.glsl","ortho_frag.glsl")
+        textwriter = Writer(workarea)
 
         shaders = []
         shaders.append(sl.load_shader_progs("shader_vert.glsl", "shader_frag.glsl"))  # Regular view
@@ -95,7 +96,6 @@ class ReviewOpenGL(object):
         for shader in shaders:        
             self.setup_shaders(shader)
 
-        textwriter = Writer(workarea)
 
         # Load models and modules
         ml = ModelLoader()
@@ -176,9 +176,9 @@ class ReviewOpenGL(object):
                         
 
             shaftrpm[0] =  eh.model_data[0]
-            shaftrpm[1] = -EHandler.model_data[0]
-            steering[0] = -EHandler.model_data[1]
-            steering[1] = -EHandler.model_data[1]
+            shaftrpm[1] = -eh.model_data[0]
+            steering[0] = -eh.model_data[1]
+            steering[1] = -eh.model_data[1]
             for i in range(0, len(revcount)):
                 if engineon[i]:
                     revcount[i] += shaftrpm[i]
@@ -189,15 +189,15 @@ class ReviewOpenGL(object):
             glfw.poll_events()
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
 
-            # if textwriter is not None:
-            #     glUseProgram(ortho_shader)
-            #     uniform_mtx_ortho = glGetUniformLocation(ortho_shader, "mtx_ortho")
-            #     glUniformMatrix4fv(uniform_mtx_ortho, 1, GL_FALSE, textwriter.m_ortho)
-            #     textwriter.draw("TEST 1234")
+            if textwriter is not None:
+                glUseProgram(ortho_shader)
+                uniform_mtx_ortho = glGetUniformLocation(ortho_shader, "mtx_ortho")
+                glUniformMatrix4fv(uniform_mtx_ortho, 1, GL_FALSE, textwriter.m_ortho)
+                textwriter.draw("TEST 1234")
 
             for model in models:
                 # tran_vec = pyrr.matrix44.create_from_translation(pyrr.Vector3([0.0, 0.0, -EHandler.DIST]))
-                tran_vec = pyrr.matrix44.create_from_translation(pyrr.Vector3([model["location"][0], model["location"][1], -EHandler.DIST]))
+                tran_vec = pyrr.matrix44.create_from_translation(pyrr.Vector3([model["location"][0], model["location"][1], -eh.DIST]))
                 rot_x = pyrr.Matrix44.from_x_rotation(0.01 * eh.model_axis[0]) #0.0 * glfwtime)
                 rot_y = pyrr.Matrix44.from_y_rotation(0.01 * eh.model_axis[1]) #0.8 * glfwtime)
                 # rot_z = pyrr.Matrix44.from_z_rotation(0.01 * eh.model_axis[2]) #0.8 * glfwtime)
@@ -205,7 +205,7 @@ class ReviewOpenGL(object):
                 # rotation_mtx = pyrr.matrix44.multiply(rotation_mtx, rot_z)
                 model_mtx = pyrr.matrix44.multiply(rotation_mtx, tran_vec)
 
-                glUseProgram(shaders[EHandler.SHADERNUM])
+                glUseProgram(shaders[eh.SHADERNUM])
                 # glUseProgram(shaders[len(shaders)-1])
                 glUniformMatrix4fv(self.uniform_modl, 1, GL_FALSE, model_mtx)
                 glUniformMatrix4fv(self.uniform_proj, 1, GL_FALSE, eh.proj_vec)

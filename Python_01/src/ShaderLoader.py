@@ -94,4 +94,4 @@ if __name__=='__main__':
     from ShaderLoader import ShaderLoader
     sl = ShaderLoader()
     shader = sl.load_shader_progs(("shader_vert.glsl","shader_frag.glsl"))
-    self.log.info(f"Shader loader={shader}")
+    sl.log.info(f"Shader loader={shader}")
