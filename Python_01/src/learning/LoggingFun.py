@@ -21,11 +21,11 @@ Format String Placeholders:
 We can limit the length of these like so - %(levelname).3s
 '''
 
-import logging, os 
+import logging, sys, os 
 from logging import StreamHandler, FileHandler
 logbase,ext = os.path.splitext(os.path.basename(__file__))
 logging.basicConfig(handlers=[
-    StreamHandler(),
+    StreamHandler(sys.stdout),  # Console logs to STDERR but what if I want to grep it?
     FileHandler(logbase+'.log', mode='w') # The filename:lineno enables hyperlinking
 ], format='%(asctime)s %(levelname).3s %(filename)s:%(lineno)s %(threadName)s %(message)s'
 , datefmt='%H:%M:%S'  #  '%Y/%m/%d-%:%M:%S %p'
