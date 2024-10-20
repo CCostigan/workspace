@@ -5,7 +5,6 @@ from OpenGL.GL import *
 import glfw
 import pyrr
 import math
-import os
 import time
 import numpy as np
 
@@ -15,7 +14,7 @@ from ModelLoader import ModelLoader
 from Interaction import EHandler
 from TextWriter import Writer
 
-import logging 
+import logging, os 
 from logging import StreamHandler, FileHandler
 logbase,ext = os.path.splitext(os.path.basename(__file__))
 logging.basicConfig(handlers=[
