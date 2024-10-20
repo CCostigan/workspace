@@ -112,3 +112,5 @@ https://sibras.github.io/OpenGL4-Tutorials/docs/Tutorials/03-Tutorial3/
 
 
 
+# General use: delete all log files
+    find . -name "*.log" -exec rm {} \;
