@@ -25,11 +25,17 @@ import logging, sys, os
 from logging import StreamHandler, FileHandler
 logbase,ext = os.path.splitext(os.path.basename(__file__))
 logging.basicConfig(handlers=[
-    StreamHandler(sys.stdout),  # Console logs to STDERR but what if I want to grep it?
-    FileHandler(logbase+'.log', mode='w') # The filename:lineno enables hyperlinking
-], format='%(asctime)s %(levelname).3s %(filename)s:%(lineno)s %(threadName)s %(message)s'
+    StreamHandler(sys.stdout), 
+    FileHandler(logbase+'.log', mode='w') 
+], format='%(asctime)s %(levelname).3s %(filename)s:%(lineno)-4s %(threadName)s %(message)s'
 , datefmt='%H:%M:%S'  #  '%Y/%m/%d-%:%M:%S %p'
 , level=logging.DEBUG)
+# Features above:
+#   %(levelname).3s              Limit the number of chars to be displayed in the log levlename
+#   %(lineno)-4s                 Use at least 4 chars to show the line number and left justify them
+#   %(filename)s:%(lineno)-4s    This idiom enables 'console hyperlinking' 
+#   StreamHandler(sys.stdout)    Console normally logs to STDERR
+#   datefmt='%H:%M:%S'           I like a short timestamp - use '%Y/%m/%d-%:%M:%S %p' if you disagree
 
 class JustLearning():
     def __init__(self):

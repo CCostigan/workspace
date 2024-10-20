@@ -40,7 +40,7 @@ logbase,ext = os.path.splitext(os.path.basename(__file__))
 logging.basicConfig(handlers=[
     StreamHandler(),
     FileHandler(logbase+'.log', mode='w') # The filename:lineno enables hyperlinking
-], format='%(asctime)s %(levelname).3s %(filename)s:%(lineno)s %(threadName)s %(message)s'
+], format='%(asctime)s %(levelname).3s %(filename)s:%(lineno)-4s %(threadName)s %(message)s'
 , datefmt='%H:%M:%S'  #  '%Y/%m/%d-%:%M:%S %p'
 , level=logging.INFO)
 
