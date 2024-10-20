@@ -18,7 +18,7 @@ filename, ext = os.path.splitext(os.path.basename(__file__))
 import logging as log
 log.basicConfig(
     level=log.INFO,
-    format="%(asctime)s [%(levelname)s] %(message)s",
+    format="%(asctime)s [%(levelname).3s] %(message)s",
     handlers=[log.FileHandler(filename+".log"), log.StreamHandler(sys.stdout)],
 )
 

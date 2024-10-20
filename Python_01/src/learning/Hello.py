@@ -2,7 +2,8 @@
 #
 #
 
-import os
+import time
+import threading
 
 '''  Logging in Python - According to HAL
 Format String Placeholders:
@@ -21,13 +22,13 @@ Format String Placeholders:
 %(processName)s: Process name.
 %(thread)d: Thread ID.
 %(threadName)s: Thread name.'''
-import logging 
+import logging, os 
 from logging import StreamHandler, FileHandler
 logbase,ext = os.path.splitext(os.path.basename(__file__))
 logging.basicConfig(handlers=[
     StreamHandler(),
     FileHandler(logbase+'.log', mode='w') # The filename:lineno enables hyperlinking
-], format='%(asctime)s %(levelname)s %(filename)s:%(lineno)s %(threadName)s %(message)s'
+], format='%(asctime)s %(levelname).3s %(filename)s:%(lineno)s %(threadName)s %(message)s'
 , datefmt='%H:%M:%S'  #  '%Y/%m/%d-%:%M:%S %p'
 , level=logging.DEBUG)
 
@@ -52,12 +53,32 @@ class Hello():
             d = self.function
         )
     
+    def pythonthreadingisgarbage(self, evnt, foo):
+        self.log.info(f'pythonthreadingisgarbage called...{foo}')
+        while not evnt.is_set():
+            time.sleep(1)
+
     def main(self):
         self.log.info('Running main')
         self.log.info(self.d1['a'])
         self.log.info(self.d2['a'])
         self.log.info(self.d1==self.d2)
         self.d2['d']('TESTING')
+        self.evnt = threading.Event()
+        t = threading.Thread(target=self.pythonthreadingisgarbage, args=(self.evnt, 'TEST', ))
+        self.log.info(t)
+        t.start()                
+        self.log.info(t)
+        time.sleep(4)
+        self.log.info(t)
+        time.sleep(4)
+        self.log.info(t)
+        self.done()
+        time.sleep(4)
+        self.log.info(t)
+
+    def done(self):
+        self.evnt.set()
 
     def function(self, param):
         self.log.info(f'Function called with {param}')
@@ -66,6 +87,9 @@ class Hello():
 if __name__=='__main__':
     h = Hello(__file__)
     h.log.info('Hello (from Python)')
-    h.log.info('File location: {}'.format( __file__ ))    
+    h.log.debug('File location: {}'.format( __file__ ))    
+    h.log.debug(f'File location: {__file__}')
     h.main()
+    input("Press enter when done\n")
+    h.done()
 

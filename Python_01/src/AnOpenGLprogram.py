@@ -14,13 +14,33 @@ from ModelLoader import ModelLoader
 from Interaction import EHandler
 from TextWriter import Writer
 
+'''  Logging in Python - According to HAL
+Format String Placeholders:
+%(asctime)s: Human-readable time when the LogRecord was created.
+%(created)f: Time in seconds since the epoch when the LogRecord was created.
+%(filename)s: Filename portion of the pathname.
+%(funcName)s: Name of the function containing the logging call.
+%(levelname)s: Text logging level for the message ('DEBUG', 'INFO', etc.).
+%(levelno)d: Numeric logging level for the message (10 for DEBUG, 20 for INFO, etc.).
+%(lineno)d: Line number where the logging call was made.
+%(message)s: The logged message itself.
+%(module)s: Module (name portion of filename).
+%(name)s: Name of the logger (useful for filtering).
+%(pathname)s: Full pathname of the source file where the logging call was issued.
+%(process)d: Process ID.
+%(processName)s: Process name.
+%(thread)d: Thread ID.
+%(threadName)s: Thread name.
+We can limit the length of these like so - %(levelname).3s
+'''
+
 import logging, os 
 from logging import StreamHandler, FileHandler
 logbase,ext = os.path.splitext(os.path.basename(__file__))
 logging.basicConfig(handlers=[
     StreamHandler(),
     FileHandler(logbase+'.log', mode='w') # The filename:lineno enables hyperlinking
-], format='%(asctime)s %(levelname)s %(filename)s:%(lineno)s %(threadName)s %(message)s'
+], format='%(asctime)s %(levelname).3s %(filename)s:%(lineno)s %(threadName)s %(message)s'
 , datefmt='%H:%M:%S'  #  '%Y/%m/%d-%:%M:%S %p'
 , level=logging.INFO)
 
