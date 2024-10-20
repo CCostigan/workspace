@@ -17,6 +17,7 @@ Format String Placeholders:
 %(processName)s: Process name.
 %(thread)d: Thread ID.
 %(threadName)s: Thread name.
+
 We can limit the length of these like so - %(levelname).3s
 '''
 
