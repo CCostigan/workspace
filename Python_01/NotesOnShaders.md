@@ -111,6 +111,12 @@ https://stackoverflow.com/questions/46209627/nesting-grids-and-frames-in-tkinter
 https://sibras.github.io/OpenGL4-Tutorials/docs/Tutorials/03-Tutorial3/
 
 
+# Shader links with some source:
+https://www.khronos.org/opengl/wiki/OpenGL_Shading_Language
+https://www.khronos.org/opengl/wiki/Sampler_(GLSL)
+https://www.khronos.org/opengl/wiki/Uniform_(GLSL)
+https://www.khronos.org/opengl/wiki/Layout_Qualifier_(GLSL)
+
 
 # General use: delete all log files
     find . -name "*.log" -exec rm {} \;
