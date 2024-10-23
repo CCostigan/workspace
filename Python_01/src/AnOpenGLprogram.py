@@ -154,6 +154,8 @@ class ReviewOpenGL(object):
 
 
         d2r = 3.1415922/180
+        # r2d = 1.0/d2r
+        # r2d2 = 2*r2d
         shaft_ang = pyrr.Matrix44.from_x_rotation(-90.0 * d2r) 
         prop_scale = pyrr.Matrix44.from_scale(pyrr.Vector3([0.1, 0.1, 0.1]))
         rudd_scale = pyrr.Matrix44.from_scale(pyrr.Vector3([0.1, 0.1, 0.1]))

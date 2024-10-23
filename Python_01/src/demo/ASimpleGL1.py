@@ -64,7 +64,8 @@ def create_vertex_buffer():
         # A triangle
         vertex_data = [-1, -1, 0,
                         1, -1, 0,
-                        0,  1, 0]
+                        1,  1, 0,
+                       -1,  1, 0]
 
         attr_id = 0  # No particular reason for 0, but must match the layout location in the shader.
 
@@ -158,7 +159,7 @@ def main_loop(window):
         not glfw.window_should_close(window)
     ):
         gl.glClear(gl.GL_COLOR_BUFFER_BIT | gl.GL_DEPTH_BUFFER_BIT)
-        gl.glDrawArrays(gl.GL_TRIANGLES, 0, 3)
+        gl.glDrawArrays(gl.GL_TRIANGLE_FAN, 0, 4)
         glfw.swap_buffers(window)
         glfw.poll_events()
 

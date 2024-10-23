@@ -23,7 +23,7 @@ log.basicConfig(
 )
 
 
-@contextlib.contextmanager
+# @contextlib.contextmanager
 def create_main_window():
     if not glfw.init():
         sys.exit(1)
@@ -47,7 +47,7 @@ def create_main_window():
     finally:
         glfw.terminate()
 
-@contextlib.contextmanager
+# @contextlib.contextmanager
 def create_vertex_array_object():
     vertex_array_id = gl.glGenVertexArrays(1)
     try:
@@ -57,9 +57,10 @@ def create_vertex_array_object():
         gl.glDeleteVertexArrays(1, [vertex_array_id])
 
 
-@contextlib.contextmanager
+# @contextlib.contextmanager
 def create_vertex_buffer():
     with create_vertex_array_object():
+
         # A triangle
         vertex_data = [-1, -1, 0,
                         1, -1, 0,
@@ -93,7 +94,7 @@ def create_vertex_buffer():
 
 
 
-@contextlib.contextmanager
+# @contextlib.contextmanager
 def load_shaders():
     shaders = {
         gl.GL_VERTEX_SHADER: '''\
@@ -142,6 +143,7 @@ def load_shaders():
             logmsg = gl.glGetProgramInfoLog(program_id)
             log.error(logmsg)
             sys.exit(11)
+
         gl.glUseProgram(program_id)
         yield
     finally:
@@ -207,13 +209,21 @@ def main_loop(window, mvp_matrix_id, mvp):
 
 
 
+# if __name__ == '__main__':
+#     width, height = 800, 600
+#     window = create_main_window()
+#     vbfr = create_vertex_buffer()
+#     prog_id = load_shaders()
+#     mvp_matrix_id, mvp = create_mvp(prog_id, width, height)
+#     main_loop(window, mvp_matrix_id, mvp)
+
+
 if __name__ == '__main__':
-    width, height = 800, 600
     window = create_main_window()
-    vbfr = create_vertex_buffer()
-    prog_id = load_shaders()
-    mvp_matrix_id, mvp = create_mvp(prog_id, width, height)
-    main_loop(window, mvp_matrix_id, mvp)
+    create_vertex_buffer()
+    load_shaders()
+    main_loop(window)
+
 
     # with create_main_window() as window:
     #     with create_vertex_buffer():
