@@ -27,9 +27,9 @@ shadermap = {
 
 class ShaderLoader():
 
-    shader_home="res/shaders/"
+    shader_home="resources/shaders/"
 
-    def __init__(self, shader_home="res/shaders/"):
+    def __init__(self, shader_home="resources/shaders/"):
         self.log = logging.getLogger(__file__)        
 
         self.shader_home = shader_home

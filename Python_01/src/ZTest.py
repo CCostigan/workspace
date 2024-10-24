@@ -26,16 +26,16 @@ class ZTest():
 
     
     def __init__(self):
-        fileConfig('./res/cfg/alogger.cfg')
-        # fileConfig('res/cfg/alogger.cfg')
-        # logging.config.fileConfig('res/cfg/alogger.cfg'
+        fileConfig('./resources/cfg/alogger.cfg')
+        # fileConfig('resources/cfg/alogger.cfg')
+        # logging.config.fileConfig('resources/cfg/alogger.cfg'
         #     , defaults={'logfilename': '/var/log/mylog.log'})
         # create logger
         # 'application' code        
 
         self.log = logging.getLogger(__file__)
 
-        self.shader_home="res/shaders/"
+        self.shader_home="resources/shaders/"
         self.last_update = time.time()
         self.working=True
         sleeptme = 0.01

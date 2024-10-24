@@ -1,0 +1,32 @@
+
+<dds>
+    <types>
+        <struct name="ShapeType" extensibility="extensible">
+            <member name="color" stringMaxLength="128" type="string" key="true"/>
+            <member name="shapesize" type="long"/>
+            <!-- Locaiton  -->
+            <member name="x" type="long"/>
+            <member name="y" type="long"/>
+            <member name="z" type="long"/>
+            <!-- Pitch Roll Yaw -->
+            <member name="a" type="long"/>
+            <member name="b" type="long"/>
+            <member name="c" type="long"/>
+            <!-- Speed -->
+            <member name="speed" type="long"/>
+
+        </struct>
+        <enum name="ShapeFillKind" extensibility="extensible">
+            <enumerator name="SOLID_FILL" value="0"/>
+            <enumerator name="TRANSPARENT_FILL" value="1"/>
+            <enumerator name="HORIZONTAL_HATCH_FILL" value="2"/>
+            <enumerator name="VERTICAL_HATCH_FILL" value="3"/>
+        </enum>
+        <struct name="ShapeTypeExtended" baseType="ShapeType" extensibility="extensible">
+            <member name="fillKind" type="nonBasic" nonBasicTypeName="ShapeFillKind"/>
+            <member name="angle" type="float"/>
+        </struct>
+    </types>
+</dds>
+
+

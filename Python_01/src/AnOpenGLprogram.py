@@ -104,7 +104,7 @@ class ReviewOpenGL(object):
         sl = ShaderLoader() 
 
         tl = TextureLoader()
-        # charstrip = tl.load_texture("res/imgs/charstrip.png")
+        # charstrip = tl.load_texture("resources/imgs/charstrip.png")
         ortho_shader = sl.load_shader_progs("ortho_vert.glsl","ortho_frag.glsl")
         textwriter = Writer(workarea)
 
@@ -285,7 +285,7 @@ class ReviewOpenGL(object):
 
     def check_files(self, *filelist):
         reload = False
-        shader_home="res/shaders/"
+        shader_home="resources/shaders/"
         for filename in filelist:
             stats_mt = os.stat(shader_home+filename).st_mtime        
             if stats_mt > self.last_update:

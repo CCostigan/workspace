@@ -135,7 +135,7 @@ class EHandler():
         self.log.info(f"joystick_callback a={arg}")    
 
 if __name__=='__main__':
-    # model = ModelLoader.load_model_obj("res/mdls/Cube.obj")
+    # model = ModelLoader.load_model_obj("resources/mdls/Cube.obj")
     # self.log.info(model)
     from AnOpenGLprogram import ReviewOpenGL
     ReviewOpenGL.main()

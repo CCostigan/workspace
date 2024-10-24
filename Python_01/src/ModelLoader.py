@@ -18,8 +18,8 @@ logging.basicConfig(handlers=[
 
 # https://stackoverflow.com/questions/16380005/opengl-3-4-glvertexattribpointer-stride-and-offset-miscalculation
 
-model_home = "res/mdls/"
-image_home = "res/imgs/"
+model_home = "resources/mdls/"
+image_home = "resources/imgs/"
 
 class ModelLoader():
 
@@ -231,7 +231,7 @@ class ModelLoader():
 
 
 if __name__=='__main__':
-    # model = ModelLoader.load_model_obj("res/mdls/Cube.obj")
+    # model = ModelLoader.load_model_obj("resources/mdls/Cube.obj")
     # self.log.info(model)
     from AnOpenGLprogram import ReviewOpenGL
     rogl = ReviewOpenGL()

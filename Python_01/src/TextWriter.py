@@ -20,7 +20,7 @@ class Writer():
     def __init__(self, workarea):
         self.log = logging.getLogger(__file__)        
         self.tl = TextureLoader()
-        self.charstrip = self.tl.load_texture("res/imgs/charstrip.png")
+        self.charstrip = self.tl.load_texture("resources/imgs/charstrip.png")
 
         self.count = 0
         indx = []
