@@ -1,35 +1,53 @@
 
+
+
 import os
 import time
 from threading import Thread, Lock
 
+
+
+# import logging, os 
+# from logging import StreamHandler, FileHandler
+# logbase,ext = os.path.splitext(os.path.basename(__file__))
+# logging.basicConfig(handlers=[
+#     StreamHandler(),
+#     FileHandler(logbase+'.log', mode='w') # The filename:lineno enables hyperlinking
+# ], format='%(asctime)s %(levelname).3s %(filename)s:%(lineno)-4s %(threadName)s %(message)s'
+# , datefmt='%H:%M:%S'  #  '%Y/%m/%d-%:%M:%S %p'
+# , level=logging.INFO)
+
 import logging
-import logging.config
+from logging.config import fileConfig
 
 
 class ZTest():
-    logging.config.fileConfig('res/cfg/alogger.cfg')
-    # logging.config.fileConfig('res/cfg/alogger1.cfg')
+    
 
-    # create logger
-    logger = logging.getLogger('simpleExample')
-
-    # 'application' code
     
     def __init__(self):
+        fileConfig('./res/cfg/alogger.cfg')
+        # fileConfig('res/cfg/alogger.cfg')
+        # logging.config.fileConfig('res/cfg/alogger.cfg'
+        #     , defaults={'logfilename': '/var/log/mylog.log'})
+        # create logger
+        # 'application' code        
+
+        self.log = logging.getLogger(__file__)
+
         self.shader_home="res/shaders/"
         self.last_update = time.time()
         self.working=True
-
-        self.logger.debug('debug message')
-        time.sleep(1)
-        self.logger.info('info message')
-        time.sleep(1)
-        self.logger.warning('warn message')
-        time.sleep(1)
-        self.logger.error('error message')
-        time.sleep(1)
-        self.logger.critical('critical message')
+        sleeptme = 0.01
+        self.log.debug('Debug message')
+        time.sleep(sleeptme)
+        self.log.info('Info message')
+        time.sleep(sleeptme)
+        self.log.warning('Warn message')
+        time.sleep(sleeptme)
+        self.log.error('Error message')
+        time.sleep(sleeptme)
+        self.log.critical('Critical message')
 
     def check_files(self, callback, *args):
         filemap = {}
@@ -40,8 +58,7 @@ class ZTest():
                 if stats_mt > self.last_update:
                     self.last_update = time.time()
                     callback()
-                else:
-                    time.sleep(1.0)
+            time.sleep(0.1)
 
 
     def thread_callback(self, *args):
@@ -57,9 +74,11 @@ class ZTest():
     
 
 if __name__=='__main__':
+    print("Starting")
     zt = ZTest()
     zt.start_watch_threads(zt.thread_callback, "shader_vert.glsl", "shader_frag.glsl")
     # input("Press enter\n")             
     zt.stop_threads()
     print("Got here")
 
+#   watch -n 1 python3 src/ZTest.py
