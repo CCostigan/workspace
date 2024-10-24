@@ -1,8 +1,8 @@
 #!/bin/bash
 
+python_exec = ~/.venv/bin/python
 
-
-/home/groot/.venv/bin/python  src/AnOpenGLprogram.py
+${python_exec}  src/AnOpenGLprogram.py
 
 
 
